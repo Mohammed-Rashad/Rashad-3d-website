@@ -5,7 +5,7 @@ import fs from 'fs';
 const base = process.argv[2] || 'http://localhost:4173/';
 const out = process.argv[3] || 'screenshots';
 fs.mkdirSync(out, { recursive: true });
-const ids = ['intro', 'taiz', 'sanaa', 'cairo', 'lubeck', 'najran', 'library', 'writer', 'ai', 'conclusion'];
+const ids = ['intro', 'taiz', 'sanaa', 'cairo', 'lubeck', 'najran', 'library', 'writer', 'ai', 'conclusion', 'epilogue'];
 const only = process.env.ONLY ? process.env.ONLY.split(',') : null;
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const errors = [];

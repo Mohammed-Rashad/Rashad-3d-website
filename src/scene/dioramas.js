@@ -100,8 +100,10 @@ export async function sanaa(ctx) {
   const board = new THREE.Group(); board.position.set(0.2, 0, 2.4); board.rotation.y = 0.18; g.add(board);
   for (const x of [-1.3, 1.3]) { const leg = box(0.1, 2.6, 0.1, '#5b3d27', x, 0, 0, board); leg.rotation.z = x > 0 ? -0.05 : 0.05; }
   box(2.9, 1.7, 0.1, '#5b3d27', 0, 0.85, -0.02, board);
-  const tex = canvasTex(1024, 560, (c, w, h) => { c.fillStyle = '#21402f'; c.fillRect(0, 0, w, h); });
-  const face = mesh(new THREE.PlaneGeometry(2.7, 1.5), new THREE.MeshBasicMaterial({ map: tex, color: '#d8d8d8' }), 0, 1.7, 0.06, board);
+  // the board's texture is the shared chalk canvas from the §2 card (src/chalk.js)
+  const chalk = ctx.chalk; const tex = new THREE.CanvasTexture(chalk.canvas); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+  chalk.onChange(() => (tex.needsUpdate = true));
+  const face = mesh(new THREE.PlaneGeometry(2.7, 1.5), new THREE.MeshBasicMaterial({ map: tex, color: '#e4e4e4' }), 0, 1.7, 0.06, board);
   box(2.7, 0.06, 0.18, '#5b3d27', 0, 0.9, 0.08, board);
   const desk = await placeGLB(ctx, '/models/sanaa/SchoolDesk_01.glb', g, { pos: V(2.4, 0, 4.2), scale: 1.6, rotY: Math.PI + 0.25 });
   // school bell on a post
@@ -110,18 +112,7 @@ export async function sanaa(ctx) {
   const bell = new THREE.Group(); bell.position.set(0, 2.4, 0); bellG.add(bell);
   mesh(new THREE.CylinderGeometry(0.12, 0.32, 0.4, 10, 1, true), mat('#c99a3c', { metalness: 0.7, roughness: 0.35, side: THREE.DoubleSide }), 0, -0.25, 0, bell);
 
-  const ctx2 = tex.userData.ctx;
-  let writeT = -1;
-  const formula = 'f(t) = Σ f(n)·sinc(t − n)';
-  function drawFormula(p) {
-    ctx2.fillStyle = '#21402f'; ctx2.fillRect(0, 0, 1024, 560);
-    ctx2.fillStyle = 'rgba(255,255,255,0.05)'; for (let i = 0; i < 40; i++) ctx2.fillRect(Math.random() * 1024, Math.random() * 560, 120, 3);
-    ctx2.font = 'italic 84px "CMU Serif", Georgia, serif'; ctx2.fillStyle = '#f2f2e6'; ctx2.textBaseline = 'middle';
-    const n = Math.floor(formula.length * p); ctx2.fillText(formula.slice(0, n), 60, 220);
-    if (p >= 1) { ctx2.font = '44px "Caveat", cursive'; ctx2.fillStyle = '#ffe9a0'; ctx2.fillText('— the whole, from its samples', 300, 380); ctx2.strokeStyle = '#f2f2e6'; ctx2.lineWidth = 4; ctx2.beginPath(); ctx2.moveTo(60, 290); ctx2.quadraticCurveTo(450, 300, 900, 285); ctx2.stroke(); }
-    tex.needsUpdate = true;
-  }
-  drawFormula(0);
+  let writeT = -1, wrote = false;
   let lastChalk = 0;
   const actions = {
     chalk() { writeT = 0; ctx.sfx('chalk'); },
@@ -132,18 +123,15 @@ export async function sanaa(ctx) {
     group: g, cam: { pos: V(5, 4.2, 13), target: V(0.6, 2.4, 0) },
     sky: { top: '#1d1844', bottom: '#b4708a' }, fog: 0.03, sun: { color: '#ff9f86', intensity: 1.2, dir: V(8, 3, -6) }, hemi: { sky: '#9b86d6', ground: '#3b2a2a', intensity: 1.0 },
     clickables: [{ obj: bellG, action: 'bell' }, ...(desk ? [{ obj: desk, action: 'chalk' }] : [])],
-    drags: [{ obj: face, onDrag(hit, now) {
-      const uv = hit.uv; if (!uv) return; const x = uv.x * 1024, y = (1 - uv.y) * 560;
-      const gr = ctx2.createRadialGradient(x, y, 0, x, y, 44); gr.addColorStop(0, 'rgba(33,64,47,0.95)'); gr.addColorStop(1, 'rgba(40,72,55,0)');
-      ctx2.fillStyle = gr; ctx2.fillRect(x - 44, y - 44, 88, 88); tex.needsUpdate = true;
-      if (now - lastChalk > 180) { lastChalk = now; g.userData.fx.push(burst(g, hit.point, { color: '#ffffff', n: 14, speed: 0.6, size: 0.04, life: 0.9, gravity: -2 })); }
-      if (Math.random() < 0.05) ctx.sfx('chalk', true);
-    } }],
+    drags: [{ obj: face, onDrag(hit, now, start) {
+      const uv = hit.uv; if (!uv) return; chalk.stroke(uv.x * chalk.canvas.width, (1 - uv.y) * chalk.canvas.height, start);
+      if (now - lastChalk > 180) { lastChalk = now; g.userData.fx.push(burst(g, hit.point, { color: '#ffffff', n: 10, speed: 0.5, size: 0.035, life: 0.8, gravity: -2 })); }
+    }, onEnd() { chalk.end(); } }],
     actions, anchors: [V(-4, 6, -5), V(3.6, 6.5, -6), V(0.2, 3.4, 2.4)],
     cupSpot: V(0.3, 0.02, -4.9),
-    onEnter() { if (writeT < 0) setTimeout(() => actions.chalk(), 900); },
+    onEnter() { if (!wrote) { wrote = true; setTimeout(() => actions.chalk(), 900); } },
     update(t, dt) {
-      if (writeT >= 0) { writeT += dt; drawFormula(Math.min(1, writeT / 1.8)); if (writeT > 1.8) writeT = -1; }
+      if (writeT >= 0) { writeT += dt; chalk.writeFormula(Math.min(1, writeT / 1.8)); if (writeT > 1.8) writeT = -1; }
       if (bellSwing > 0) { bellSwing -= dt; bell.rotation.z = Math.sin(bellSwing * 18) * 0.4 * bellSwing / 2.5; }
     },
   });
@@ -155,7 +143,7 @@ export async function cairo(ctx) {
   const river = (x) => Math.sin(x * 0.12) * 1.5 - 1.5;
   g.add(terrain({ size: 44, seg: 44, height: (x, z) => { const d = Math.abs(z - river(x)); return d < 2.6 ? -0.6 : Math.min(0.6, (d - 2.6) * 0.5) + N(x * 0.3, z * 0.3) * 0.25; }, color: (x, y) => (y < -0.2 ? '#6d6047' : y < 0.35 ? '#7f8f55' : '#d9c29a') }));
   const water = new THREE.Mesh(new THREE.PlaneGeometry(44, 6, 60, 8).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ color: '#1f7f86', roughness: 0.25, metalness: 0.1, flatShading: true }));
-  water.position.y = -0.25; g.add(water);
+  water.position.y = -0.25; water.userData.noCup = true; g.add(water);
   const wp = water.geometry.attributes.position; const wx = Float32Array.from({ length: wp.count }, (_, i) => wp.getX(i)); const wz = Float32Array.from({ length: wp.count }, (_, i) => wp.getZ(i));
   for (let i = 0; i < wp.count; i++) wp.setZ(i, wz[i] + river(wx[i]));
   stars(g, 350, 55);
@@ -216,6 +204,7 @@ export async function lubeck(ctx) {
   const ground = terrain({ size: 44, seg: 30, height: (x, z) => (z < -7 ? -0.5 : 0.02 * Math.sin(x * 3) * Math.cos(z * 3)), color: (x, y) => (y < -0.2 ? '#4d5560' : '#8d877d') });
   g.add(ground);
   const sea = mesh(new THREE.PlaneGeometry(60, 30, 40, 20).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ color: '#5f7585', roughness: 0.3, flatShading: true }), 0, -0.3, -22, g);
+  sea.userData.noCup = true;
   const sp = sea.geometry.attributes.position; const sx = Float32Array.from({ length: sp.count }, (_, i) => sp.getX(i)); const sz = Float32Array.from({ length: sp.count }, (_, i) => sp.getZ(i));
   const brick = '#9c3b2e', brick2 = '#86322a', roof = '#4f6157';
   // Holstentor
@@ -405,6 +394,8 @@ export async function ai(ctx) {
   const geo = new THREE.BufferGeometry(); const pos = new Float32Array(S * S * 3); const col = new Float32Array(S * S * 3);
   for (let i = 0; i < S; i++) for (let j = 0; j < S; j++) { const k = (i * S + j) * 3; pos[k] = (i / (S - 1) - 0.5) * span; pos[k + 2] = (j / (S - 1) - 0.5) * span; }
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  // invisible floor so the hidden cup has somewhere to sit
+  mesh(new THREE.PlaneGeometry(30, 30).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }), 0, 0, 0, g);
   const field = new THREE.Points(geo, new THREE.PointsMaterial({ size: 0.09, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); g.add(field);
   const samples = [[-4, -2, 1.6], [-1, 1, 2.6], [2, -1.5, 1.2], [4.5, 2, 2.2], [0.5, -4, 1.8], [-3, 3.5, 1.1], [3, 4.5, 1.4]];
   for (const [x, z, h] of samples) { cyl(0.04, 0.04, h, glow('#7fd8e6', 1.5), x, 0, z, g, 6); sphere(0.14, glow('#f2c66d', 3), x, h, z, g, 1); }

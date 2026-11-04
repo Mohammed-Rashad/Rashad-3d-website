@@ -5,7 +5,7 @@ Any value equal to `TODO_FROM_FAMILY` (or empty) is hidden on the live site.
 
 ## Links (`content/profile.json → links`)
 - [ ] `scholar`: his own Google Scholar profile URL (the two Scholar links on the CV belong to his referees, so they are not used)
-- [ ] `facebook`: link to his Facebook profile or page, used for "Read his posts" in §6 (only if he's happy with it being public)
+- [ ] **`facebook`: link to his Facebook profile or page. §7 is now just a big "Read his writing on Facebook" button (and the letters on the 3D corkboard open it).** Until it's filled, §7 says the link is coming soon. Later you can add individual posts to `posts.json`.
 
 ## Per-chapter stories & photos (`content/chapters.json`)
 For each of `taiz`, `sanaa`, `cairo`, `lubeck`, `najran`, `library`, `writer`, `ai`, `conclusion`:
@@ -38,7 +38,7 @@ For each of `taiz`, `sanaa`, `cairo`, `lubeck`, `najran`, `library`, `writer`, `
 - [ ] Every joke in `content/jokes.json`: set `"approved": true` after the family reviews it, or `"enabled": false` to remove it
 - [ ] `footer-status` ("Status: Under review (Referee 2: Mom)") is **disabled** until the family approves it
 - [ ] `profile.json → dedication` ("A Festschrift in honor of Baba, from his four co-authors."): set `"confirmed": true` to show it
-- [ ] **Arabic text**: all Arabic was drafted by Claude. Please have a native speaker in the family review it (`content/*.json` and `src/render/page.mjs`)
+- [ ] **Arabic text**: drafted by Claude and revised once (grammar, academic terms, names: عنّابي، بريستين). Please still have a native speaker in the family review it (`content/*.json`, `src/render/page.mjs`, `src/chapters.mjs`). In particular, check the Arabic spellings of Prof. Annaby's and Prof. Prestin's names.
 - [ ] Call-to-prayer ambience for Taiz: **not added**. Say if you want it.
 
 ## Sound & models (optional upgrades)

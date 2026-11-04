@@ -14,7 +14,8 @@ Rendered on the site as the bibliography in §9. One reference per line starting
 
 ## Sound
 
-- **All ambiences and interaction sounds**, procedurally synthesised for this site with tools/synth-audio.mjs (CC0). Replace with Freesound / ElevenLabs recordings later and list them here
+- **All ambiences and interaction sounds**, procedurally synthesised for this site with tools/synth-audio.mjs (CC0): soft tonal pads per chapter plus sparse details. Replace with Freesound / ElevenLabs recordings later and list them here
+- **Icons**, drawn for this site (src/icons.mjs, CC0)
 
 ## Fonts and code
 

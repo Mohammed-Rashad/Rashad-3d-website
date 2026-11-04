@@ -12,6 +12,8 @@ import { CHAPTERS } from './chapters.mjs';
 import { createAudio } from './audio.js';
 import { lifeCurve, finalCurve } from './curve.js';
 import { playIntro } from './intro.js';
+import { icon } from './icons.mjs';
+import { createChalk } from './chalk.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -41,7 +43,7 @@ const audio = createAudio({ lang, captionsEl: $('#captions') });
 const sfx = (n, quiet) => audio.sfx(n, quiet);
 const btnSound = $('#btn-sound'), vol = $('#vol');
 vol.value = audio.volume();
-function paintSound() { const on = audio.enabled; btnSound.setAttribute('aria-pressed', on); $('.ico', btnSound).textContent = on ? '🔊' : '🔇'; vol.hidden = !on; btnSound.title = on ? audio.ambienceLabel() : ''; }
+function paintSound() { const on = audio.enabled; btnSound.setAttribute('aria-pressed', on); $('.ico-slot', btnSound).innerHTML = icon(on ? 'volumeOn' : 'volumeOff'); vol.hidden = !on; btnSound.title = on ? audio.ambienceLabel() : ''; }
 btnSound.addEventListener('click', async () => { await audio.enable(!audio.enabled); paintSound(); });
 vol.addEventListener('input', () => audio.setVolume(+vol.value));
 // persistent preference: if the visitor turned sound on before, re-enable on their first gesture
@@ -78,6 +80,8 @@ const hunt = {
   has: (id) => found.has(id),
   find(id) {
     if (found.has(id)) return; found.add(id); store.set('cups', JSON.stringify([...found])); paintCups(); sfx('found');
+    const left = CUP_CHAPTERS.length - found.size;
+    if (left) toast(icon('cup') + ' ' + (lang() === 'ar' ? `أحسنت! بقي ${left} ${left === 1 ? 'فنجان' : 'فناجين'}.` : `Nice! ${left} cup${left === 1 ? '' : 's'} to go.`));
     const c = $('#cups'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
     if (found.size === CUP_CHAPTERS.length) setTimeout(finalMessage, 900);
   },
@@ -86,15 +90,36 @@ function finalMessage() {
   sfx('unlock');
   const m = data.messages?.final; const text = tr(m?.text); const from = tr(m?.from);
   const L = lang() === 'ar';
-  openModal(`<h3>${L ? 'وجدتَ كل الفناجين ☕×٨' : 'You found every cup ☕×8'}</h3>
+  openModal(`<h3>${icon('cup')} ${L ? 'وجدتَ الفناجين الثمانية كلها!' : 'You found all 8 cups!'}</h3>
     ${text ? `<p class="handwritten">${esc(text)}</p>${from ? `<p>— ${esc(from)}</p>` : ''}` : `<p class="handwritten">${L ? 'رسالة الأبناء الأخيرة قيد الكتابة… عُد قريبًا.' : 'The kids are still writing the final message… come back soon.'}</p>`}`);
 }
 // calm / no-WebGL: hide a tiny cup button in each card instead
 if (calm) for (const id of CUP_CHAPTERS) {
   const card = $(`#${id} .card`); if (!card || found.has(id)) continue;
-  const b = document.createElement('button'); b.type = 'button'; b.className = 'calm-cup'; b.textContent = '☕'; b.setAttribute('aria-label', 'A hidden coffee cup');
-  b.style.cssText = 'position:absolute;bottom:8px;inset-inline-end:10px;background:none;border:0;font-size:14px;opacity:.35;cursor:pointer';
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'calm-cup'; b.innerHTML = icon('cup'); b.setAttribute('aria-label', 'A hidden coffee cup');
+  b.style.cssText = 'position:absolute;bottom:8px;inset-inline-end:10px;background:none;border:0;font-size:18px;color:#7a3d14;opacity:.6;cursor:pointer';
   b.addEventListener('click', () => { hunt.find(id); b.remove(); }); card.appendChild(b);
+}
+
+/* ---------------- toasts + the hunt's progress panel ---------------- */
+const toastEl = document.createElement('div'); toastEl.className = 'toast'; toastEl.setAttribute('role', 'status'); document.body.appendChild(toastEl);
+let toastT = 0;
+function toast(htmlStr, ms = 4200) { toastEl.innerHTML = htmlStr; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.add('hide-now') || toastEl.classList.toggle('show', false), ms); }
+function huntPanel() {
+  const L = lang() === 'ar';
+  const rows = CUP_CHAPTERS.map((id) => { const ch = CHAPTERS.find((c) => c.id === id); const got = found.has(id); return `<li class="${got ? 'got' : ''}">${icon(got ? 'check' : 'cup')} <a href="#${id}">§${ch.n} ${esc(ch.title[lang()].split(':')[0])}</a>${got ? '' : ` <span class="muted">${L ? 'لم تجده بعد' : 'not found yet'}</span>`}</li>`; }).join('');
+  openModal(`<h3>${icon('cup')} ${L ? 'البحث عن فناجين القهوة' : 'The coffee-cup hunt'}</h3>
+    <p>${L ? 'في كل مشهد ثلاثي الأبعاد فنجان قهوة يمني صغير مخبّأ. يتوهّج قليلًا ويتصاعد منه البخار، ويزداد توهّجه كلما أطلت النظر. انقر عليه لتجمعه.' : 'Every 3D scene hides one small Yemeni coffee cup. It glows a little and steams, and glows brighter the longer you look. Click it to collect it.'}</p>
+    <ul class="hunt-list">${rows}</ul><p class="muted">${found.size}/${CUP_CHAPTERS.length}</p>`);
+  $$('.hunt-list a', modal).forEach((a) => a.addEventListener('click', closeModal));
+}
+$('#cups').addEventListener('click', huntPanel);
+if (!found.size && !calm) html.classList.add('hunt-new');
+const seenHint = new Set();
+function chapterHint(id) {
+  if (calm || !CUP_CHAPTERS.includes(id) || found.has(id) || seenHint.has(id)) return; seenHint.add(id);
+  const first = seenHint.size === 1; const L = lang() === 'ar';
+  setTimeout(() => currentId === id && toast(icon('cup') + ' ' + (first ? (L ? 'فنجان قهوة مخبّأ في هذا المشهد. هل تراه؟ انقر عليه لتجمعه.' : 'A coffee cup is hidden in this scene. Can you spot it? Click it to collect it.') : (L ? 'فنجان آخر مخبّأ هنا…' : 'Another cup is hidden here…')), first ? 6000 : 3500), 2600);
 }
 
 /* ---------------- whispers (accessible list in each card) ---------------- */
@@ -117,8 +142,9 @@ function onChapter(id) {
   html.style.setProperty('--chapter-accent', ch.accent);
   audio.setAmbience(ch.amb); paintSound();
   $$('.toc a').forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-  $$('.calm-timeline li').forEach((li) => li.classList.toggle('on', li.dataset.p === id || (['library', 'writer', 'ai', 'conclusion'].includes(id) && li.dataset.p === 'najran')));
-  $('#life-curve-wrap').classList.toggle('hide', id === 'conclusion' || id === 'intro');
+  $$('.calm-timeline li').forEach((li) => li.classList.toggle('on', li.dataset.p === id || (['library', 'writer', 'ai', 'conclusion', 'epilogue'].includes(id) && li.dataset.p === 'najran')));
+  $('#life-curve-wrap').classList.toggle('hide', id === 'conclusion' || id === 'intro' || id === 'epilogue');
+  chapterHint(id);
   if (id === 'najran') { const l = $('.levelup'); l.classList.remove('pulse'); void l.offsetWidth; l.classList.add('pulse'); }
   world && world.go(id);
 }
@@ -140,7 +166,8 @@ function openBook(id) { const d = $(`#book-${CSS.escape(id)}`); if (!d) { sfx('p
 function openLetter(i) {
   sfx('rustle');
   const posts = $$('.letter');
-  if (!posts.length) return openModal(`<p class="handwritten soon">${lang() === 'ar' ? 'المنشورات قريبًا…' : 'Posts coming soon…'}</p>`);
+  const fb = $('.fb-link'); if (!posts.length && fb) { window.open(fb.href, '_blank', 'noopener'); return; }
+  if (!posts.length) return openModal(`<p class="handwritten soon">${lang() === 'ar' ? 'رابط صفحته على فيسبوك قريبًا…' : 'The link to his Facebook page is coming soon…'}</p>`);
   const p = posts[i % posts.length]; openModal(`<article class="letter" lang="${p.lang}" dir="${p.dir}" style="--r:0deg">${p.innerHTML}</article>`);
 }
 document.addEventListener('click', (e) => {
@@ -149,6 +176,9 @@ document.addEventListener('click', (e) => {
   if (a === 'compile') { compileHTML(!(world && world.action('compile'))); return; }
   if (a === 'snow') { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on); world && world.action('snow', on); if (!world) sfx('snow'); return; }
   if (a === 'mma') return evalMma();
+  if (a === 'chalk-tool') { chalk.setTool(b.dataset.tool); $$('[data-action=chalk-tool]').forEach((x) => x.setAttribute('aria-pressed', x === b)); return; }
+  if (a === 'chalk-clear') { chalk.clear(); sfx('rustle'); return; }
+  if (a === 'chalk' && !world) { chalk.writeFormula(1); sfx('chalk'); return; }
   if (a === 'radio') { if (!(world && world.action('radio'))) sfx('radio'); return; }
   if (!(world && world.action(a))) sfx({ pour: 'pour', chalk: 'chalk', bell: 'bell', marzipan: 'blip' }[a] || 'blip');
 });
@@ -158,6 +188,7 @@ function emit(type, detail) {
   if (type === 'book') openBook(detail);
   if (type === 'letter') openLetter(detail);
   if (type === 'whisper') showWhisper(detail);
+  if (type === 'goto') document.getElementById(detail)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
   if (type === 'snow') $('[data-action=snow]')?.setAttribute('aria-pressed', detail);
   if (type === 'levelup') { const l = $('.levelup'); l.classList.remove('pulse'); void l.offsetWidth; l.classList.add('pulse'); }
 }
@@ -199,11 +230,12 @@ $('#his-name')?.addEventListener('click', () => {
   if (nameClicks === 17) {
     nameClicks = 0; sfx('unlock');
     const m = data.messages?.birthday; const text = tr(m?.text), from = tr(m?.from); const L = lang() === 'ar';
-    openModal(`<h3>${L ? '١٧ ديسمبر 🎂' : '17 December 🎂'}</h3>${text ? `<p class="handwritten">${esc(text)}</p>${from ? `<p>— ${esc(from)}</p>` : ''}` : `<p class="handwritten">${L ? 'الأبناء ما زالوا يكتبون هذه الرسالة.' : 'The kids are still writing this one.'}</p>`}`);
+    openModal(`<h3>${icon('cake')} ${L ? '١٧ ديسمبر' : '17 December'}</h3>${text ? `<p class="handwritten">${esc(text)}</p>${from ? `<p>— ${esc(from)}</p>` : ''}` : `<p class="handwritten">${L ? 'الأبناء ما زالوا يكتبون هذه الرسالة.' : 'The kids are still writing this one.'}</p>`}`);
   }
 });
 
 /* ---------------- lazy widgets ---------------- */
+const chalk = createChalk($('#chalk-pad'), { sfx });
 function whenNear(el, fn, margin = '600px') { if (!el) return; const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); fn(); } }, { rootMargin: margin }); io.observe(el); }
 whenNear($('#constellation'), async () => { const { constellation } = await import('./constellation.js'); const c = constellation($('#constellation'), data.constellation, { reduced, lang }); redrawers.push(c.redraw); });
 whenNear($('#ai'), async () => { const { initExplorable } = await import('./explorable.js'); const ex = initExplorable({ sfx, loopSfx: (n, p) => audio.loop(n, p), reduced, lang }); redrawers.push(ex.redraw); });
@@ -215,12 +247,25 @@ const titlepage = $('.titlepage');
 if (calm) { $('#intro-canvas').remove(); titlepage.classList.add('shown'); }
 else playIntro($('#intro-canvas'), () => titlepage.classList.add('shown'));
 
+// the part of the screen not covered by the chapter's text card (cups are placed there)
+function freeRect(id) {
+  const w = innerWidth, h = innerHeight; const c = document.querySelector('#' + id + ' .card');
+  const r = c ? c.getBoundingClientRect() : { left: 0, right: 0, top: h, bottom: h };
+  const top = 70, bot = h - 100;
+  const opts = [
+    { x0: r.right + 20, x1: w - 12, y0: top, y1: bot },
+    { x0: 12, x1: r.left - 20, y0: top, y1: bot },
+    { x0: 12, x1: w - 12, y0: top, y1: Math.min(bot, r.top - 20) },
+  ].map((o) => ({ ...o, a: Math.max(0, o.x1 - o.x0) * Math.max(0, o.y1 - o.y0) }));
+  return opts.sort((a, b) => b.a - a.a)[0];
+}
 async function startWorld() {
   if (calm) return;
   try {
     const { createWorld } = await import('./scene/world.js');
     world = await createWorld({ canvas: $('#world'), labelsEl: $('#labels'), hunt, sfx, emit, lang, isRTL: () => html.dir === 'rtl',
-      data: { whispers: data.whispers, history: data.history, postsCount: $$('.letter').length } });
+      data: { freeRect, whispers: data.whispers, history: data.history, postsCount: $$('.letter').length, chalk, pinIcon: icon('pin') } });
+    if (location.search.includes('debug')) window.__goto = (id) => onChapter(id);
     const id = currentId; currentId = null; onChapter(id || 'intro');
   } catch (e) { console.error('3D failed, falling back to calm mode', e); html.classList.add('calm'); }
 }

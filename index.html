@@ -19,12 +19,12 @@
     <canvas id="intro-canvas" aria-hidden="true"></canvas>
     <div id="labels" aria-hidden="true"></div>
     <header class="hud" role="toolbar" aria-label="Site controls">
-      <button class="hud-btn" id="btn-toc" aria-expanded="false" aria-controls="toc"><span class="l-en" lang="en">§ Contents</span><span class="l-ar" lang="ar">§ المحتويات</span></button>
+      <button class="hud-btn" id="btn-toc" aria-expanded="false" aria-controls="toc"><!--ICON:list--> <span class="l-en" lang="en">Contents</span><span class="l-ar" lang="ar">المحتويات</span></button>
       <span class="hud-spacer"></span>
-      <span class="cups" id="cups" title="Hidden Yemeni coffee cups" aria-live="polite">☕ <span id="cups-n">0</span>/<span id="cups-t">8</span></span>
-      <button class="hud-btn" id="btn-lang" aria-label="Switch language"><span class="l-en" lang="ar">العربية</span><span class="l-ar" lang="en">English</span></button>
+      <button class="hud-btn cups" id="cups" type="button" aria-live="polite" aria-label="Coffee-cup hunt: progress and help"><!--ICON:cup--> <span id="cups-n">0</span>/<span id="cups-t">8</span> <span class="cups-label"><span class="l-en" lang="en">cups found</span><span class="l-ar" lang="ar">فناجين</span></span></button>
+      <button class="hud-btn" id="btn-lang" aria-label="Switch language"><!--ICON:lang--> <span class="l-en" lang="ar">العربية</span><span class="l-ar" lang="en">English</span></button>
       <div class="sound-wrap">
-        <button class="hud-btn" id="btn-sound" aria-pressed="false"><span class="ico">🔇</span> <span class="l-en" lang="en">Tap to enable sound</span><span class="l-ar" lang="ar">اضغط لتفعيل الصوت</span></button>
+        <button class="hud-btn" id="btn-sound" aria-pressed="false"><span class="ico-slot"><!--ICON:volumeOff--></span> <span class="l-en" lang="en">Tap to enable sound</span><span class="l-ar" lang="ar">اضغط لتفعيل الصوت</span></button>
         <input type="range" id="vol" min="0" max="1" step="0.05" value="0.7" aria-label="Master volume" hidden />
       </div>
     </header>

@@ -1,8 +1,17 @@
 {
   "_note": "Names, links and the short factual intro of every chapter. Any string equal to TODO_FROM_FAMILY (or empty) is hidden on the site.",
-  "name": { "en": "Rashad M. Asharabi", "ar": "رشاد مدهش الشرعبي" },
-  "fullName": { "en": "Rashad Mudhsh Ali Hezam Asharabi", "ar": "رشاد مدهش علي حزام الشرعبي" },
-  "nickname": { "en": "Baba", "ar": "بابا" },
+  "name": {
+    "en": "Rashad M. Asharabi",
+    "ar": "رشاد مدهش الشرعبي"
+  },
+  "fullName": {
+    "en": "Rashad Mudhsh Ali Hezam Asharabi",
+    "ar": "رشاد مدهش علي حزام الشرعبي"
+  },
+  "nickname": {
+    "en": "Baba",
+    "ar": "بابا"
+  },
   "links": {
     "cv": "https://rashad1974.netlify.app/",
     "orcid": "https://orcid.org/0000-0002-6616-2008",
@@ -18,47 +27,51 @@
   "chapters": {
     "taiz": {
       "en": "Rashad Mudhsh Ali Hezam Asharabi was born on 17 December 1974 in Taiz, among the terraced mountains of south-western Yemen. Taiz governorate is also home to al-Mokha, the old port whose name gave the world the word “mocha”.",
-      "ar": "وُلد رشاد مدهش علي حزام الشرعبي في ١٧ ديسمبر ١٩٧٤ في تعز، بين المدرجات الجبلية في جنوب غرب اليمن. وفي محافظة تعز أيضًا تقع المخا، الميناء القديم الذي أعطى العالم كلمة «موكا»."
+      "ar": "وُلد رشاد مدهش علي حزام الشرعبي في السابع عشر من ديسمبر ١٩٧٤ في تعز، بين الجبال والمدرّجات الزراعية في جنوب غرب اليمن. وفي محافظة تعز أيضًا تقع المخا، الميناء العريق الذي منح العالم كلمة «موكا»."
     },
     "sanaa": {
       "en": "He studied mathematics at Sana'a University and received his B.S. in 1999. Long before the degree was finished he was already teaching: first as a demonstrator at the Higher Institute of Teachers in Taiz (1995–97), then at the Faculty of Education in Al-Mahweet.",
-      "ar": "درس الرياضيات في جامعة صنعاء وحصل على البكالوريوس عام ١٩٩٩. وقبل أن ينهي الدرجة بوقت طويل كان يدرّس بالفعل: معيدًا في المعهد العالي للمعلمين في تعز (١٩٩٥–١٩٩٧)، ثم في كلية التربية بالمحويت."
+      "ar": "درس الرياضيات في جامعة صنعاء، ونال درجة البكالوريوس عام ١٩٩٩. لكنه بدأ التدريس قبل تخرّجه بوقت طويل: معيدًا في المعهد العالي للمعلمين بتعز (١٩٩٥–١٩٩٧)، ثم في كلية التربية بالمحويت."
     },
     "cairo": {
       "en": "At Cairo University he earned his M.Sc. (2004) and Ph.D. (2008), supervised by Prof. Mahmoud Annaby, who became his most frequent co-author. Their first big paper appeared in the SIAM Journal on Numerical Analysis in 2008.",
-      "ar": "في جامعة القاهرة نال الماجستير (٢٠٠٤) والدكتوراه (٢٠٠٨) بإشراف الأستاذ الدكتور محمود عنبي، الذي صار أكثر من شاركه التأليف. ونُشرت أولى أوراقهما الكبيرة في مجلة SIAM للتحليل العددي عام ٢٠٠٨."
+      "ar": "وفي جامعة القاهرة حصل على الماجستير (٢٠٠٤) ثم الدكتوراه (٢٠٠٨) بإشراف الأستاذ الدكتور محمود عنّابي، الذي صار لاحقًا أكثرَ مَن شاركه التأليف. وقد نُشرت أولى أوراقهما البحثية الكبرى في مجلة SIAM للتحليل العددي عام ٢٠٠٨."
     },
     "cairoInterlude": {
       "en": "From 2008 to 2011 he was back in Yemen, as Assistant Professor and Head of the Department of Mathematics in Al-Mahweet.",
-      "ar": "ومن ٢٠٠٨ إلى ٢٠١١ عاد إلى اليمن أستاذًا مساعدًا ورئيسًا لقسم الرياضيات في المحويت."
+      "ar": "وبين عامَي ٢٠٠٨ و٢٠١١ عاد إلى اليمن أستاذًا مساعدًا ورئيسًا لقسم الرياضيات في المحويت."
     },
     "lubeck": {
       "en": "In 2011 the Alexander von Humboldt Foundation brought him to the University of Lübeck, hosted by Prof. Jürgen Prestin, on a fellowship for European-Islamic Cultural Dialogue. He came back as a Humboldt postdoctoral fellow in 2012–13 and again in 2014, 2017 and 2019, with visits to Berlin, Bremen and Karlsruhe along the way. With Prestin he built the Hermite-Gauss version of his method (2015), which uses derivatives as well as values.",
-      "ar": "في عام ٢٠١١ جاءت به مؤسسة ألكسندر فون هومبولت إلى جامعة لوبيك، في ضيافة الأستاذ الدكتور يورغن برستين، ضمن زمالة للحوار الثقافي الأوروبي الإسلامي. ثم عاد زميلًا لما بعد الدكتوراه في ٢٠١٢–٢٠١٣، ومرة أخرى في ٢٠١٤ و٢٠١٧ و٢٠١٩، مع زيارات إلى برلين وبريمن وكارلسروه. ومع برستين بنى نسخة هيرميت-غاوس من طريقته (٢٠١٥)، التي تستخدم المشتقات إلى جانب القيم."
+      "ar": "في عام ٢٠١١ استضافته جامعة لوبيك الألمانية بمنحة من مؤسسة ألكسندر فون هومبولت ضمن برنامج الحوار الثقافي الأوروبي الإسلامي، وكان مضيفه الأستاذ الدكتور يورغن بريستين. ثم عاد إليها باحثًا لما بعد الدكتوراه في ٢٠١٢–٢٠١٣، ثم في الأعوام ٢٠١٤ و٢٠١٧ و٢٠١٩، وزار خلال ذلك برلين وبريمن وكارلسروه. ومع بريستين طوّر نسخة «هيرميت–غاوس» من طريقته (٢٠١٥)، وهي تستخدم المشتقات إلى جانب القيم."
     },
     "najran": {
       "en": "At Najran University in Saudi Arabia he rose from Assistant Professor to Associate Professor (2016) and to Full Professor (December 2020). He has supervised six M.Sc. students, serves as an academic editor for Mathematical Problems in Engineering, and speaks two further languages fluently: Mathematica and LaTeX. Two of his chapters appeared in the Festschrift for Frank Stenger's 80th birthday (2021). In all: 40+ papers.",
-      "ar": "في جامعة نجران بالمملكة العربية السعودية تدرّج من أستاذ مساعد إلى أستاذ مشارك (٢٠١٦) ثم إلى أستاذ دكتور (ديسمبر ٢٠٢٠). أشرف على ست رسائل ماجستير، ويعمل محررًا أكاديميًا في مجلة Mathematical Problems in Engineering، ويتقن لغتين إضافيتين: Mathematica وLaTeX. وظهر فصلان من أبحاثه في الكتاب التذكاري لعيد ميلاد فرانك ستنغر الثمانين (٢٠٢١). وفي المجمل: أكثر من ٤٠ ورقة بحثية."
+      "ar": "وفي جامعة نجران بالمملكة العربية السعودية تدرّج من أستاذ مساعد إلى أستاذ مشارك (٢٠١٦)، ثم إلى أستاذ (بروفيسور) في ديسمبر ٢٠٢٠. أشرف على ست رسائل ماجستير، ويعمل محررًا أكاديميًا في مجلة Mathematical Problems in Engineering، ويُتقن لغتين أخريين بطلاقة: Mathematica وLaTeX. كما نُشر له فصلان في الكتاب التذكاري الصادر احتفاءً بعيد ميلاد فرانك ستينغر الثمانين (٢٠٢١). وله في المجمل أكثر من أربعين بحثًا منشورًا."
     },
     "library": {
       "en": "Outside mathematics he reads, follows and writes about history and politics. Pull a book from the shelf.",
-      "ar": "خارج الرياضيات يقرأ التاريخ والسياسة ويتابعهما ويكتب عنهما. اسحب كتابًا من الرف."
+      "ar": "بعيدًا عن الرياضيات، يقرأ في التاريخ والسياسة ويتابعهما ويكتب عنهما. اسحب كتابًا من الرف."
     },
     "libraryPolitics": {
       "en": "He follows and writes about politics too. This site does not speak for him: his own words are in his posts.",
-      "ar": "ويتابع السياسة ويكتب عنها أيضًا. هذا الموقع لا يتحدث نيابةً عنه: كلماته موجودة في منشوراته."
+      "ar": "وهو يتابع الشأن السياسي ويكتب فيه أيضًا، لكن هذا الموقع لا يتحدث باسمه؛ فكلماته في منشوراته."
     },
     "writer": {
-      "en": "He writes, and often. These are a few of his posts, chosen by the family.",
-      "ar": "يكتب، وكثيرًا. هذه بعض منشوراته، اختارتها العائلة."
+      "en": "He writes, and often, on Facebook. Rather than copy his posts here, we would rather you read them where he wrote them.",
+      "ar": "يكتب كثيرًا على فيسبوك. وبدلًا من نقل منشوراته إلى هنا، ندعوك إلى قراءتها حيث كتبها."
     },
     "ai": {
       "en": "His research asks an old question that every phone, camera and AI model now depends on: if you only know a signal at a few points, can you rebuild all of it? Play with it below.",
-      "ar": "يطرح بحثه سؤالًا قديمًا يعتمد عليه اليوم كل هاتف وكاميرا ونموذج ذكاء اصطناعي: إذا عرفتَ إشارة عند نقاط قليلة فقط، هل يمكنك إعادة بنائها كلها؟ جرّب بنفسك في الأسفل."
+      "ar": "يطرح بحثه سؤالًا قديمًا يقوم عليه اليوم كل هاتف وكاميرا ونموذج ذكاء اصطناعي: إذا عرفتَ إشارةً عند بضع نقاط فقط، فهل يمكنك أن تعيد بناءها كاملة؟ جرّب بنفسك في الأسفل."
     },
     "conclusion": {
       "en": "Five sample points: Taiz, Sana'a, Cairo, Lübeck, Najran. Everything in between is reconstruction.",
-      "ar": "خمس نقاط معاينة: تعز، صنعاء، القاهرة، لوبيك، نجران. وكل ما بينها إعادة بناء."
+      "ar": "خمس نقاط معاينة: تعز، وصنعاء، والقاهرة، ولوبيك، ونجران. وكل ما بينها إعادةُ بناء."
+    },
+    "epilogue": {
+      "en": "This is where the samples were taken. Drag to spin the globe; tap a pin to go back to that chapter.",
+      "ar": "هنا أُخذت العيّنات. اسحب لتدوير الكرة الأرضية، وانقر على أي دبّوس للعودة إلى فصله."
     }
   }
 }

@@ -52,16 +52,39 @@ function click(len = 0.02, lo = 1500, hi = 6000) { const x = noise(Math.floor(le
 const S = {};
 
 // ---------- ambiences (loops) ----------
-S['amb-intro'] = () => { const x = buf(14); for (const f of [110, 164.8, 220]) mix(x, mul(tone(14, f, { a: 3, d: 30, harm: [1, 0.1] }), new Float32Array(14 * SR).fill(0.25))); for (let i = 0; i < x.length; i++) x[i] *= 0.7 + 0.3 * Math.sin(TAU * i / SR / 7); return loopify(x, 2); };
-S['amb-taiz'] = () => { const x = wind(16, 0.5, 250); for (let k = 0; k < 14; k++) { const at = Math.floor(rnd() * 14 * SR); const f = 2800 + rnd() * 2000; for (let j = 0; j < 2 + rnd() * 3; j++) mix(x, chirp(f), at + j * Math.floor(0.12 * SR), 0.12); } return loopify(x); };
-S['amb-sanaa'] = () => { const x = wind(14, 0.7, 200); mix(x, x.map(() => 0)); for (let k = 0; k < 200; k++) { const at = Math.floor(rnd() * 13.5 * SR); mix(x, tone(0.03, 4200 + rnd() * 300, { a: 0.003, d: 0.01 }), at, 0.04); } return loopify(x); };
-S['amb-cairo'] = () => { const n = 16 * SR; const w = noise(n); bandpass(w, 200, 1200); for (let i = 0; i < n; i++) { const t = i / SR; w[i] *= 0.5 + 0.5 * Math.abs(Math.sin(TAU * t * 0.37) * Math.sin(TAU * t * 1.3)); } const hum = brown(n); lowpass(hum, 180); mix(w, hum, 0, 0.6); for (let k = 0; k < 40; k++) mix(w, click(0.015, 800, 3000), Math.floor(rnd() * 15 * SR), 0.3); return loopify(w); };
-S['amb-lubeck'] = () => { const n = 16 * SR; const sea = noise(n); lowpass(sea, 700); for (let i = 0; i < n; i++) { const t = i / SR; sea[i] *= 0.25 + 0.75 * Math.pow(0.5 + 0.5 * Math.sin(TAU * t / 5.2), 3); } mix(sea, wind(16, 0.4, 300), 0, 0.5); for (const at of [2.1, 6.5, 7.2, 11.8]) mix(sea, gull(), Math.floor(at * SR), 0.35); return loopify(sea); };
-S['amb-najran'] = () => { const x = wind(16, 0.75, 450); const hi = noise(16 * SR); bandpass(hi, 2000, 5000); for (let i = 0; i < hi.length; i++) hi[i] *= 0.06 * (0.5 + 0.5 * Math.sin(TAU * i / SR / 4)); mix(x, hi); return loopify(x); };
-S['amb-library'] = () => { const n = 14 * SR; const x = brown(n); lowpass(x, 300); const c = noise(n); bandpass(c, 1500, 6000); for (let i = 0; i < n; i++) c[i] *= rnd() < 0.002 ? 1 : 0.03; mix(x, c, 0, 0.5); const clk = buf(14); for (let t = 0; t < 14; t += 1) mix(clk, click(0.01, 2000, 5000), Math.floor(t * SR), 0.25); mix(x, clk); return loopify(x); };
-S['amb-writer'] = () => { const n = 14 * SR; const x = brown(n); lowpass(x, 400); for (let k = 0; k < 6; k++) { const r = noise(Math.floor(0.4 * SR)); bandpass(r, 1000, 6000); mix(x, mul(r, env(r.length, 0.1, 0.1)), Math.floor(rnd() * 13 * SR), 0.15); } return loopify(x); };
-S['amb-ai'] = () => { const x = buf(16); for (const [f, g] of [[130.8, 0.3], [196, 0.2], [261.6, 0.12], [329.6, 0.08]]) { const t = tone(16, f, { a: 4, d: 40, harm: [1, 0.3, 0.1], vib: 0.002 }); mix(x, t, 0, g); } return loopify(x, 3); };
-S['amb-end'] = () => { const x = buf(18); for (const [f, g] of [[146.8, 0.3], [220, 0.22], [293.7, 0.15], [370, 0.1], [440, 0.06]]) mix(x, tone(18, f, { a: 5, d: 40, harm: [1, 0.2], vib: 0.003 }), 0, g); return loopify(x, 3); };
+
+
+// ---------- ambiences (seamless loops): soft tonal pads + sparse details, no hiss ----------
+const hz = (m) => 440 * Math.pow(2, (m - 69) / 12);
+// every LFO period divides the loop length L, so loops are seamless by construction
+function pad(L, notes, { gain = 0.18, bright = 0.25, breathe = 0.35 } = {}) {
+  const n = Math.floor(L * SR); const x = new Float32Array(n);
+  notes.forEach((m, k) => {
+    const f = hz(m); const cyc = Math.round(f * L) / L; // integer cycles per loop
+    const lfo = 1 + (k % 3); const ph0 = k * 1.7;
+    for (let i = 0; i < n; i++) {
+      const t = i / SR; const a = 1 - breathe * (0.5 + 0.5 * Math.sin((TAU * lfo * t) / L + ph0));
+      const p = TAU * cyc * t;
+      x[i] += gain * a * (Math.sin(p) + bright * Math.sin(2 * p) * 0.5 + bright * 0.2 * Math.sin(3 * p));
+    }
+  });
+  return lowpass(x, 2200);
+}
+function sprinkle(x, L, count, make, gain, seedOff = 0) { for (let k = 0; k < count; k++) { const at = Math.floor(((k + 0.5 + (rnd() - 0.5) * 0.6) / count) * (L - 2.6) * SR); mix(x, make(k), at, gain); } return x; }
+const pluck = (m, d = 0.9) => tone(d + 0.4, hz(m), { a: 0.004, d, harm: [1, 0.25, 0.08] });
+const drop = () => tone(0.25, 900 + rnd() * 700, { a: 0.002, d: 0.06, glide: 2.5 });
+const softWind = (L, g = 0.06) => { const w = brown(Math.floor(L * SR)); lowpass(w, 220); for (let i = 0; i < w.length; i++) w[i] *= g * (0.6 + 0.4 * Math.sin((TAU * 2 * i) / (L * SR))); return w; };
+const L = 24;
+S['amb-intro'] = () => pad(L, [50, 57, 62, 66], { gain: 0.16, breathe: 0.5 });
+S['amb-taiz'] = () => { const x = pad(L, [50, 57, 62, 64, 69], { gain: 0.12 }); mix(x, softWind(L, 0.08)); sprinkle(x, L, 7, () => { const c = buf(0.6); const f = 3000 + rnd() * 1500; for (let j = 0; j < 3; j++) mix(c, chirp(f), Math.floor(j * 0.11 * SR)); return c; }, 0.05); return x; };
+S['amb-sanaa'] = () => { const x = pad(L, [52, 59, 64, 67, 71], { gain: 0.12, bright: 0.15 }); sprinkle(x, L, 10, (k) => pluck([76, 79, 83, 81][k % 4], 1.4), 0.04); return x; };
+S['amb-cairo'] = () => { const x = pad(L, [57, 58, 61, 64, 69], { gain: 0.1, breathe: 0.45 }); sprinkle(x, L, 22, drop, 0.05); mix(x, softWind(L, 0.05)); return x; };
+S['amb-lubeck'] = () => { const x = pad(L, [53, 60, 65, 69, 72], { gain: 0.11 }); sprinkle(x, L, 3, () => gull(), 0.12); sprinkle(x, L, 2, () => bell(220, 4), 0.06); return x; };
+S['amb-najran'] = () => { const x = pad(L, [50, 51, 54, 57, 62], { gain: 0.11, breathe: 0.5 }); mix(x, softWind(L, 0.1)); return x; };
+S['amb-library'] = () => { const x = pad(L, [48, 55, 60, 64], { gain: 0.1, bright: 0.1 }); const clk = buf(L); for (let t = 0; t < L - 0.1; t += 1) mix(clk, click(0.008, 2500, 5000), Math.floor(t * SR), 0.05); mix(x, clk); return x; };
+S['amb-writer'] = () => { const x = pad(L, [55, 62, 67, 71], { gain: 0.11, bright: 0.12 }); sprinkle(x, L, 6, (k) => pluck([74, 79, 76, 81][k % 4], 1.8), 0.035); return x; };
+S['amb-ai'] = () => { const x = pad(L, [48, 55, 62, 67, 72], { gain: 0.1, bright: 0.4 }); sprinkle(x, L, 24, (k) => pluck([72, 76, 79, 84, 83, 79][k % 6], 0.4), 0.03); return x; };
+S['amb-end'] = () => pad(L, [50, 57, 62, 66, 69, 74], { gain: 0.12, breathe: 0.4 });
 
 // ---------- interaction sounds ----------
 S['sfx-pour'] = () => { const n = 1.6 * SR; const x = noise(n); for (let i = 0; i < n; i++) { const t = i / SR; x[i] *= Math.sin(Math.PI * t / 1.6); } bandpass(x, 400, 2500); for (let k = 0; k < 40; k++) mix(x, tone(0.04, 600 + rnd() * 900, { a: 0.002, d: 0.015, glide: 3 }), Math.floor(rnd() * 1.5 * SR), 0.25); return x; };
@@ -97,7 +120,7 @@ function writeWav(file, x) {
 const only = process.argv.slice(2);
 for (const [name, fn] of Object.entries(S)) {
   if (only.length && !only.includes(name)) continue;
-  const x = norm(fn(), name.startsWith('amb') ? 0.5 : 0.8);
+  const x = norm(fn(), name.startsWith('amb') ? 0.35 : 0.8);
   const wav = path.join(TMP, name + '.wav'); writeWav(wav, x);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, '-c:a', 'libvorbis', '-q:a', '1', path.join(OUT, name + '.ogg')]);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, '-c:a', 'libmp3lame', '-b:a', '64k', path.join(OUT, name + '.mp3')]);

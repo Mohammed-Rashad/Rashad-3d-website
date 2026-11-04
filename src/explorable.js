@@ -1,4 +1,6 @@
 // §8 — the explorable: aliasing → sinc reconstruction → sinc-Gauss → a tiny neural net.
+import { icon } from './icons.mjs';
+const trainLabel = (on, lang) => icon(on ? 'pause' : 'play') + ' ' + (on ? (lang() === 'ar' ? 'إيقاف' : 'Pause') : (lang() === 'ar' ? 'درّب' : 'Train'));
 const sinc = (x) => (Math.abs(x) < 1e-9 ? 1 : Math.sin(Math.PI * x) / (Math.PI * x));
 const COL = { bg: '#12142e', grid: 'rgba(255,255,255,0.07)', axis: 'rgba(255,255,255,0.25)', gold: '#f2c66d', cyan: '#7fd8e6', red: '#ff7a6b', text: '#c9cbe8' };
 
@@ -32,9 +34,9 @@ function aliasing(root, { sfx, reduced, lang }) {
     const ap = apparent();
     ctx.fillStyle = COL.text; ctx.font = font(o, 13); ctx.textAlign = 'center';
     const L = lang() === 'ar';
-    const msg = Math.abs(ap) < 0.05 ? (L ? 'تبدو متوقفة!' : 'looks frozen!') : ap < 0 ? (L ? `تبدو أنها تدور للخلف: ${ap.toFixed(1)} دورة/ث` : `appears to spin backwards: ${ap.toFixed(1)} rev/s`) : (L ? `تبدو: ${ap.toFixed(1)} دورة/ث` : `appears: +${ap.toFixed(1)} rev/s`);
+    const msg = Math.abs(ap) < 0.05 ? (L ? 'تبدو متوقفة!' : 'looks frozen!') : ap < 0 ? (L ? `تبدو كأنها تدور إلى الخلف: ${ap.toFixed(1)} دورة/ث` : `appears to spin backwards: ${ap.toFixed(1)} rev/s`) : (L ? `السرعة الظاهرة: ${ap.toFixed(1)} دورة/ث` : `appears: +${ap.toFixed(1)} rev/s`);
     ctx.fillStyle = ap < 0 || Math.abs(ap) < 0.05 ? COL.red : COL.cyan; ctx.fillText(msg, cx, H - 14 * dpr);
-    ctx.fillStyle = COL.text; ctx.fillText(L ? `الحقيقة: ${F0} دورة/ث` : `truth: +${F0} rev/s`, cx, 20 * dpr);
+    ctx.fillStyle = COL.text; ctx.fillText(L ? `السرعة الحقيقية: ${F0} دورة/ث` : `truth: +${F0} rev/s`, cx, 20 * dpr);
     // signal plot: true sine (height of the marked spoke) + samples + alias
     const x0 = W * 0.42, x1 = W - 16 * dpr, yc = H * 0.5, A = H * 0.32; const span = 1; // one second
     ctx.strokeStyle = COL.axis; ctx.lineWidth = 1 * dpr; ctx.beginPath(); ctx.moveTo(x0, yc); ctx.lineTo(x1, yc); ctx.stroke();
@@ -44,7 +46,7 @@ function aliasing(root, { sfx, reduced, lang }) {
     if (fs < 2 * F0) { ctx.strokeStyle = COL.red; ctx.setLineDash([6 * dpr, 4 * dpr]); ctx.beginPath(); for (let i = 0; i <= 400; i++) { const tt = (i / 400) * span; const y = yc - Math.sin(2 * Math.PI * ap * tt) * A; i ? ctx.lineTo(X(tt), y) : ctx.moveTo(X(tt), y); } ctx.stroke(); ctx.setLineDash([]); }
     ctx.fillStyle = COL.gold; for (let n = 0; n <= fs * span; n++) { const tt = n / fs; const y = yc - Math.sin(2 * Math.PI * F0 * tt) * A; ctx.beginPath(); ctx.arc(X(tt), y, 3.5 * dpr, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = COL.text; ctx.textAlign = 'left'; ctx.font = font(o, 12);
-    ctx.fillText(fs >= 2 * F0 ? (L ? 'العينات تكفي (≥ ضعف التردد)' : 'enough samples (≥ 2× frequency)') : (L ? 'تعرّج: المنحنى الأحمر يطابق العينات نفسها' : 'aliasing: the red curve fits the same samples'), x0, 20 * dpr);
+    ctx.fillText(fs >= 2 * F0 ? (L ? 'العيّنات كافية (≥ ضعف التردد)' : 'enough samples (≥ 2× frequency)') : (L ? 'تعرّج: المنحنى الأحمر يمرّ بالعيّنات نفسها' : 'aliasing: the red curve fits the same samples'), x0, 20 * dpr);
     if (sampleIdx !== lastSample) { lastSample = sampleIdx; }
   }
   function loop(ts) { if (!visible) { last = null; return; } if (last != null) t += ((ts - last) / 1000) * SLOW; last = ts; draw(); requestAnimationFrame(loop); }
@@ -113,7 +115,7 @@ function gauss(root, { sfx, lang }) {
     ctx.fillStyle = useG ? 'rgba(242,198,109,0.35)' : 'rgba(127,216,230,0.35)';
     for (let i = 0; i <= 150; i++) { const t = -9 + (i / 150) * 18; const e = (approx(t, N, useG) - f(t)) * 200; ctx.fillRect(X(t), ly1 + 14 * dpr, 2 * dpr, -Math.max(-12 * dpr, Math.min(12 * dpr, e * dpr))); }
     ctx.fillStyle = COL.text; ctx.font = font(o, 12); ctx.textAlign = 'left';
-    ctx.fillText(L ? `إعادة البناء بـ 2N = ${2 * N} عينة` : `reconstruction from 2N = ${2 * N} samples`, lx0, 16 * dpr);
+    ctx.fillText(L ? `إعادة البناء من 2N = ${2 * N} عيّنة` : `reconstruction from 2N = ${2 * N} samples`, lx0, 16 * dpr);
     ctx.fillText(L ? 'الخطأ ×٢٠٠' : 'error ×200', lx0, H - 4 * dpr);
     // right: log error vs N
     const rx0 = W * 0.63, rx1 = W - 12 * dpr, ry0 = 26 * dpr, ry1 = H - 30 * dpr;
@@ -121,7 +123,7 @@ function gauss(root, { sfx, lang }) {
     ctx.strokeStyle = COL.axis; ctx.beginPath(); ctx.moveTo(rx0, ry0); ctx.lineTo(rx0, ry1); ctx.lineTo(rx1, ry1); ctx.stroke();
     ctx.fillStyle = COL.text; ctx.font = font(o, 10); ctx.textAlign = 'right'; for (let p = 0; p >= lo; p -= 3) { ctx.fillText(`1e${p}`, rx0 - 4 * dpr, RY(10 ** p) + 3 * dpr); ctx.strokeStyle = COL.grid; ctx.beginPath(); ctx.moveTo(rx0, RY(10 ** p)); ctx.lineTo(rx1, RY(10 ** p)); ctx.stroke(); }
     ctx.textAlign = 'center'; ctx.fillText('N', (rx0 + rx1) / 2, H - 8 * dpr);
-    for (const [g, c, label] of [[false, COL.cyan, L ? 'كلاسيكي (كثير حدود)' : 'classical (polynomial)'], [true, COL.gold, L ? 'sinc-Gauss (أُسّي)' : 'sinc-Gauss (exponential)']]) {
+    for (const [g, c, label] of [[false, COL.cyan, L ? 'التقليدي (حدودي)' : 'classical (polynomial)'], [true, COL.gold, L ? 'sinc-Gauss (أُسّي)' : 'sinc-Gauss (exponential)']]) {
       ctx.strokeStyle = c; ctx.lineWidth = 2 * dpr; ctx.beginPath(); for (let n = 2; n <= 24; n++) { const y = RY(maxErr(n, g)); n === 2 ? ctx.moveTo(RX(n), y) : ctx.lineTo(RX(n), y); } ctx.stroke();
       ctx.fillStyle = c; ctx.beginPath(); ctx.arc(RX(N), RY(maxErr(N, g)), (g === useG ? 5 : 3) * dpr, 0, 7); ctx.fill();
       ctx.textAlign = 'right'; ctx.font = font(o, 11); ctx.fillText(label, rx1, (g ? RY(maxErr(20, true)) + 16 * dpr : RY(maxErr(20, false)) - 8 * dpr));
@@ -183,13 +185,13 @@ function mlp(root, { sfx, loopSfx, lang }) {
   }
   function loop() {
     if (!training) return;
-    const d = data(); if (d.length < 2) { training = false; trainBtn.textContent = lang() === 'ar' ? '▶ درّب' : '▶ Train'; return; }
+    const d = data(); if (d.length < 2) { training = false; trainBtn.innerHTML = trainLabel(false, lang); return; }
     let loss = 0; for (let k = 0; k < 25; k++) loss = trainStep(d);
     lastLoss = loss; lossEl.textContent = `step ${step} · loss ${loss.toExponential(2)}`;
-    draw(); if (step > 6000 || loss < 2e-5) { training = false; loopSfx('hum', false); trainBtn.textContent = lang() === 'ar' ? '▶ درّب' : '▶ Train'; return; }
+    draw(); if (step > 6000 || loss < 2e-5) { training = false; loopSfx('hum', false); trainBtn.innerHTML = trainLabel(false, lang); return; }
     requestAnimationFrame(loop);
   }
-  trainBtn.addEventListener('click', () => { training = !training; trainBtn.textContent = training ? (lang() === 'ar' ? '❚❚ إيقاف' : '❚❚ Pause') : (lang() === 'ar' ? '▶ درّب' : '▶ Train'); loopSfx('hum', training); if (training) loop(); });
+  trainBtn.addEventListener('click', () => { training = !training; trainBtn.innerHTML = trainLabel(training, lang); loopSfx('hum', training); if (training) loop(); });
   root.querySelector('[data-w=reset]').addEventListener('click', () => { init(); lossEl.textContent = ''; draw(); });
   init(); store.listeners.add(draw); o.onresize = draw; draw();
 }

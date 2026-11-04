@@ -1,0 +1,28 @@
+// Small line-icon set (24×24, stroke = currentColor), drawn for this site. Used at build time and at runtime.
+const P = {
+  cup: '<path d="M5 8h11v4.5A5.5 5.5 0 0 1 10.5 18 5.5 5.5 0 0 1 5 12.5Z"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M4 21h14"/><path d="M8.5 2.5c-.7.9-.7 1.6 0 2.5M12 2.5c-.7.9-.7 1.6 0 2.5"/>',
+  bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z"/><path d="M10 21a2 2 0 0 0 4 0"/>',
+  radio: '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M7 4l10 4"/><circle cx="8.5" cy="14" r="2.5"/><path d="M14 12h4M14 15h4"/>',
+  volumeOff: '<path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4Z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/>',
+  volumeOn: '<path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4Z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>',
+  snow: '<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/><path d="M9.5 4.5 12 6l2.5-1.5M9.5 19.5 12 18l2.5 1.5"/>',
+  pin: '<path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11Z"/><circle cx="12" cy="10" r="2.2"/>',
+  cake: '<path d="M4 21h16v-7H4Z"/><path d="M4 16.5c2 1.3 3.3 1.3 4 0s2-1.3 4 0 2.7 1.3 4 0 2-1.3 4 0"/><path d="M8 14v-3M12 14v-3M16 14v-3"/><path d="M8 7.5c0-1 .8-1.6 0-3M12 7.5c0-1 .8-1.6 0-3M16 7.5c0-1 .8-1.6 0-3"/>',
+  list: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  lang: '<path d="M3 5h10M8 3v2M5 5c0 4 3 7 6 8M11 5c0 4-3 7-7 9"/><path d="M13 21l4-9 4 9M14.5 18h5"/>',
+  chalk: '<path d="M14.5 4.5 19.5 9.5 9 20H4v-5Z"/><path d="M12.5 6.5l5 5"/>',
+  eraser: '<path d="M16 4l5 5-9.5 9.5H7L3 14.5Z"/><path d="M11 9l5 5"/><path d="M11.5 18.5H21"/>',
+  clear: '<path d="M4 7h16M9 7V4h6v3M6.5 7l1 13h9l1-13"/>',
+  play: '<path d="M7 4.5v15l12-7.5Z"/>',
+  pause: '<path d="M8 5v14M16 5v14"/>',
+  reset: '<path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/>',
+  dice: '<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/><circle cx="15" cy="9" r="1"/><circle cx="9" cy="15" r="1"/>',
+  external: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  hand: '<path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V4.5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7.5c0 4-2.5 7-6.5 7-2.5 0-4-1.2-5.3-3.3L3.6 14.3a1.6 1.6 0 0 1 2.6-1.8L8 14.5"/>',
+  scroll: '<rect x="7" y="3" width="10" height="18" rx="5"/><path d="M12 7v3"/>',
+  chevron: '<path d="M6 9l6 6 6-6"/>',
+  sparkle: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/>',
+  check: '<path d="M4.5 12.5l5 5 10-11"/>',
+};
+export const icon = (name, cls = '') => `<svg class="ico ${cls}" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${P[name] || ''}</svg>`;

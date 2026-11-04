@@ -3,7 +3,8 @@
 import fs from 'fs';
 import path from 'path';
 import katex from 'katex';
-import { CHAPTERS, UI } from '../chapters.mjs';
+import { CHAPTERS, UI, secLabel } from '../chapters.mjs';
+import { icon } from '../icons.mjs';
 
 const TODO = 'TODO_FROM_FAMILY';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -61,13 +62,19 @@ function chapterBody(id, c, dev) {
   switch (id) {
     case 'taiz':
       return `<p class="lead">${L(P.taiz)}</p>${J}${st}
-        <div class="actions"><button class="btn" data-action="pour">${LH('☕ Pour a cup', '☕ اسكب فنجانًا')}</button></div>
-        ${hint('Click the coffee plant in the mountains.', 'اضغط على شجرة البن في الجبال.')}`;
+        <div class="actions"><button class="btn" data-action="pour">${icon('cup')} ${LH('Pour a cup', 'اسكب فنجانًا')}</button></div>
+        ${hint('Click the coffee plant in the valley.', 'انقر على شجرة البنّ في الوادي.')}`;
     case 'sanaa':
       return `<p class="lead">${L(P.sanaa)}</p>${J}${st}
-        <div class="actions"><button class="btn" data-action="chalk">${LH('Write on the board', 'اكتب على السبورة')}</button><button class="btn" data-action="bell">${LH('🔔 Ring the bell', '🔔 اقرع الجرس')}</button></div>
-        <div class="chalk-fallback" dir="ltr">${tex('f(t) = \\sum_{n} f(n)\\,\\operatorname{sinc}(t-n)', true)}</div>
-        ${hint('Drag across the chalkboard to erase it.', 'اسحب على السبورة لمسحها.')}`;
+        <figure class="chalkpad"><canvas id="chalk-pad" width="1024" height="560" aria-label="Chalkboard: draw with your mouse or finger"></canvas>
+          <figcaption>${LH('Your board. Whatever you write here also appears on the chalkboard in the scene, and you can draw on that one directly too.', 'سبورتك أنت. كل ما تكتبه هنا يظهر أيضًا على السبورة في المشهد، ويمكنك الكتابة عليها مباشرةً كذلك.')}</figcaption></figure>
+        <div class="actions chalk-tools" role="group" aria-label="Chalk tools">
+          <button class="btn" data-action="chalk-tool" data-tool="chalk" aria-pressed="true">${icon('chalk')} ${LH('Chalk', 'طباشير')}</button>
+          <button class="btn" data-action="chalk-tool" data-tool="eraser" aria-pressed="false">${icon('eraser')} ${LH('Eraser', 'ممحاة')}</button>
+          <button class="btn" data-action="chalk-clear">${icon('clear')} ${LH('Clean', 'امسح الكل')}</button>
+          <button class="btn" data-action="chalk">${icon('sparkle')} ${LH('Write his formula', 'اكتب معادلته')}</button>
+          <button class="btn" data-action="bell">${icon('bell')} ${LH('Ring the bell', 'اقرع الجرس')}</button></div>
+        <div class="chalk-fallback" dir="ltr">${tex('f(t) = \\sum_{n} f(n)\\,\\operatorname{sinc}(t-n)', true)}</div>`;
     case 'cairo':
       return `<p class="lead">${L(P.cairo)}</p>
         <div class="texbox" dir="ltr" aria-label="LaTeX compile demo">
@@ -95,15 +102,15 @@ function chapterBody(id, c, dev) {
       return `<p class="lead">${L(P.lubeck)}</p>
         <div class="figs">${axis}${map}</div>${J}${st}
         ${(c.chapters.lubeck?.germanyLife || []).filter(okL).map((t) => `<p>${L(t)}</p>`).join('')}
-        <div class="actions"><button class="btn" data-action="snow" aria-pressed="false">${LH('❄ Toggle snow', '❄ تشغيل الثلج')}</button><button class="btn" data-action="marzipan">${LH('Sample the marzipan', 'عايِن المرزبانية')}</button></div>
-        ${hint('Click the marzipan block on the quay.', 'اضغط على قطعة المرزبانية عند الرصيف.')}`;
+        <div class="actions"><button class="btn" data-action="snow" aria-pressed="false">${icon('snow')} ${LH('Snow', 'تساقط الثلج')}</button><button class="btn" data-action="marzipan">${LH('Sample the marzipan', 'قطّع المرزبان إلى عيّنات')}</button></div>
+        ${hint('Click the marzipan block on the quay.', 'انقر على قطعة المرزبان عند الرصيف.')}`;
     }
     case 'najran':
       return `<p class="lead">${L(P.najran)}</p>
-        <div class="levelup" aria-label="Full Professor, December 2020">${LH('Full Professor · Dec 2020', 'أستاذ دكتور · ديسمبر ٢٠٢٠')}</div>
+        <div class="levelup" aria-label="Full Professor, December 2020">${LH('Full Professor · Dec 2020', 'أستاذ (بروفيسور) · ديسمبر ٢٠٢٠')}</div>
         <figure class="constellation-fig"><canvas id="constellation" width="560" height="340" aria-label="Co-author constellation: each star is a paper, lines join co-authors"></canvas>
-          <figcaption>${LH('Co-author constellation, from the public CV. Every star is a paper; the big clusters are Annaby and Prestin.', 'كوكبة المؤلفين المشاركين، من السيرة الذاتية العامة. كل نجمة ورقة بحثية؛ والعنقودان الكبيران هما عنبي وبرستين.')}
-          <a href="${esc(c.profile.links.cv)}#publications" target="_blank" rel="noopener">${LH('All papers →', 'كل الأوراق ←')}</a></figcaption></figure>
+          <figcaption>${LH('Co-author constellation, from the public CV. Every star is a paper; the big clusters are Annaby and Prestin.', 'كوكبة المؤلفين المشاركين، مستخلصة من السيرة الذاتية المنشورة. كل نجمة بحثٌ منشور، والعنقودان الكبيران هما عنّابي وبريستين.')}
+          <a href="${esc(c.profile.links.cv)}#publications" target="_blank" rel="noopener">${LH('All papers', 'كل الأبحاث') + ' ' + icon('external')}</a></figcaption></figure>
         ${J}${st}`;
     case 'library': {
       const items = c.history.items.filter((h) => h.confirmed || dev);
@@ -112,44 +119,50 @@ function chapterBody(id, c, dev) {
         : `<p class="handwritten">${L(UI.shelfStocking)}</p>`;
       const fb = ok(c.profile.links.facebook) ? ` <a href="${esc(c.profile.links.facebook)}" target="_blank" rel="noopener">${L(UI.hisPosts)}</a>` : '';
       return `<p class="lead">${L(P.library)}</p>${books}<p>${L(P.libraryPolitics)}${fb}</p>${J}${st}
-        <div class="actions"><button class="btn" data-action="radio">${LH('📻 Tune the radio', '📻 اضبط الراديو')}</button></div>`;
+        <div class="actions"><button class="btn" data-action="radio">${icon('radio')} ${LH('Tune the radio', 'اضبط الراديو')}</button></div>`;
     }
     case 'writer': {
       const fn = jokes.find((j) => j.kind === 'footnote' && j.enabled);
       const posts = c.posts.items.filter((p) => ok(p.text));
       const list = posts.length
         ? `<div class="letters">` + posts.map((p, i) => `<article class="letter" lang="${p.lang === 'ar' ? 'ar' : 'en'}" dir="${p.lang === 'ar' ? 'rtl' : 'ltr'}" style="--r:${(i % 2 ? 1 : -1) * 1.5}deg"><p>${esc(p.text).replace(/\n/g, '<br>')}</p><footer>${ok(p.date) ? `<time>${esc(p.date)}</time>` : ''}${ok(p.url) ? ` · <a href="${esc(p.url)}" target="_blank" rel="noopener">${L(UI.readPost)}</a>` : ''}</footer></article>`).join('') + `</div>`
-        : `<p class="handwritten soon">${L(UI.postsSoon)}</p>`;
+        : '';
+      const fbUrl = c.profile.links.facebook;
+      const fbLink = ok(fbUrl)
+        ? `<p class="fb-wrap"><a class="btn big fb-link" href="${esc(fbUrl)}" target="_blank" rel="noopener">${LH('Read his writing on Facebook', 'اقرأ ما يكتبه على فيسبوك')} ${icon('external')}</a></p>`
+        : `<p class="handwritten soon">${LH('The link to his Facebook page is coming soon…', 'رابط صفحته على فيسبوك قريبًا…')}</p>`;
       const mark = fn ? `<sup class="fn-mark"><a href="#fn-7-1" id="fnref-7-1">7.1</a></sup>` : '';
-      return `<p class="lead">${L(P.writer)}${mark}</p>${list}${st}
-        ${fn ? `<ol class="footnotes"><li id="fn-7-1" value="7"><span class="fn-num">7.1</span> ${L(fn.body)} <a href="#fnref-7-1" aria-label="back">↩</a></li></ol>` : ''}`;
+      return `<p class="lead">${L(P.writer)}${mark}</p>${fbLink}${list}${st}
+        ${fn ? `<ol class="footnotes"><li id="fn-7-1" value="7"><span class="fn-num">7.1</span> ${L(fn.body)} <a href="#fnref-7-1" aria-label="back">↑</a></li></ol>` : ''}`;
     }
     case 'ai': {
       const views = (c.ai.items || []).filter((v) => okL(v.text));
       return `<p class="lead">${L(P.ai)}</p>
-        <h3>${LH('1 · Too few samples', '١ · عينات أقل من اللازم')}</h3>
-        <p>${LH('A wheel spins at a steady speed, but a camera only looks at it a few times per second. Slide the sample rate down. Below twice the wheel’s frequency, the samples cannot tell a fast forward spin from a slow backward one. That is <strong>aliasing</strong>, and it is why wheels in films seem to roll backwards.', 'عجلة تدور بسرعة ثابتة، لكن الكاميرا لا تنظر إليها إلا بضع مرات في الثانية. حرّك معدل المعاينة إلى الأسفل. حين يقل عن ضعف تردد العجلة، لا تستطيع العينات التمييز بين دوران سريع إلى الأمام ودوران بطيء إلى الخلف. هذا هو <strong>التعرّج</strong>، ولهذا تبدو عجلات السيارات في الأفلام وكأنها تدور إلى الخلف.', 'p')}</p>
+        <h3>${LH('1 · Too few samples', '١ · حين تقلّ العيّنات')}</h3>
+        <p>${LH('A wheel spins at a steady speed, but a camera only looks at it a few times per second. Slide the sample rate down. Below twice the wheel’s frequency, the samples cannot tell a fast forward spin from a slow backward one. That is <strong>aliasing</strong>, and it is why wheels in films seem to roll backwards.', 'تدور عجلة بسرعة ثابتة، لكن الكاميرا لا تلتقط لها إلا بضع صور في الثانية. حرّك شريط معدّل المعاينة إلى الأسفل: حين يقلّ عن ضعف تردد العجلة، تعجز العيّنات عن التمييز بين دوران سريع إلى الأمام ودوران بطيء إلى الخلف. هذا هو <strong>التعرّج</strong>، وهو سبب ظهور عجلات السيارات في الأفلام وكأنها تدور إلى الوراء.', 'p')}</p>
         <div class="widget" id="w-alias" dir="ltr"><canvas width="640" height="260" aria-label="Spinning wheel sampled at an adjustable rate"></canvas>
-          <label>${LH('Sample rate', 'معدل المعاينة')} <input type="range" min="1" max="40" step="0.5" value="24" aria-label="Sample rate"> <output>24</output> /s</label></div>
-        <h3>${LH('2 · Rebuilding the whole from samples', '٢ · إعادة بناء الكل من العينات')}</h3>
-        <p>${LH('The sampling theorem says that if a signal has no frequencies above some limit, its samples, taken fast enough, determine it completely. The recipe: place a <em>sinc</em> wave on every sample, scale it by the sample’s value, and add them all up. Click to place samples; drag to move them.', 'تقول مبرهنة المعاينة إن الإشارة التي لا تحوي ترددات فوق حدٍّ معين تحددها عيناتها تمامًا إذا أُخذت بسرعة كافية. والوصفة: ضع موجة <em>sinc</em> على كل عينة، واضربها في قيمة العينة، ثم اجمعها كلها. اضغط لوضع العينات، واسحب لتحريكها.', 'p')}</p>
+          <label>${LH('Sample rate', 'معدّل المعاينة')} <input type="range" min="1" max="40" step="0.5" value="24" aria-label="Sample rate"> <output>24</output> /s</label></div>
+        <h3>${LH('2 · Rebuilding the whole from samples', '٢ · إعادة بناء الكل من العيّنات')}</h3>
+        <p>${LH('The sampling theorem says that if a signal has no frequencies above some limit, its samples, taken fast enough, determine it completely. The recipe: place a <em>sinc</em> wave on every sample, scale it by the sample’s value, and add them all up. Click to place samples; drag to move them.', 'تنصّ مبرهنة المعاينة على أن الإشارة التي لا تحتوي تردداتٍ فوق حدٍّ معيّن تتحدّد تمامًا بعيّناتها، إذا أُخذت بسرعة كافية. والوصفة: ضع موجة <em>sinc</em> عند كل عيّنة، واضربها في قيمة تلك العيّنة، ثم اجمع الموجات كلها. انقر لوضع العيّنات، واسحبها لتحريكها.', 'p')}</p>
         <div class="eq" dir="ltr">${tex('f(t) = \\sum_{n\\in\\mathbb{Z}} f(n)\\,\\operatorname{sinc}(t-n), \\qquad \\operatorname{sinc}(x)=\\frac{\\sin \\pi x}{\\pi x}', true)}</div>
         <div class="widget" id="w-recon" dir="ltr"><canvas width="640" height="280" aria-label="Click to add samples; the sinc reconstruction is drawn live"></canvas>
-          <div class="row"><button class="btn small" data-w="clear">${LH('Clear', 'مسح')}</button><button class="btn small" data-w="random">${LH('Random', 'عشوائي')}</button><label><input type="checkbox" data-w="terms" checked> ${LH('show each sinc', 'أظهر كل sinc')}</label></div></div>
+          <div class="row"><button class="btn small" data-w="clear">${icon('clear')} ${LH('Clear', 'مسح')}</button><button class="btn small" data-w="random">${icon('dice')} ${LH('Random', 'عشوائي')}</button><label><input type="checkbox" data-w="terms" checked> ${LH('show each sinc', 'أظهر كل موجة sinc')}</label></div></div>
         <h3>${LH('3 · His contribution: a Gaussian multiplier', '٣ · إسهامه: المضاعِف الغاوسي')}</h3>
-        <p>${LH('The catch is that a sinc wave fades away slowly, so you need a great many samples. In practice you stop after <em>N</em> of them, and the error shrinks only polynomially. Multiply each sinc by a Gaussian bell and the error falls <strong>exponentially</strong>. Much of Prof. Asharabi’s work extends this sinc-Gauss idea: to derivatives (Hermite-Gauss, with Prestin), to several variables, to nonuniform samples, and to computing eigenvalues.', 'المشكلة أن موجة sinc تتلاشى ببطء، فتحتاج إلى عدد هائل من العينات. وفي الواقع تتوقف بعد <em>N</em> منها، فلا يصغر الخطأ إلا بمعدل كثيرات الحدود. أما إذا ضربت كل sinc في جرس غاوسي فإن الخطأ يهبط <strong>أُسّيًا</strong>. وكثير من أعمال الأستاذ الدكتور الشرعبي يوسّع فكرة sinc-Gauss هذه: إلى المشتقات (هيرميت-غاوس مع برستين)، وإلى عدة متغيرات، وإلى العينات غير المنتظمة، وإلى حساب القيم الذاتية.', 'p')}</p>
+        <p>${LH('The catch is that a sinc wave fades away slowly, so you need a great many samples. In practice you stop after <em>N</em> of them, and the error shrinks only polynomially. Multiply each sinc by a Gaussian bell and the error falls <strong>exponentially</strong>. Much of Prof. Asharabi’s work extends this sinc-Gauss idea: to derivatives (Hermite-Gauss, with Prestin), to several variables, to nonuniform samples, and to computing eigenvalues.', 'المشكلة أن موجة sinc تخبو ببطء، فتحتاج إلى عدد هائل من العيّنات. وفي التطبيق تتوقف بعد <em>N</em> عيّنة، فلا يتناقص الخطأ إلا بمعدّل حدودي. أما إذا ضربتَ كل sinc في جرسٍ غاوسي، فإن الخطأ يهبط <strong>أُسّيًا</strong>. ويوسّع كثيرٌ من أعمال الأستاذ الدكتور الشرعبي فكرةَ sinc-غاوس هذه: إلى المشتقات (طريقة هيرميت–غاوس مع بريستين)، وإلى الدوال متعددة المتغيرات، وإلى العيّنات غير المنتظمة، وإلى حساب القيم الذاتية.', 'p')}</p>
         <div class="eq" dir="ltr">${tex('\\big|f(t) - G_{h,N}f(t)\\big| \\;\\le\\; C\\,\\frac{e^{-(\\pi - h\\sigma)N/2}}{\\sqrt{N}}', true)}
-          <details class="whatmeans"><summary>${LH('What does this mean?', 'ماذا يعني هذا؟')}</summary><p>${LH('Every extra sample multiplies the error by a fixed factor smaller than one, like compound interest in reverse. Ten more samples can mean several more correct digits. Classical truncation only nibbles at the error.', 'كل عينة إضافية تضرب الخطأ في عامل ثابت أصغر من واحد، كالفائدة المركبة لكن بالعكس. عشر عينات إضافية قد تعني عدة خانات صحيحة أخرى. أما القطع الكلاسيكي فيقضم الخطأ قضمًا.')}</p></details></div>
+          <details class="whatmeans"><summary>${LH('What does this mean?', 'ماذا يعني هذا؟')}</summary><p>${LH('Every extra sample multiplies the error by a fixed factor smaller than one, like compound interest in reverse. Ten more samples can mean several more correct digits. Classical truncation only nibbles at the error.', 'كل عيّنة إضافية تضرب الخطأ في عاملٍ ثابت أصغر من الواحد، كالفائدة المركّبة ولكن بالعكس؛ فعشر عيّنات إضافية قد تعني بضع خانات عشرية صحيحة أخرى. أما القطع التقليدي فلا يقضم من الخطأ إلا القليل.')}</p></details></div>
         <div class="widget" id="w-gauss" dir="ltr"><canvas width="640" height="300" aria-label="Error of classical versus sinc-Gauss reconstruction as N grows"></canvas>
           <div class="row"><label>N <input type="range" min="2" max="24" step="1" value="6" aria-label="Number of terms N"> <output>6</output></label><label><input type="checkbox" data-w="gauss" checked> ${LH('Gaussian multiplier', 'المضاعِف الغاوسي')}</label></div></div>
         <h3>${LH('4 · The machine’s way', '٤ · طريقة الآلة')}</h3>
-        <p>${LH('A neural network can fill the gaps too. It turns hundreds of little knobs until its curve passes near your points. Press <em>train</em> on the samples from widget 2 and compare. It often fits the points well, but nothing promises what happens between or beyond them. The theorem does.', 'تستطيع الشبكة العصبية أيضًا ملء الفراغات: تدير مئات المقابض الصغيرة حتى يمر منحناها قرب نقاطك. اضغط <em>درّب</em> على عينات الأداة ٢ وقارن. غالبًا ما تطابق النقاط جيدًا، لكن لا شيء يضمن ما يحدث بينها أو بعدها. أما المبرهنة فتضمن.', 'p')}</p>
+        <p>${LH('A neural network can fill the gaps too. It turns hundreds of little knobs until its curve passes near your points. Press <em>train</em> on the samples from widget 2 and compare. It often fits the points well, but nothing promises what happens between or beyond them. The theorem does.', 'تستطيع الشبكة العصبية أيضًا أن تسدّ الفجوات: فهي تضبط مئات المقابض الصغيرة حتى يمرّ منحناها قريبًا من نقاطك. اضغط <em>درّب</em> لتتعلّم من عيّنات الأداة ٢، ثم قارن. كثيرًا ما تطابق النقاطَ جيدًا، لكن لا شيء يضمن ما يحدث بينها أو خارجها. أما المبرهنة فتضمن ذلك.', 'p')}</p>
         <div class="widget" id="w-mlp" dir="ltr"><canvas width="640" height="280" aria-label="Neural network curve compared with sinc reconstruction"></canvas>
-          <div class="row"><button class="btn small" data-w="train">${LH('▶ Train', '▶ درّب')}</button><button class="btn small" data-w="reset">${LH('Reset', 'إعادة')}</button><span class="loss" aria-live="polite"></span></div></div>
-        <p class="caption-big">${LH('Before computers could hear or see, someone had to prove you could rebuild the whole from the samples.', 'قبل أن تسمع الحواسيب أو ترى، كان على أحدٍ ما أن يبرهن أنك تستطيع إعادة بناء الكل من العينات.')}</p>
+          <div class="row"><button class="btn small" data-w="train">${icon('play')} ${LH('Train', 'درّب')}</button><button class="btn small" data-w="reset">${icon('reset')} ${LH('Reset', 'إعادة ضبط')}</button><span class="loss" aria-live="polite"></span></div></div>
+        <p class="caption-big">${LH('Before computers could hear or see, someone had to prove you could rebuild the whole from the samples.', 'قبل أن تتعلّم الحواسيب أن تسمع وترى، كان لا بدّ أن يُبرهن أحدٌ على أنك تستطيع إعادة بناء الكل من العيّنات.')}</p>
         ${views.length ? `<div class="his-views"><h3>${LH('In his words', 'بكلماته')}</h3>${views.map((v) => `<blockquote>${L(v.text)}</blockquote>`).join('')}</div>` : ''}
         ${J}${st}`;
     }
+    case 'epilogue':
+      return `<p class="lead hint-strong">${icon('globe')} <span>${L(P.epilogue)}</span></p>`;
     case 'conclusion': {
       const main = jokes.find((j) => j.id === 'main-theorem');
       const ack = jokes.find((j) => j.id === 'acknowledgements' && j.enabled);
@@ -185,31 +198,40 @@ export function renderPage(c, { dev = false } = {}) {
   <section class="chapter intro" id="intro" data-chapter="intro" tabindex="-1" aria-label="Title page">
     <div class="card paper titlepage">
       <p class="journal">${LH('Journal of Family Analysis · Vol. 1 · Festschrift issue', 'مجلة التحليل العائلي · المجلد ١ · عدد تذكاري')}</p>
-      <h1>${LH('On the Convergence of a Yemeni Mathematician', 'في تقارب عالِم رياضيات يمني')}</h1>
+      <h1>${LH('On the Convergence of a Yemeni Mathematician', 'حول تقارُب عالِم رياضياتٍ يمني')}</h1>
       <p class="authors"><button class="name-btn" id="his-name" type="button">${L(p.name)}</button><sup>1</sup>
-        · ${LH('Received: 17 December 1974', 'استُلم: ١٧ ديسمبر ١٩٧٤')} · ${LH('Accepted: still under review', 'قُبل: لا يزال قيد المراجعة')}</p>
+        · ${LH('Received: 17 December 1974', 'تاريخ الاستلام: ١٧ ديسمبر ١٩٧٤')} · ${LH('Accepted: still under review', 'تاريخ القبول: لا يزال قيد المراجعة')}</p>
       <p class="affil"><sup>1</sup> ${LH('Taiz → Sana’a → Cairo → Lübeck → Najran', 'تعز ← صنعاء ← القاهرة ← لوبيك ← نجران')}</p>
-      <div class="abstract"><p>${LH('<strong>Abstract.</strong> We study a function <span dir="ltr">' + tex('f(t)') + '</span>, known locally as “Baba”, sampled at five points in space-time. Using a sinc-Gaussian operator with <em>family</em> as the multiplier, we reconstruct the continuous life between samples and show that convergence is exponential.', '<strong>الملخص.</strong> ندرس دالة <span dir="ltr">' + tex('f(t)') + '</span>، تُعرف محليًا باسم «بابا»، أُخذت عيناتها عند خمس نقاط في الزمكان. وباستخدام مؤثر sinc-Gauss تكون فيه <em>العائلة</em> هي المضاعِف، نعيد بناء الحياة المتصلة بين العينات ونبيّن أن التقارب أُسّي.')}</p>
-      <p class="kw">${LH('<strong>Keywords:</strong> sampling, coffee, chalk, Humboldt, Facebook, four children.', '<strong>كلمات مفتاحية:</strong> المعاينة، القهوة، الطباشير، هومبولت، فيسبوك، أربعة أبناء.')}</p>
+      <div class="abstract"><p>${LH('<strong>Abstract.</strong> We study a function <span dir="ltr">' + tex('f(t)') + '</span>, known locally as “Baba”, sampled at five points in space-time. Using a sinc-Gaussian operator with <em>family</em> as the multiplier, we reconstruct the continuous life between samples and show that convergence is exponential.', '<strong>الملخص.</strong> ندرس دالةً <span dir="ltr">' + tex('f(t)') + '</span>، تُعرف محليًا باسم «بابا»، أُخذت عيّناتها عند خمس نقاط في الزمكان. وباستخدام مؤثّر sinc-غاوس تكون فيه <em>العائلة</em> هي المضاعِف، نعيد بناء الحياة المتصلة بين العيّنات، ونُثبت أن التقارب أُسّي.')}</p>
+      <p class="kw">${LH('<strong>Keywords:</strong> sampling, coffee, chalk, Humboldt, Facebook, four children.', '<strong>الكلمات المفتاحية:</strong> المعاينة، القهوة، الطباشير، هومبولت، فيسبوك، أربعة أبناء.')}</p>
       <p class="kw"><strong>MSC 2020:</strong> <span dir="ltr">94A20, 41A25, 00-DAD</span></p></div>
-      <p class="scroll-cue">${L(UI.scroll)} ↓</p>
+      <div class="howto" aria-label="How to read this paper">
+        <h2 class="howto-h">${LH('How to read this paper', 'كيف تقرأ هذه الورقة')}</h2>
+        <ul>
+          <li class="howto-cups">${icon('cup')}<span>${LH('<strong>Find the 8 hidden Yemeni coffee cups</strong>, one in every 3D scene. Click a cup to collect it; find all of them to unlock a message from his children.', '<strong>ابحث عن ٨ فناجين قهوة يمنية مخبّأة</strong>، فنجان في كل مشهد ثلاثي الأبعاد. انقر على الفنجان لتجمعه، واعثر عليها كلها لتفتح رسالة من أبنائه.')}</span></li>
+          <li>${icon('scroll')}<span>${LH('Scroll: every chapter is one sample point of his life.', 'مرّر للأسفل: كل فصل نقطة معاينة من حياته.')}</span></li>
+          <li>${icon('hand')}<span>${LH('Click things in the scenes: the coffee plant, the chalkboard, the books…', 'انقر على ما في المشاهد: شجرة البنّ، والسبورة، والكتب…')}</span></li>
+          <li>${icon('volumeOn')}<span>${LH('Sound is off. Switch it on at the top if you like.', 'الصوت مُطفأ، ويمكنك تشغيله من الأعلى إن شئت.')}</span></li>
+        </ul>
+        <a class="btn big start-btn" href="#taiz">${LH('Start reading', 'ابدأ القراءة')} ${icon('chevron')}</a>
+      </div>
     </div>
   </section>`;
 
   const secs = CHAPTERS.filter((ch) => ch.n > 0).map((ch) => `
   <section class="chapter" id="${ch.id}" data-chapter="${ch.id}" style="--accent:${ch.accent}" tabindex="-1" aria-labelledby="h-${ch.id}">
     <div class="card paper">
-      <h2 id="h-${ch.id}"><span class="sec">§${ch.n}</span> ${L(ch.title)}</h2>
+      <h2 id="h-${ch.id}"><span class="sec">${LH(secLabel(ch, 'en'), secLabel(ch, 'ar'))}</span> ${L(ch.title)}</h2>
       ${chapterBody(ch.id, c, dev)}
       <div class="whispers" data-whispers="${ch.id}"></div>
     </div>
   </section>`).join('');
 
-  const toc = `<nav class="toc" id="toc" aria-label="${UI.contents.en}" hidden><ol>${CHAPTERS.map((ch) => `<li><a href="#${ch.id}">${ch.n ? `<span class="sec">§${ch.n}</span> ` : ''}${L(ch.title)}</a></li>`).join('')}</ol></nav>`;
+  const toc = `<nav class="toc" id="toc" aria-label="${UI.contents.en}" hidden><ol>${CHAPTERS.map((ch) => `<li><a href="#${ch.id}">${ch.n ? `<span class="sec">${LH(secLabel(ch, 'en'), secLabel(ch, 'ar'))}</span> ` : ''}${L(ch.title)}</a></li>`).join('')}</ol></nav>`;
 
   const footerJoke = c.jokes.items.find((j) => j.id === 'footer-status');
   const footer = `<footer class="site-footer"><p>${footerJoke && footerJoke.enabled ? L(footerJoke.body) : ''}</p>
-    <p class="small">${LH('Made with love by his son. Formal CV: ', 'صُنع بحب من ابنه. السيرة الرسمية: ')}<a href="${esc(p.links.cv)}" target="_blank" rel="noopener">rashad1974.netlify.app</a></p></footer>`;
+    <p class="small">${LH('Made with love by his son. Formal CV: ', 'صُنع بحبّ من ابنه. السيرة الذاتية الرسمية: ')}<a href="${esc(p.links.cv)}" target="_blank" rel="noopener">rashad1974.netlify.app</a></p></footer>`;
 
   // runtime data (whispers etc.) – only what the widgets need
   const data = {

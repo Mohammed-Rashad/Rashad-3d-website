@@ -47,7 +47,7 @@ export function drawCurve(ctx, W, H, progress, { lang = 'en', envelope = 0, dpr 
     const a = Math.min(1, (progress - 2.6) * 2) * (0.55 + 0.25 * Math.sin(progress * 5));
     const u = Math.max(2, head - 0.45); const av = f(u);
     ctx.globalAlpha = a; ctx.fillStyle = '#3bb3a3'; ctx.beginPath(); ctx.arc(X(u), Y(av) - 7 * dpr, 2.6 * dpr, 0, Math.PI * 2); ctx.fill();
-    ctx.font = `${10 * dpr}px "CMU Serif", Georgia, serif`; ctx.textAlign = 'center'; ctx.fillText(lang === 'ar' ? 'عنبي' : 'Annaby', X(u), Y(av) - 13 * dpr); ctx.globalAlpha = 1;
+    ctx.font = `${10 * dpr}px "CMU Serif", Georgia, serif`; ctx.textAlign = 'center'; ctx.fillText(lang === 'ar' ? 'عنّابي' : 'Annaby', X(u), Y(av) - 13 * dpr); ctx.globalAlpha = 1;
   }
   // sample points + labels
   for (let k = 0; k < K; k++) {
@@ -76,7 +76,7 @@ export function finalCurve(canvas, getLang, { calm, onLit }) {
     const W = canvas.width, H = canvas.height;
     ctx.fillStyle = '#12142e'; ctx.fillRect(0, 0, W, H);
     drawCurve(ctx, W, H, 1 + p * 8.6, { lang: getLang(), envelope: Math.max(0, (p - 0.65) / 0.35), dpr, pad: 40, annaby: false });
-    if (p >= 1) { ctx.fillStyle = '#f2c66d'; ctx.font = `italic ${14 * dpr}px "CMU Serif", Georgia, serif`; ctx.textAlign = 'right'; ctx.fillText(getLang() === 'ar' ? 'الخطأ ← ٠ أُسّيًا' : 'error → 0, exponentially', W - 14 * dpr, 22 * dpr); }
+    if (p >= 1) { ctx.fillStyle = '#f2c66d'; ctx.font = `italic ${14 * dpr}px "CMU Serif", Georgia, serif`; ctx.textAlign = 'right'; ctx.fillText(getLang() === 'ar' ? 'الخطأ يؤول إلى الصفر أُسّيًا' : 'error → 0, exponentially', W - 14 * dpr, 22 * dpr); }
   }
   render(calm ? 1 : 0);
   if (calm) { done = true; onLit && onLit(); }

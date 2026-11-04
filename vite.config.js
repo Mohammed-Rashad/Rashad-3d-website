@@ -13,7 +13,8 @@ function contentPlugin() {
     async transformIndexHtml(html) {
       const url = pathToFileURL(path.join(root, 'src/render/page.mjs')).href + (dev ? `?t=${Date.now()}` : '');
       const { renderPage, loadContent } = await import(url);
-      return html.replace('<!--APP-->', renderPage(loadContent(root), { dev }));
+      const { icon } = await import(pathToFileURL(path.join(root, 'src/icons.mjs')).href + (dev ? `?t=${Date.now()}` : ''));
+      return html.replace('<!--APP-->', renderPage(loadContent(root), { dev })).replace(/<!--ICON:(\w+)-->/g, (_, n) => icon(n));
     },
     configureServer(server) {
       server.watcher.add([path.join(root, 'content'), path.join(root, 'CREDITS.md')]);

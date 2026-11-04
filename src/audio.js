@@ -2,11 +2,11 @@
 const CAPTIONS = {
   pour: { en: '[coffee pouring]', ar: '[صب القهوة]' }, clink: { en: '[cup clinks]', ar: '[رنين الفنجان]' },
   chalk: { en: '[chalk scratches]', ar: '[صرير الطباشير]' }, bell: { en: '[school bell rings]', ar: '[جرس المدرسة]' },
-  keys: { en: '[keyboard clacking]', ar: '[نقر لوحة المفاتيح]' }, ding: { en: '[compile ding!]', ar: '[تنبيه: اكتمل الترجمة]' },
+  keys: { en: '[keyboard clacking]', ar: '[نقر لوحة المفاتيح]' }, ding: { en: '[compile ding!]', ar: '[رنين: اكتمل التحويل]' },
   churchbell: { en: '[church bells]', ar: '[أجراس الكنيسة]' }, tram: { en: '[tram bell]', ar: '[جرس الترام]' }, snow: { en: '[footsteps in snow]', ar: '[خطوات على الثلج]' },
   gull: { en: '[seagulls]', ar: '[نوارس]' }, applause: { en: '[applause]', ar: '[تصفيق]' }, page: { en: '[page turns]', ar: '[تقليب صفحة]' },
   radio: { en: '[radio tuning crackle]', ar: '[خشخشة ضبط الراديو]' }, rustle: { en: '[paper rustles]', ar: '[حفيف الورق]' }, scribble: { en: '[pen scribbles]', ar: '[خربشة القلم]' },
-  pulse: { en: '[golden chime]', ar: '[رنين ذهبي]' }, found: { en: '[cup found!]', ar: '[وُجد فنجان!]' }, unlock: { en: '[everything converges]', ar: '[كل شيء يتقارب]' },
+  pulse: { en: '[golden chime]', ar: '[رنين ذهبي]' }, found: { en: '[cup found!]', ar: '[وجدتَ فنجانًا!]' }, unlock: { en: '[everything converges]', ar: '[كل شيء يتقارب]' },
   wobble: { en: '[wobble]', ar: '[تمايل]' }, blip: null, hum: { en: '[network hums]', ar: '[طنين الشبكة]' },
 };
 const AMB_DESC = {
@@ -29,7 +29,7 @@ export function createAudio({ lang, captionsEl }) {
   async function setAmbience(name) {
     if (name === ambName && amb) return; ambName = name;
     if (!on) return;
-    const old = amb; amb = get(name, { loop: true, volume: 0 }); amb.play(); amb.fade(0, 0.55, 1500);
+    const old = amb; amb = get(name, { loop: true, volume: 0 }); amb.play(); amb.fade(0, 0.4, 2000);
     if (old && old !== amb) { old.fade(old.volume(), 0, 1500); setTimeout(() => old.stop(), 1600); }
   }
   return {
