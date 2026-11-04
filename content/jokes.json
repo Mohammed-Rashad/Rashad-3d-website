@@ -1,0 +1,97 @@
+{
+  "_note": "Every joke/theorem on the site. Set enabled:false to hide one. Approved:true once the family has confirmed it.",
+  "items": [
+    {
+      "id": "lemma-1-1", "chapter": "taiz", "kind": "lemma", "number": "1.1", "enabled": true, "approved": false,
+      "title": { "en": "Jitter error", "ar": "خطأ الارتعاش" },
+      "body": {
+        "en": "His 2011 paper studies “jitter errors” in sampling. We conjecture the source is Yemeni coffee.",
+        "ar": "تدرس ورقته عام ٢٠١١ «أخطاء الارتعاش» في المعاينة. ونخمّن أن المصدر هو القهوة اليمنية."
+      }
+    },
+    {
+      "id": "remark-2-1", "chapter": "sanaa", "kind": "remark", "number": "2.1", "enabled": true, "approved": false,
+      "title": { "en": "", "ar": "" },
+      "body": {
+        "en": "He was teaching mathematics before finishing his degree. In sampling terms: output before input. Causality is overrated.",
+        "ar": "كان يدرّس الرياضيات قبل أن ينهي دراسته. بلغة المعاينة: المُخرَج قبل المُدخَل. السببية مبالغ في تقديرها."
+      }
+    },
+    {
+      "id": "theorem-3-1", "chapter": "cairo", "kind": "theorem", "number": "3.1", "enabled": true, "approved": false,
+      "title": { "en": "Eigenvalues of discontinuous problems", "ar": "القيم الذاتية للمسائل غير المتصلة" },
+      "body": {
+        "en": "His early papers compute eigenvalues of problems with discontinuities. Moving countries four times is a discontinuity. Our result: the eigenvalues (his values) stayed the same.",
+        "ar": "تحسب أوراقه الأولى القيم الذاتية لمسائل فيها انقطاعات. والانتقال بين البلدان أربع مرات انقطاع. نتيجتنا: القيم الذاتية (قيمه هو) بقيت كما هي."
+      }
+    },
+    {
+      "id": "definition-4-1", "chapter": "lubeck", "kind": "definition", "number": "4.1", "enabled": true, "approved": false,
+      "title": { "en": "", "ar": "" },
+      "body": {
+        "en": "His Humboldt visits to Germany (2011, 2012–13, 2014, 2017, 2019) are a textbook example of periodic nonuniform sampling, the title of his 2023 paper.",
+        "ar": "زياراته إلى ألمانيا بمنحة هومبولت (٢٠١١، ٢٠١٢–٢٠١٣، ٢٠١٤، ٢٠١٧، ٢٠١٩) مثال نموذجي على المعاينة الدورية غير المنتظمة، وهو عنوان ورقته عام ٢٠٢٣."
+      }
+    },
+    {
+      "id": "problem-4-2", "chapter": "lubeck", "kind": "problem", "number": "4.2", "enabled": true, "approved": false,
+      "title": { "en": "Inverse heat conduction", "ar": "مسألة التوصيل الحراري العكسية" },
+      "body": {
+        "en": "He has a paper on the inverse heat conduction problem. Applied version: go from Najran in August to Lübeck in January and reconstruct how you got there.",
+        "ar": "له ورقة عن مسألة التوصيل الحراري العكسية. النسخة التطبيقية: انتقل من نجران في أغسطس إلى لوبيك في يناير، ثم أعد بناء كيف وصلت إلى هناك."
+      }
+    },
+    {
+      "id": "corollary-5-1", "chapter": "najran", "kind": "corollary", "number": "5.1", "enabled": true, "approved": false,
+      "title": { "en": "Hyperstability", "ar": "الاستقرار الفائق" },
+      "body": {
+        "en": "He has a 2024 paper on hyperstability of functional equations. Anyone who survived supervising six theses and committee meetings is hyperstable.",
+        "ar": "له ورقة عام ٢٠٢٤ عن الاستقرار الفائق للمعادلات الدالية. وكل من نجا من الإشراف على ست رسائل ومن اجتماعات اللجان مستقر استقرارًا فائقًا."
+      }
+    },
+    {
+      "id": "remark-6-1", "chapter": "library", "kind": "remark", "number": "6.1", "enabled": true, "approved": false,
+      "title": { "en": "Aliasing error", "ar": "خطأ التعرّج" },
+      "body": {
+        "en": "He wrote a paper on aliasing error. Real-world aliasing: Asharabi, Al-Sharabi, Ash-Sharabi, Alsharabi. Same signal, many reconstructions.",
+        "ar": "كتب ورقة عن خطأ التعرّج. والتعرّج في الحياة الواقعية: Asharabi وAl-Sharabi وAsh-Sharabi وAlsharabi. إشارة واحدة وإعادات بناء كثيرة."
+      }
+    },
+    {
+      "id": "footnote-7-1", "chapter": "writer", "kind": "footnote", "number": "7.1", "enabled": true, "approved": false,
+      "title": { "en": "", "ar": "" },
+      "body": {
+        "en": "Unlike his journal papers, these posts were not peer-reviewed. The comment section did that.",
+        "ar": "على عكس أوراقه في المجلات، لم تخضع هذه المنشورات لتحكيم الأقران. قسم التعليقات قام بالمهمة."
+      }
+    },
+    {
+      "id": "main-theorem", "chapter": "conclusion", "kind": "theorem", "number": "", "enabled": true, "approved": false,
+      "title": { "en": "Main Theorem", "ar": "المبرهنة الرئيسية" },
+      "body": {
+        "en": "Let f be a life sampled at Taiz, Sana'a, Cairo, Lübeck and Najran. With a Gaussian multiplier G (one patient wife, four children), the reconstruction converges exponentially.",
+        "ar": "لتكن f حياةً أُخذت عيناتها في تعز وصنعاء والقاهرة ولوبيك ونجران. مع مضاعِف غاوسي G (زوجة صبورة وأربعة أبناء)، يتقارب إعادة البناء تقاربًا أُسّيًا."
+      },
+      "proof": {
+        "en": "Left as an exercise to the reader.",
+        "ar": "متروك تمرينًا للقارئ."
+      }
+    },
+    {
+      "id": "acknowledgements", "chapter": "conclusion", "kind": "acknowledgements", "number": "", "enabled": true, "approved": false,
+      "title": { "en": "Acknowledgements", "ar": "شكر وتقدير" },
+      "body": {
+        "en": "This work was supported by the Alexander von Humboldt Foundation, Cairo University, Najran University, and an unreasonable amount of coffee.",
+        "ar": "دُعم هذا العمل من مؤسسة ألكسندر فون هومبولت وجامعة القاهرة وجامعة نجران، وكمية غير معقولة من القهوة."
+      }
+    },
+    {
+      "id": "footer-status", "chapter": "footer", "kind": "status", "number": "", "enabled": false, "approved": false,
+      "title": { "en": "", "ar": "" },
+      "body": {
+        "en": "Status: Under review (Referee 2: Mom).",
+        "ar": "الحالة: قيد المراجعة (المحكّم الثاني: ماما)."
+      }
+    }
+  ]
+}

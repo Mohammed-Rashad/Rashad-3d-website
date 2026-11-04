@@ -1,0 +1,17 @@
+{
+  "_note": "History topics he loves. Only items with confirmed:true show on the live site; unconfirmed ones show in `npm run dev` with a DRAFT badge so the family can review them.",
+  "items": [
+    { "id": "saba", "confirmed": false,
+      "title": { "en": "The Kingdom of Saba", "ar": "مملكة سبأ" },
+      "text": { "en": "The ancient South Arabian kingdom of Saba (Sheba), centred on Ma'rib, grew rich on the incense trade.", "ar": "مملكة سبأ العربية الجنوبية القديمة، ومركزها مأرب، اغتنت من تجارة البخور." } },
+    { "id": "marib", "confirmed": false,
+      "title": { "en": "The Ma'rib Dam", "ar": "سد مأرب" },
+      "text": { "en": "One of the great engineering works of the ancient world, irrigating the oasis of Ma'rib for centuries before its final collapse.", "ar": "من أعظم الأعمال الهندسية في العالم القديم، روى واحة مأرب قرونًا قبل انهياره الأخير." } },
+    { "id": "arwa", "confirmed": false,
+      "title": { "en": "Queen Arwa", "ar": "الملكة أروى" },
+      "text": { "en": "Arwa al-Sulayhi ruled Yemen for decades from Jibla, near Ibb, in the 11th and 12th centuries.", "ar": "حكمت أروى بنت أحمد الصليحي اليمن عقودًا من جبلة قرب إب في القرنين الحادي عشر والثاني عشر." } },
+    { "id": "rasulids", "confirmed": false,
+      "title": { "en": "The Rasulids of Taiz", "ar": "الدولة الرسولية في تعز" },
+      "text": { "en": "From the 13th to the 15th century the Rasulid dynasty ruled from Taiz, famous for its scholarship, astronomy and agriculture.", "ar": "من القرن الثالث عشر إلى الخامس عشر حكمت الدولة الرسولية من تعز، واشتهرت بالعلم والفلك والزراعة." } }
+  ]
+}

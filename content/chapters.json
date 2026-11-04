@@ -1,0 +1,16 @@
+{
+  "_note": "Stories and photos per chapter, filled by the family. Photos go in public/photos/ and are referenced as \"photos/xyz.jpg\". Empty arrays hide gracefully.",
+  "_example": {
+    "stories": [{ "title": { "en": "", "ar": "" }, "text": { "en": "", "ar": "" } }],
+    "photos": [{ "src": "photos/example.jpg", "alt": { "en": "", "ar": "" }, "caption": { "en": "", "ar": "" }, "year": "" }]
+  },
+  "taiz":    { "stories": [], "photos": [] },
+  "sanaa":   { "stories": [], "photos": [] },
+  "cairo":   { "stories": [], "photos": [] },
+  "lubeck":  { "stories": [], "photos": [], "germanyLife": [] },
+  "najran":  { "stories": [], "photos": [] },
+  "library": { "stories": [], "photos": [] },
+  "writer":  { "stories": [], "photos": [] },
+  "ai":      { "stories": [], "photos": [] },
+  "conclusion": { "stories": [], "photos": [] }
+}
