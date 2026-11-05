@@ -71,14 +71,16 @@ addEventListener('keydown', (e) => {
 
 /* ---------------- coffee-cup hunt ---------------- */
 const CUP_CHAPTERS = ['taiz', 'sanaa', 'cairo', 'lubeck', 'najran', 'library', 'writer', 'ai'];
-const found = new Set(JSON.parse(store.get('cups', '[]')).filter((c) => CUP_CHAPTERS.includes(c)));
+// the hunt starts fresh on every visit (nothing is saved)
+const found = new Set();
+try { localStorage.removeItem('cups'); } catch (e) {}
 $('#cups-t').textContent = CUP_CHAPTERS.length;
 const paintCups = () => { $('#cups-n').textContent = found.size; };
 paintCups();
 const hunt = {
   has: (id) => found.has(id),
   find(id) {
-    if (found.has(id)) return; found.add(id); store.set('cups', JSON.stringify([...found])); paintCups(); sfx('found');
+    if (found.has(id)) return; found.add(id); paintCups(); sfx('found');
     const left = CUP_CHAPTERS.length - found.size;
     if (left) toast(icon('cup') + ' ' + (lang() === 'ar' ? `أحسنت! بقي ${left} ${left === 1 ? 'فنجان' : 'فناجين'}.` : `Nice! ${left} cup${left === 1 ? '' : 's'} to go.`));
     const c = $('#cups'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
