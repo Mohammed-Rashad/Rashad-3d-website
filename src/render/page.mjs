@@ -190,8 +190,9 @@ export function renderPage(c, { dev = false } = {}) {
   const p = c.profile;
   const intro = `
   <section class="chapter intro" id="intro" data-chapter="intro" tabindex="-1" aria-label="Title page">
+    <div class="intro-wrap">
+    ${ok(p.photo?.src) ? `<figure class="polaroid title-polaroid" style="--r:-3deg"><img src="${esc(p.photo.src)}" alt="${esc(p.photo.alt?.en || '')}" width="600" height="326" decoding="async"><figcaption>${L(p.nickname)}</figcaption></figure>` : ''}
     <div class="card paper titlepage">
-      ${ok(p.photo?.src) ? `<figure class="polaroid title-polaroid" style="--r:-3deg"><img src="${esc(p.photo.src)}" alt="${esc(p.photo.alt?.en || '')}" width="600" height="326" decoding="async"><figcaption>${L(p.nickname)}</figcaption></figure>` : ''}
       <p class="journal">${LH('Journal of Family Analysis · Vol. 1 · Festschrift issue', 'مجلة التحليل العائلي · المجلد ١ · عدد تذكاري')}</p>
       <h1>${LH('On the Convergence of a Yemeni Mathematician', 'حول تقارُب عالِم رياضياتٍ يمني')}</h1>
       <p class="authors"><button class="name-btn" id="his-name" type="button">${L(p.name)}</button><sup>1</sup>
@@ -207,6 +208,7 @@ export function renderPage(c, { dev = false } = {}) {
       </ul>
       <p class="cup-call">${icon('cup')} <span>${LH('<strong>8 Yemeni coffee cups</strong> are hidden in the scenes. Find them all to unlock a message from his children.', '<strong>٨ فناجين قهوة يمنية</strong> مخبّأة في المشاهد. اعثر عليها كلها لتفتح رسالة من أبنائه.')}</span></p>
       <a class="btn big start-btn" href="#taiz">${LH('Start', 'ابدأ')} ${icon('chevron')}</a>
+    </div>
     </div>
   </section>`;
 

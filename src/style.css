@@ -407,3 +407,21 @@ details.more[open] > summary { margin-bottom: 8px; }
 .title-polaroid img { aspect-ratio: 16 / 10; object-position: 72% 40%; }
 .title-polaroid figcaption { font-size: 24px; margin-top: 8px; }
 [data-lang='ar'] .title-polaroid figcaption { font-family: var(--arabic-hand); font-size: 22px; }
+
+/* title page: the portrait sits beside the card, pinned like an album photo */
+.intro-wrap { display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.intro-wrap > * { pointer-events: auto; }
+.intro-wrap .titlepage { margin-inline: 0; }
+.intro-wrap .title-polaroid { --r: -5deg; flex: none; width: 270px; margin: 0; margin-inline-end: -36px; z-index: 2; position: relative; padding: 10px 10px 12px; align-self: center; transform: rotate(var(--r)) translateY(-40px); }
+[dir='rtl'] .intro-wrap .title-polaroid { --r: 5deg; }
+.intro-wrap .title-polaroid img { aspect-ratio: 4 / 5; object-position: 70% 35%; }
+.intro-wrap .title-polaroid::before { content: ''; position: absolute; top: -10px; left: 50%; width: 70px; height: 22px; transform: translateX(-50%) rotate(2deg); background: rgba(255, 248, 225, 0.75); box-shadow: 0 1px 3px #0002; }
+@media (max-width: 980px) {
+  .intro-wrap { flex-direction: column; }
+  .intro-wrap .title-polaroid { --r: -3deg; width: min(230px, 58vw); margin: 0 0 -22px; transform: rotate(var(--r)); }
+  [dir='rtl'] .intro-wrap .title-polaroid { --r: 3deg; }
+  .intro-wrap .title-polaroid img { aspect-ratio: 16 / 11; }
+}
+.title-polaroid img { height: auto; }
+.title-polaroid figcaption { color: #4a3b2f; }
+@media (max-width: 980px) { .intro-wrap .title-polaroid { width: min(210px, 54vw); } }
