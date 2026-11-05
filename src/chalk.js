@@ -31,11 +31,19 @@ export function createChalk(canvas, { sfx } = {}) {
     const now = performance.now(); if (sfx && now - lastSfx > 650) { lastSfx = now; sfx(state.tool === 'eraser' ? 'rustle' : 'chalk-stroke', true); }
   }
   const end = () => (last = null);
+  let writing = false, raf = 0;
+  // writes the formula over `ms` milliseconds, independent of the 3D frame rate
+  function animateFormula(ms = 1600) {
+    cancelAnimationFrame(raf); background(); writing = true; const t0 = performance.now();
+    const step = (now) => { const p = Math.min(1, (now - t0) / ms); writeFormula(p); if (p < 1) raf = requestAnimationFrame(step); else writing = false; };
+    raf = requestAnimationFrame(step);
+  }
   function writeFormula(p) {
     // writes his formula progressively (p: 0..1) on top of whatever is there
     const text = 'f(t) = Σ f(n)·sinc(t − n)';
     ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = BOARD; ctx.fillRect(40, 150, W - 80, 260);
+    if (p <= 0.001 || p >= 1 || !writing) background();
+    else { ctx.fillStyle = BOARD; ctx.fillRect(40, 150, W - 80, 260); }
     ctx.font = 'italic 84px "CMU Serif", Georgia, serif'; ctx.fillStyle = '#f2f2e6'; ctx.textBaseline = 'middle';
     ctx.fillText(text.slice(0, Math.floor(text.length * p)), 60, 220);
     if (p >= 1) { ctx.font = '46px "Caveat", cursive'; ctx.fillStyle = '#ffe9a0'; ctx.fillText('the whole, from its samples', 300, 370); ctx.strokeStyle = '#f2f2e6'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(60, 290); ctx.quadraticCurveTo(450, 300, 900, 285); ctx.stroke(); }
@@ -51,7 +59,7 @@ export function createChalk(canvas, { sfx } = {}) {
   canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
   background();
   return {
-    canvas, state, stroke, end, writeFormula,
+    canvas, state, stroke, end, writeFormula, animateFormula,
     clear() { background(); changed(); },
     setTool(t) { state.tool = t; },
     onChange(f) { listeners.add(f); },

@@ -425,3 +425,6 @@ details.more[open] > summary { margin-bottom: 8px; }
 .title-polaroid img { height: auto; }
 .title-polaroid figcaption { color: #4a3b2f; }
 @media (max-width: 980px) { .intro-wrap .title-polaroid { width: min(210px, 54vw); } }
+
+/* sound on by default: hide the "tap to enable" label once it's on */
+#btn-sound.on .l-en, #btn-sound.on .l-ar { display: none !important; }

@@ -132,3 +132,18 @@ export function burst(parent, at, { color = '#ffe9a8', n = 40, speed = 1.5, life
   };
   return pts;
 }
+
+// a small street-name sign on a post (text drawn on a canvas)
+export function signpost(title, sub, pos, rotY = 0) {
+  const g = new THREE.Group(); g.position.copy(pos); g.rotation.y = rotY;
+  mesh(new THREE.CylinderGeometry(0.035, 0.04, 1.5, 8), mat('#2a2a2e', { roughness: 0.5, metalness: 0.4 }), 0, 0.75, 0, g);
+  const t = canvasTex(512, 200, (c, w, h) => {
+    c.fillStyle = '#f4efe2'; c.fillRect(0, 0, w, h); c.strokeStyle = '#7a2f25'; c.lineWidth = 10; c.strokeRect(8, 8, w - 16, h - 16);
+    c.fillStyle = '#7a2f25'; c.textAlign = 'center'; let fs = 74; do { c.font = `700 ${fs}px "CMU Serif", Georgia, serif`; fs -= 2; } while (c.measureText(title).width > w - 60 && fs > 20); c.fillText(title, w / 2, 108);
+    c.fillStyle = '#3a3330'; c.font = 'italic 40px "CMU Serif", Georgia, serif'; c.fillText(sub, w / 2, 164);
+  });
+  const face = new THREE.MeshStandardMaterial({ map: t, roughness: 0.8 });
+  const board = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.4, 0.04), [mat('#2a2a2e'), mat('#2a2a2e'), mat('#2a2a2e'), mat('#2a2a2e'), face, face]);
+  board.position.y = 1.55; g.add(board);
+  return g;
+}

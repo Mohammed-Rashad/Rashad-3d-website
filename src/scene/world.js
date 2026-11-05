@@ -428,7 +428,7 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
   function applyCamera() {
     const w = innerWidth, h = innerHeight; const sx = Math.abs(shift.x), sy = Math.abs(shift.y);
     camera.setViewOffset(w * (1 + 2 * sx), h * (1 + 2 * sy), shift.x >= 0 ? 0 : 2 * sx * w, shift.y >= 0 ? 0 : 2 * sy * h, w, h);
-    const k = active && camera.aspect < 1 ? 1.75 : 1; camera.position.copy(cam.pos).sub(cam.target).multiplyScalar(k).add(cam.target); camera.lookAt(cam.target); sky.position.copy(camera.position);
+    const k = active && camera.aspect < 1 ? (active.mobileZoom ?? 1.75) : 1; camera.position.copy(cam.pos).sub(cam.target).multiplyScalar(k).add(cam.target); camera.lookAt(cam.target); sky.position.copy(camera.position);
     camera.updateMatrixWorld();
   }
   const perf = /[?&]debug=1\b/.test(location.search) ? (() => {
@@ -482,6 +482,7 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
     go, action,
     relayout() { if (current) { const s = layoutShift(current); gsap.to(shift, { x: s.x, y: s.y, duration: 0.6 }); } setLabelText(); buildWhispers(); },
     removeCup(id) { const d = built[id]; if (d && d.cup) { d.group.remove(d.cup); d.cup = null; } },
+    state: () => ({ current, active: active?.id || null, atGlobe, timelines: tls.map((t) => [t.isActive(), +t.progress().toFixed(2), +t.duration().toFixed(2), +(t.delay?.() || 0).toFixed(2)]), cam: cam.pos.toArray().map((v) => +v.toFixed(1)) }),
     // QA helper: where is the active cup on screen, and is anything in front of it?
     cupInfo() {
       if (!active || !active.cup) return null; applyCamera();

@@ -3,7 +3,7 @@
 //   clickables:[{obj, action}], drags:[{obj, onDrag(hit)}], actions:{}, anchors:[Vector3], cupSpot:Vector3, update(t,dt), onEnter() }
 import * as THREE from 'three';
 import { gsap } from 'gsap';
-import { mat, glow, mesh, box, cyl, cone, sphere, rng, noise2, terrain, towerHouse, palm, coffeePlant, coffeeCup, canvasTex, burst } from './kit.js';
+import { mat, glow, mesh, box, cyl, cone, sphere, rng, noise2, terrain, towerHouse, palm, coffeePlant, coffeeCup, canvasTex, burst, signpost } from './kit.js';
 
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const base = (o) => ({ clickables: [], drags: [], actions: {}, anchors: [], fx: [], update() {}, onEnter() {}, ...o });
@@ -98,7 +98,7 @@ export async function taiz(ctx) {
       .add(() => ctx.sfx('clink'));
   };
   return base({
-    group: g, cam: { pos: V(6.5, 7.5, 17), target: V(0.2, 2.4, 0.5) },
+    group: g, cam: { pos: V(4.4, 5.4, 12.4), target: V(-0.4, 2.3, 1.0) }, mobileZoom: 1.35,
     sky: { top: '#4a3560', bottom: '#e9a979' }, fog: 0.028, sun: { color: '#ffd2a0', intensity: 2.2, dir: V(-6, 8, 4) }, hemi: { sky: '#ffe0c0', ground: '#4b3a2a', intensity: 1.1 },
     clickables: [{ obj: plant, action: 'pour' }, { obj: pourCup, action: 'pour' }, { obj: potPivot, action: 'pour' }],
     actions: { pour },
@@ -131,10 +131,10 @@ export async function sanaa(ctx) {
   box(2.7, 0.06, 0.18, '#5b3d27', 0, 0.9, 0.08, board);
   const desk = await placeGLB(ctx, '/models/sanaa/SchoolDesk_01.glb', g, { pos: V(2.4, 0, 4.2), scale: 1.6, rotY: Math.PI + 0.25 });
 
-  let writeT = -1, wrote = false;
+  let wrote = false;
   let lastChalk = 0;
   const actions = {
-    chalk() { writeT = 0; ctx.sfx('chalk'); },
+    chalk() { chalk.animateFormula(1600); ctx.sfx('chalk'); },
   };
   return base({
     group: g, cam: { pos: V(5, 4.2, 13), target: V(0.6, 2.4, 0) },
@@ -148,7 +148,6 @@ export async function sanaa(ctx) {
     cupSpot: V(0.3, 0.02, -4.9),
     onEnter() { if (!wrote) { wrote = true; setTimeout(() => actions.chalk(), 900); } },
     update(t, dt) {
-      if (writeT >= 0) { writeT += dt; chalk.writeFormula(Math.min(1, writeT / 1.8)); if (writeT > 1.8) writeT = -1; }
     },
   });
 }
@@ -219,9 +218,13 @@ export async function lubeck(ctx) {
   // Holstentor: built in Blender with Poly Haven brick/slate/plaster (tools/blender/06_holstentor.py)
   const ht = new THREE.Group(); ht.position.set(0.5, 0, -1.5); g.add(ht);
   await placeGLB(ctx, '/models/lubeck/holstentor.glb', ht, { pos: V(0, 0, 0), scale: 1, rotY: 0 });
+  // the gate's real inscription on its white band, and a little name sign in front
+  const insc = canvasTex(1024, 96, (c, w, h) => { c.fillStyle = '#ece6d8'; c.fillRect(0, 0, w, h); c.fillStyle = '#2b2723'; c.font = '600 58px "CMU Serif", Georgia, serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('CONCORDIA DOMI FORIS PAX', w / 2, h / 2 + 2); });
+  mesh(new THREE.PlaneGeometry(2.1, 0.2), new THREE.MeshStandardMaterial({ map: insc, roughness: 0.9 }), 0, 2.55, 1.035, ht);
+  ht.add(signpost('HOLSTENTOR', 'Lübeck', V(-2.35, 0, 2.9), 0.3));
   // gabled houses along the quay
   const r = rng(44);
-  await Promise.all([-9.6, -7.1, -4.6, 5.4, 7.9, 10.4].map((x, i) => placeGLB(ctx, '/models/lubeck/lubeck_house.glb', g, { pos: V(x, 0, -5.8), scale: 0.42 + (i % 3) * 0.03, rotY: 0 })));
+  await Promise.all([-9.6, -7.1, -4.6, 4.3, 6.8, 9.3].map((x, i) => placeGLB(ctx, '/models/lubeck/lubeck_house.glb', g, { pos: V(x, 0, -5.8), scale: 0.42 + (i % 3) * 0.03, rotY: 0 })));
   // St. Mary's spires far behind
   for (const x of [-4.2, -2.8]) { box(1.1, 6.5, 1.1, brick2, x, 0, -11, g); cone(0.8, 3.5, roof, x, 6.5, -11, g, 4); }
   // marzipan loaf on a crate

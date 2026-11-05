@@ -42,11 +42,20 @@ const audio = createAudio({ lang, captionsEl: $('#captions') });
 const sfx = (n, quiet) => audio.sfx(n, quiet);
 const btnSound = $('#btn-sound'), vol = $('#vol');
 vol.value = audio.volume();
-function paintSound() { const on = audio.enabled; btnSound.setAttribute('aria-pressed', on); $('.ico-slot', btnSound).innerHTML = icon(on ? 'volumeOn' : 'volumeOff'); vol.hidden = !on; btnSound.title = on ? audio.ambienceLabel() : ''; }
-btnSound.addEventListener('click', async () => { await audio.enable(!audio.enabled); paintSound(); });
+let wantSound = store.get('sound', '1') !== '0'; // on by default; a visitor can switch it off
+function paintSound() { const on = audio.enabled || wantSound; btnSound.classList.toggle('on', on); btnSound.setAttribute('aria-pressed', on); $('.ico-slot', btnSound).innerHTML = icon(on ? 'volumeOn' : 'volumeOff'); vol.hidden = !on; btnSound.title = on ? audio.ambienceLabel() : ''; }
+btnSound.addEventListener('click', async () => {
+  if (audio.enabled || wantSound) { wantSound = false; await audio.enable(false); } else { wantSound = true; await audio.enable(true); }
+  paintSound();
+});
 vol.addEventListener('input', () => audio.setVolume(+vol.value));
-// persistent preference: if the visitor turned sound on before, re-enable on their first gesture
-if (store.get('sound') === '1') addEventListener('pointerdown', async function once() { removeEventListener('pointerdown', once); if (!audio.enabled) { await audio.enable(true); paintSound(); } }, { once: true });
+// audio may only start after a user gesture: the first tap, click or key anywhere turns it on
+const firstGesture = async (e) => {
+  if (e.target?.closest?.('#btn-sound')) return; // the button handles itself
+  ['pointerdown', 'keydown', 'touchend'].forEach((t) => removeEventListener(t, firstGesture, true));
+  if (wantSound && !audio.enabled) { await audio.enable(true); paintSound(); }
+};
+['pointerdown', 'keydown', 'touchend'].forEach((t) => addEventListener(t, firstGesture, true));
 paintSound();
 
 /* ---------------- language ---------------- */
@@ -179,7 +188,7 @@ document.addEventListener('click', (e) => {
   if (a === 'mma') return evalMma();
   if (a === 'chalk-tool') { chalk.setTool(b.dataset.tool); $$('[data-action=chalk-tool]').forEach((x) => x.setAttribute('aria-pressed', x === b)); return; }
   if (a === 'chalk-clear') { chalk.clear(); sfx('rustle'); return; }
-  if (a === 'chalk' && !world) { chalk.writeFormula(1); sfx('chalk'); return; }
+  if (a === 'chalk' && !world) { chalk.animateFormula(1200); sfx('chalk'); return; }
   if (a === 'radio') { if (!(world && world.action('radio'))) sfx('radio'); return; }
   if (!(world && world.action(a))) sfx({ pour: 'pour', chalk: 'chalk', marzipan: 'blip' }[a] || 'blip');
 });
