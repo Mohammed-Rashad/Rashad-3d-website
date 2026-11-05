@@ -1,0 +1,11 @@
+# Cache rules (Cloudflare). Hashed build files never change; models, sounds, skies and photos change rarely.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/models/*
+  Cache-Control: public, max-age=604800
+/audio/*
+  Cache-Control: public, max-age=604800
+/skies/*
+  Cache-Control: public, max-age=604800
+/photos/*
+  Cache-Control: public, max-age=604800
