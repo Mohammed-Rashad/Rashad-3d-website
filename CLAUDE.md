@@ -21,7 +21,9 @@ Tone: an affectionate family album that happens to understand Fourier analysis. 
 - **Coffee cups:** placed at runtime (`positionCup` in world.js) by raycasting through `CUP_AT[id]` inside the screen area not covered by the card (`freeRect` in main.js), only on up-facing surfaces, never on water (`userData.noCup`). Halo + steam, brighter after ~10 s. QA: `node tools/qa-cups.mjs desktop|mobile` (needs `npm run preview`).
 - **Chalkboard:** `src/chalk.js`. The `#chalk-pad` canvas in the §2 card is also the 3D board's texture.
 - **Ending:** `epilogue` chapter (Appendix A) = interactive globe; the visitor rotates the *globe* (the camera stays still), and pins/labels scroll to their chapter.
-- **Sky:** shader in world.js with per-chapter `SKIES` (zenith/horizon/ground, sun glow, fbm clouds, stars).
+- **Sky:** shader in world.js with per-chapter `SKIES`. The five places use Poly Haven pure-sky panoramas (`public/skies/<id>.jpg`, `-1k` on phones), crossfaded and rotated (`yaw`) so the sun sits behind the scene; the same panorama is PMREM'd into `scene.environment` to light the PBR models. Globe/AI/interiors use the painted procedural sky (gradient, sun glow, fbm clouds, stars).
+- **Performance:** `?debug=1` shows an fps/draw-call/triangle/texture/heap overlay. Phones are capped at 30 fps and render at DPR ≤ 1.5 without bloom. The 3D world starts only after the intro, on idle. CMU fonts are self-hosted in `src/fonts.css` with `font-display: swap`. Lighthouse mobile: 94 performance, 95 accessibility (2026-11-05).
+- **Buildings:** made live in Blender. `tools/blender/lib.py` (Builder: primitives + box-UV + join + recentre + export), `06_holstentor.py`, `08_yemen_houses.py`, `09_cairo_univ.py`. Sketchfab models: `01_lineup.py` → `02_clean.py` → `04_export.py`. Run with `node tools/blender/live.mjs <script.py>` (Blender add-on socket :9876), then gltf-transform resize 512 + webp + meshopt.
 - **Icons:** `src/icons.mjs` (inline SVG, no emoji). In index.html use `<!--ICON:name-->` (replaced by the Vite plugin).
 - **Gotcha:** the pyenv `python3` shim on this machine prints nothing; use node for scripts.
 

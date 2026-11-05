@@ -16,6 +16,10 @@ Every model used on the site. Skip anything with unclear licensing.
 | Date palm (Najran, Cairo) | `public/models/najran/date_palm.glb` | "Date Palm", https://sketchfab.com/3d-models/11acf710e6c149daa8d6fb8cdc5d087f | evolveduk | CC-BY | 10k → 6k faces; instanced |
 | Dhow (Cairo, replaces the felucca) | `public/models/cairo/dhow.glb` | "Low Poly Ancient Dhow Ship", https://sketchfab.com/3d-models/f25b4552dce24d379833160dd217db84 | Nisa Nurul Azizah | CC-BY | 512 px WebP |
 | Dallah (Taiz, replaces the brass pot) | `public/models/taiz/dallah.glb` | "Dallah – Arabian Coffee pot", https://sketchfab.com/3d-models/1aa080b38eb142688b14e49dc8701ae0 | CGDELUXE | CC-BY | display base removed, 25k → 4k faces |
+| Taiz tower houses (2 variants) | `public/models/taiz/taiz_house_{a,b}.glb` | built in Blender, `tools/blender/08_yemen_houses.py`; Poly Haven rustic_stone_wall + white_plaster_02 | this site + Poly Haven | CC0 | ~1–1.4k faces |
+| Sana'a tower houses (2 variants) | `public/models/sanaa/sanaa_house_{a,b}.glb` | same script; rustic_stone_wall base, brown_brick_02 upper storeys, white gypsum, glowing qamariya windows | this site + Poly Haven | CC0 | ~1.2–1.6k faces |
+| Cairo University main building + clock tower | `public/models/cairo/cairo_university.glb`, `cairo_clock_tower.glb` | built in Blender, `tools/blender/09_cairo_univ.py`; sandstone_blocks_05, white_sandstone_bricks | this site + Poly Haven | CC0 | 1.5k + 0.6k faces |
+| Sky panoramas | `public/skies/{taiz,sanaa,cairo,lubeck,najran}.jpg` | Poly Haven HDRIs (tonemapped): kloofendal_38d_partly_cloudy_puresky, qwantani_dusk_2_puresky, qwantani_moonrise_puresky, kloofendal_overcast_puresky, qwantani_sunset_puresky | Greg Zaal, Jarod Guest et al. | CC0 | 2048×1024 + 1024×512 JPG |
 | Globe (low-poly, coarse continents) | `src/scene/globe.js` | procedural | this site | CC0 | — |
 | Taiz terraces, tower houses, fortress, coffee plant | `src/scene/dioramas.js`, `src/scene/kit.js` | procedural | this site | CC0 | — |
 | Old Sana'a facades, chalkboard, bell | `src/scene/dioramas.js` | procedural | this site | CC0 | chalkboard is a live CanvasTexture |

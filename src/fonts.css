@@ -1,0 +1,6 @@
+/* Computer Modern (OFL), self-hosted with font-display: swap so text paints immediately */
+@font-face { font-family: 'CMU Serif'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('./fonts/cmu-serif-500-roman.woff2') format('woff2'); }
+@font-face { font-family: 'CMU Serif'; font-style: italic; font-weight: 400 600; font-display: swap; src: url('./fonts/cmu-serif-500-italic.woff2') format('woff2'); }
+@font-face { font-family: 'CMU Serif'; font-style: normal; font-weight: 700 900; font-display: swap; src: url('./fonts/cmu-serif-700-roman.woff2') format('woff2'); }
+@font-face { font-family: 'CMU Serif'; font-style: italic; font-weight: 700 900; font-display: swap; src: url('./fonts/cmu-serif-700-italic.woff2') format('woff2'); }
+@font-face { font-family: 'CMU Typewriter Text'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('./fonts/cmu-typewriter-text-500-roman.woff2') format('woff2'); }

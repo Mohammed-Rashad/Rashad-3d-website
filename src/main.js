@@ -1,5 +1,4 @@
-import 'computer-modern/cmu-serif.css';
-import 'computer-modern/cmu-typewriter-text.css';
+import './fonts.css';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/amiri/400.css';
@@ -245,7 +244,9 @@ if (fc) { const f = finalCurve(fc, lang, { calm, onLit: () => $('.final-curve').
 /* ---------------- intro + 3D world ---------------- */
 const titlepage = $('.titlepage');
 if (calm) { $('#intro-canvas').remove(); titlepage.classList.add('shown'); }
-else playIntro($('#intro-canvas'), () => titlepage.classList.add('shown'));
+let introResolve; const introDone = new Promise((r) => (introResolve = r));
+if (calm) introResolve();
+else playIntro($('#intro-canvas'), () => { titlepage.classList.add('shown'); introResolve(); });
 
 // the part of the screen not covered by the chapter's text card (cups are placed there)
 function freeRect(id) {
@@ -270,4 +271,6 @@ async function startWorld() {
   } catch (e) { console.error('3D failed, falling back to calm mode', e); html.classList.add('calm'); }
 }
 onScroll();
-('requestIdleCallback' in window ? requestIdleCallback : (f) => setTimeout(f, 200))(startWorld, { timeout: 1500 });
+// start the 3D world only after the intro animation, when the browser is idle (keeps first paint fast)
+const idle = (fn) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 2500 }) : setTimeout(fn, 300));
+if (calm) idle(startWorld); else introDone.then(() => idle(startWorld));

@@ -19,6 +19,9 @@ Rendered on the site as the bibliography in §9. One reference per line starting
 - **Dallah – Arabian Coffee pot**, CGDELUXE (CC-BY). https://sketchfab.com/3d-models/1aa080b38eb142688b14e49dc8701ae0
 - **Holstentor**, modelled for this site in Blender with Poly Haven textures by Rob Tuytel, Dario Barresi and Dimitrios Savva (CC0). https://polyhaven.com/textures
 
+- **Sky panoramas** (kloofendal_38d_partly_cloudy, qwantani_dusk_2, qwantani_moonrise, kloofendal_overcast, qwantani_sunset), Poly Haven (CC0). https://polyhaven.com/hdris
+- **Yemeni tower houses and Cairo University**, modelled for this site in Blender with Poly Haven textures rustic_stone_wall, brown_brick_02, white_plaster_02, sandstone_blocks_05, white_sandstone_bricks (CC0). https://polyhaven.com/textures
+
 ## Sound
 
 - **All ambiences and interaction sounds**, procedurally synthesised for this site with tools/synth-audio.mjs (CC0): soft tonal pads per chapter plus sparse details. Replace with Freesound / ElevenLabs recordings later and list them here

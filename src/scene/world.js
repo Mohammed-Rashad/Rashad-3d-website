@@ -20,11 +20,11 @@ const GLOBE_IDS = ['intro', 'conclusion', 'epilogue'];
 // Painted skies: zenith → horizon glow → ground, a sun/moon glow, drifting clouds, twinkling stars.
 const SKIES = {
   globe: { top: '#02030f', horizon: '#121a52', bottom: '#04051a', glow: '#8fa4ff', sun: V(-0.4, 0.5, 0.8), stars: 1, clouds: 0, sunSize: 0 },
-  taiz: { top: '#3d4f94', horizon: '#f6b67c', bottom: '#c98a5e', glow: '#ffd59a', sun: V(-0.55, 0.16, -0.82), stars: 0, clouds: 0.55, sunSize: 1 },
-  sanaa: { top: '#15153f', horizon: '#ee8f8a', bottom: '#5e3552', glow: '#ffb08a', sun: V(0.75, 0.05, -0.66), stars: 0.55, clouds: 0.35, sunSize: 0.8 },
-  cairo: { top: '#030d1a', horizon: '#2c7a7c', bottom: '#0a2a30', glow: '#d9f3ff', sun: V(0.45, 0.42, -0.78), stars: 0.9, clouds: 0.18, sunSize: 0.45 },
-  lubeck: { top: '#56667e', horizon: '#d3d9de', bottom: '#9ba6af', glow: '#ffffff', sun: V(-0.4, 0.3, -0.86), stars: 0, clouds: 0.95, sunSize: 0.25 },
-  najran: { top: '#2b2558', horizon: '#ff9b4c', bottom: '#c47a3a', glow: '#ffcf7a', sun: V(0.7, 0.08, -0.7), stars: 0.15, clouds: 0.28, sunSize: 1.2 },
+  taiz: { top: '#3d4f94', horizon: '#b9b7b0', bottom: '#c98a5e', glow: '#ffd59a', sun: V(-0.55, 0.16, -0.82), stars: 0, clouds: 0.55, sunSize: 1, tex: 'taiz', yaw: 0.32 },
+  sanaa: { top: '#15153f', horizon: '#a0849a', bottom: '#5e3552', glow: '#ffb08a', sun: V(0.75, 0.05, -0.66), stars: 0.55, clouds: 0.35, sunSize: 0.8, tex: 'sanaa', yaw: 0.27 },
+  cairo: { top: '#030d1a', horizon: '#3f6f8a', bottom: '#0a2a30', glow: '#d9f3ff', sun: V(0.45, 0.42, -0.78), stars: 0.9, clouds: 0.18, sunSize: 0.45, tex: 'cairo', yaw: 0.3 },
+  lubeck: { top: '#56667e', horizon: '#9a9ea6', bottom: '#9ba6af', glow: '#ffffff', sun: V(-0.4, 0.3, -0.86), stars: 0, clouds: 0.95, sunSize: 0.25, tex: 'lubeck', yaw: 0.3 },
+  najran: { top: '#2b2558', horizon: '#d4b48e', bottom: '#c47a3a', glow: '#ffcf7a', sun: V(0.7, 0.08, -0.7), stars: 0.15, clouds: 0.28, sunSize: 1.2, tex: 'najran', yaw: 0.25 },
   library: { top: '#1c130f', horizon: '#3a261a', bottom: '#1a100c', glow: '#ffbf80', sun: V(0, 1, 0), stars: 0, clouds: 0, sunSize: 0 },
   writer: { top: '#1d1713', horizon: '#3a2b21', bottom: '#1a120e', glow: '#ffbf80', sun: V(0, 1, 0), stars: 0, clouds: 0, sunSize: 0 },
   ai: { top: '#01040c', horizon: '#0b3a4c', bottom: '#020a12', glow: '#7fd8e6', sun: V(0, 1, 0), stars: 0.6, clouds: 0, sunSize: 0 },
@@ -34,6 +34,8 @@ const GLOBE_ENV = { id: 'globe', fog: 0.004, sun: { color: '#fff1d6', intensity:
 const SKY_VERT = 'varying vec3 vDir; void main(){ vDir = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }';
 const SKY_FRAG = `
 uniform vec3 top, horizon, bottom, glow, sunDir; uniform float stars, clouds, sunSize, time;
+uniform sampler2D skyA, skyB; uniform float abMix, texAmt, yawA, yawB;
+vec2 eq(vec3 d, float yaw){ return vec2(fract(atan(d.z, d.x) / 6.2831853 + 0.5 + yaw), asin(clamp(d.y, -1.0, 1.0)) / 3.14159265 + 0.5); }
 varying vec3 vDir;
 float hash(vec3 p){ p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
 float noise(vec3 x){ vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
@@ -54,9 +56,14 @@ void main(){
     col = mix(col, cc, c * 0.8);
   }
   if (stars > 0.0 && h > 0.02) {
-    vec3 p = floor(d * 280.0); float s = hash(p);
+    vec3 q = d * 280.0; vec3 p = floor(q); float s = hash(p);
+    float dotv = smoothstep(0.22, 0.0, length(fract(q) - 0.5)); // round points, not cells
     float tw = 0.55 + 0.45 * sin(time * 1.7 + s * 60.0);
-    col += vec3(1.0, 0.96, 0.86) * step(0.9972, s) * stars * tw * smoothstep(0.02, 0.35, h);
+    col += vec3(1.0, 0.96, 0.86) * step(0.9972, s) * dotv * stars * tw * 1.6 * smoothstep(0.02, 0.35, h);
+  }
+  if (texAmt > 0.001) {
+    vec3 ta = texture2D(skyA, eq(d, yawA)).rgb, tb = texture2D(skyB, eq(d, yawB)).rgb;
+    col = mix(col, mix(ta, tb, abMix), texAmt);
   }
   col += (hash(vec3(gl_FragCoord.xy, time)) - 0.5) / 180.0; // dither: no banding
   gl_FragColor = vec4(col, 1.0);
@@ -83,7 +90,9 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
   // sky dome that follows the camera
   const S0 = SKIES.globe;
   const skyU = { top: { value: new THREE.Color(S0.top) }, horizon: { value: new THREE.Color(S0.horizon) }, bottom: { value: new THREE.Color(S0.bottom) }, glow: { value: new THREE.Color(S0.glow) },
-    sunDir: { value: S0.sun.clone() }, stars: { value: S0.stars }, clouds: { value: S0.clouds }, sunSize: { value: S0.sunSize }, time: { value: 0 } };
+    sunDir: { value: S0.sun.clone() }, stars: { value: S0.stars }, clouds: { value: S0.clouds }, sunSize: { value: S0.sunSize }, time: { value: 0 },
+    skyA: { value: null }, skyB: { value: null }, abMix: { value: 0 }, texAmt: { value: 0 }, yawA: { value: 0 }, yawB: { value: 0 } };
+  const blank = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1); blank.needsUpdate = true; skyU.skyA.value = skyU.skyB.value = blank;
   const sky = new THREE.Mesh(new THREE.SphereGeometry(180, 48, 24), new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false, fog: false, uniforms: skyU, vertexShader: SKY_VERT, fragmentShader: SKY_FRAG }));
   sky.renderOrder = -1; scene.add(sky);
 
@@ -108,12 +117,36 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
   const glbCache = {};
   const loadGLB = (url) => (glbCache[url] ||= new Promise((res, rej) => gltf.load(url, (g) => res(g.scene), undefined, rej))).then((s) => s.clone(true));
 
+  // photographic skies, loaded per chapter; the same panorama lights PBR models (PMREM)
+  const pmrem = new THREE.PMREMGenerator(renderer); const texLoader = new THREE.TextureLoader(); const skyCache = {};
+  function loadSky(name) {
+    return (skyCache[name] ||= new Promise((res) => texLoader.load(`/skies/${name}${isMobile ? '-1k' : ''}.jpg`, (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace; tex.generateMipmaps = false; tex.minFilter = THREE.LinearFilter; tex.mapping = THREE.EquirectangularReflectionMapping;
+      res({ tex, env: pmrem.fromEquirectangular(tex).texture });
+    }, undefined, () => res(null))));
+  }
+  scene.environmentIntensity = 0.55;
+  let skyToken = 0;
+  function setSky(k, d) {
+    const token = ++skyToken;
+    if (!k.tex) { gsap.to(skyU.texAmt, { value: 0, duration: d }); scene.environment = null; return; }
+    loadSky(k.tex).then((s) => {
+      if (!s || token !== skyToken) return;
+      scene.environment = s.env;
+      if (skyU.texAmt.value < 0.01 || d === 0) { skyU.skyA.value = s.tex; skyU.yawA.value = k.yaw || 0; skyU.abMix.value = 0; gsap.to(skyU.texAmt, { value: 1, duration: d }); return; }
+      skyU.skyB.value = s.tex; skyU.yawB.value = k.yaw || 0; skyU.abMix.value = 0;
+      gsap.to(skyU.texAmt, { value: 1, duration: d });
+      gsap.to(skyU.abMix, { value: 1, duration: d, onComplete() { skyU.skyA.value = s.tex; skyU.yawA.value = k.yaw || 0; skyU.abMix.value = 0; } });
+    });
+  }
+
   // dioramas (built lazily)
   const built = {}; const building = {};
   const ctxFor = (id) => ({ isMobile, loadGLB, sfx, emit, history: data.history, postsCount: data.postsCount, chapterData: data.chapters?.[id], chalk: data.chalk });
   function ensure(id) {
     if (!BUILDERS[id]) return Promise.resolve(null);
     if (built[id]) return Promise.resolve(built[id]);
+    if (SKIES[id]?.tex) loadSky(SKIES[id].tex);
     if (!building[id]) building[id] = BUILDERS[id](ctxFor(id)).then((d) => { d.id = id; d.group.visible = false; d.group.userData.fx = []; scene.add(d.group); built[id] = d; placeCup(d); return d; });
     return building[id];
   }
@@ -184,6 +217,7 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
     t.to(skyU.sunDir.value, { x: k.sun.x, y: k.sun.y, z: k.sun.z, duration: d }, '<');
     t.to(skyU.stars, { value: k.stars, duration: d }, '<'); t.to(skyU.clouds, { value: k.clouds, duration: d }, '<'); t.to(skyU.sunSize, { value: k.sunSize, duration: d }, '<');
     tweenColor(scene.fog.color, k.horizon, d, t); t.to(scene.fog, { density: env.fog, duration: d }, '<');
+    t.add(() => setSky(k, d), '<');
     tweenColor(sun.color, env.sun.color, d, t); t.to(sun, { intensity: env.sun.intensity, duration: d }, '<');
     t.to(sunDir, { x: env.sun.dir.x, y: env.sun.dir.y, z: env.sun.dir.z, duration: d }, '<');
     tweenColor(hemi.color, env.hemi.sky, d, t); tweenColor(hemi.groundColor, env.hemi.ground, d, t); t.to(hemi, { intensity: env.hemi.intensity, duration: d }, '<');
@@ -192,7 +226,7 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
     const k = skyOf(env);
     for (const c of ['top', 'horizon', 'bottom', 'glow']) skyU[c].value.set(k[c]);
     skyU.sunDir.value.copy(k.sun); skyU.stars.value = k.stars; skyU.clouds.value = k.clouds; skyU.sunSize.value = k.sunSize;
-    scene.fog.color.set(k.horizon); scene.fog.density = env.fog;
+    scene.fog.color.set(k.horizon); scene.fog.density = env.fog; setSky(k, 0);
     sun.color.set(env.sun.color); sun.intensity = env.sun.intensity; sunDir.copy(env.sun.dir); hemi.color.set(env.hemi.sky); hemi.groundColor.set(env.hemi.ground); hemi.intensity = env.hemi.intensity;
   }
   function arcsFor(chId) {
@@ -397,8 +431,35 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
     const k = active && camera.aspect < 1 ? 1.75 : 1; camera.position.copy(cam.pos).sub(cam.target).multiplyScalar(k).add(cam.target); camera.lookAt(cam.target); sky.position.copy(camera.position);
     camera.updateMatrixWorld();
   }
+  const perf = /[?&]debug=1\b/.test(location.search) ? (() => {
+    const el = document.createElement('pre'); el.className = 'perf-hud'; document.body.appendChild(el);
+    renderer.info.autoReset = false;
+    let frames = 0, acc = 0, worst = 0, last = performance.now();
+    return {
+      begin() { renderer.info.reset(); },
+      end(ms) {
+        frames++; acc += ms; worst = Math.max(worst, ms); const now = performance.now();
+        if (now - last < 500) return;
+        const fps = (frames * 1000) / (now - last), i = renderer.info, mem = performance.memory;
+        el.textContent = [
+          `fps ${fps.toFixed(0).padStart(3)}   frame ${(1000 / fps).toFixed(1)} ms (worst ${worst.toFixed(1)})`,
+          `cpu/frame ${(acc / frames).toFixed(1)} ms`,
+          `draw calls ${i.render.calls}   tris ${(i.render.triangles / 1000).toFixed(1)}k`,
+          `geometries ${i.memory.geometries}   textures ${i.memory.textures}   programs ${i.programs?.length ?? '?'}`,
+          `chapter ${current}   dioramas built ${Object.keys(built).length}`,
+          `dpr ${renderer.getPixelRatio().toFixed(2)}   canvas ${renderer.domElement.width}×${renderer.domElement.height}   bloom ${composer ? 'on' : 'off'}`,
+          mem ? `js heap ${(mem.usedJSHeapSize / 1048576).toFixed(0)} / ${(mem.jsHeapSizeLimit / 1048576).toFixed(0)} MB` : 'js heap n/a',
+        ].join('\n');
+        frames = 0; acc = 0; worst = 0; last = now;
+      },
+    };
+  })() : null;
+  // phones: 30 fps cap (halves GPU work and battery; the scenes are slow-moving)
+  const minFrame = isMobile ? 1000 / 31 : 0; let lastDraw = 0;
   function loop() {
     if (!running) return; requestAnimationFrame(loop);
+    if (minFrame && performance.now() - lastDraw < minFrame) return; lastDraw = performance.now();
+    const t0 = performance.now(); perf && perf.begin();
     const now = performance.now(); const dt = Math.min(0.05, (now - lastT) / 1000); lastT = now; elapsed += dt; chapterTime += dt; const t = elapsed;
     skyU.time.value = t;
     applyCamera();
@@ -413,6 +474,7 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
     }
     updateLabels();
     composer ? composer.render() : renderer.render(scene, camera);
+    perf && perf.end(performance.now() - t0);
   }
   loop();
 
