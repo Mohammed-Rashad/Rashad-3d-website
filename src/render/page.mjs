@@ -206,7 +206,7 @@ export function renderPage(c, { dev = false } = {}) {
         <li>${icon('hand')}<span>${LH('Click things in the scenes.', 'انقر على ما في المشاهد.')}</span></li>
         <li>${icon('volumeOn')}<span>${LH('Sound is off; switch it on at the top.', 'الصوت مُطفأ؛ شغّله من الأعلى.')}</span></li>
       </ul>
-      <p class="cup-call">${icon('cup')} <span>${LH('<strong>8 Yemeni coffee cups</strong> are hidden in the scenes. Find them all to unlock a message from his children.', '<strong>٨ فناجين قهوة يمنية</strong> مخبّأة في المشاهد. اعثر عليها كلها لتفتح رسالة من أبنائه.')}</span></p>
+      <p class="cup-call">${icon('cup')} <span>${LH('<strong>8 Yemeni coffee cups</strong> are hidden in the scenes. Find them all.', '<strong>٨ فناجين قهوة يمنية</strong> مخبّأة في المشاهد. اعثر عليها كلها.')}</span></p>
       <a class="btn big start-btn" href="#taiz">${LH('Start', 'ابدأ')} ${icon('chevron')}</a>
     </div>
     </div>

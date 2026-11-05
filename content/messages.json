@@ -1,5 +1,13 @@
 {
-  "_note": "Hidden messages from the kids. birthday = shown after clicking his name 17 times. final = shown after finding all coffee cups. Leave a field as TODO_FROM_FAMILY to show a gentle placeholder.",
-  "birthday": { "from": { "en": "TODO_FROM_FAMILY", "ar": "TODO_FROM_FAMILY" }, "text": { "en": "TODO_FROM_FAMILY", "ar": "TODO_FROM_FAMILY" } },
-  "final":    { "from": { "en": "TODO_FROM_FAMILY", "ar": "TODO_FROM_FAMILY" }, "text": { "en": "TODO_FROM_FAMILY", "ar": "TODO_FROM_FAMILY" } }
+  "_note": "Hidden message from the kids: birthday = shown after clicking his name on the title page 17 times. Leave as TODO_FROM_FAMILY to show a gentle placeholder.",
+  "birthday": {
+    "from": {
+      "en": "TODO_FROM_FAMILY",
+      "ar": "TODO_FROM_FAMILY"
+    },
+    "text": {
+      "en": "TODO_FROM_FAMILY",
+      "ar": "TODO_FROM_FAMILY"
+    }
+  }
 }

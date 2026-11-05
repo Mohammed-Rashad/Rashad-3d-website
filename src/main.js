@@ -93,15 +93,12 @@ const hunt = {
     const left = CUP_CHAPTERS.length - found.size;
     if (left) toast(icon('cup') + ' ' + (lang() === 'ar' ? `أحسنت! بقي ${left} ${left === 1 ? 'فنجان' : 'فناجين'}.` : `Nice! ${left} cup${left === 1 ? '' : 's'} to go.`));
     const c = $('#cups'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
-    if (found.size === CUP_CHAPTERS.length) setTimeout(finalMessage, 900);
+    if (found.size === CUP_CHAPTERS.length) setTimeout(allCupsFound, 900);
   },
 };
-function finalMessage() {
+function allCupsFound() {
   sfx('unlock');
-  const m = data.messages?.final; const text = tr(m?.text); const from = tr(m?.from);
-  const L = lang() === 'ar';
-  openModal(`<h3>${icon('cup')} ${L ? 'وجدتَ الفناجين الثمانية كلها!' : 'You found all 8 cups!'}</h3>
-    ${text ? `<p class="handwritten">${esc(text)}</p>${from ? `<p>— ${esc(from)}</p>` : ''}` : `<p class="handwritten">${L ? 'رسالة الأبناء الأخيرة قيد الكتابة… عُد قريبًا.' : 'The kids are still writing the final message… come back soon.'}</p>`}`);
+  toast(icon('cup') + ' ' + (lang() === 'ar' ? 'وجدتَ الفناجين الثمانية كلها!' : 'You found all 8 cups!'), 6000);
 }
 // calm / no-WebGL: hide a tiny cup button in each card instead
 if (calm) for (const id of CUP_CHAPTERS) {

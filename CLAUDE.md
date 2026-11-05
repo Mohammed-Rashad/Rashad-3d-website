@@ -37,7 +37,7 @@ These were chosen from research into playful 3D portfolios (Bruno Simon), intera
 2. **The life curve** (the visual spine). A glowing signal line runs through the whole site. Each chapter is a *sample point*; as you scroll, sinc lobes bloom from each point and the continuous curve reconstructs between them. At the end a Gaussian envelope appears, labeled *family*, and the series converges.
 3. **A story-map globe** (the transitions). A stylized low-poly globe with glowing arcs Taiz → Sana'a → Cairo → Lübeck → Najran. The camera flies **only when the chapter changes**, never continuously. Only the five main places get pins; no conference-by-conference clutter.
 4. **One real explorable** (the showpiece, Ciechanowski-style). A playable version of his actual research: aliasing → sinc reconstruction → sinc-Gauss → a tiny neural net. Text must be readable without JS; interactivity is layered on top.
-5. **Whispers + coffee cups** (the charm, Bruno-Simon-style). Short notes from family, students and colleagues pinned in the 3D world, plus a hidden Yemeni coffee cup in each chapter. Finding all of them unlocks a final message.
+5. **Whispers + coffee cups** (the charm, Bruno-Simon-style). Short notes from family, students and colleagues pinned in the 3D world, plus a hidden Yemeni coffee cup in each chapter. Finding all of them shows a short "You found all 8 cups!" celebration (no message, family decision 2026-11-06).
 
 Explicitly **not** doing: a drivable car, leaderboards, a full publications list, constant camera motion, a badge wall.
 

@@ -34,7 +34,6 @@ For each of `taiz`, `sanaa`, `cairo`, `lubeck`, `najran`, `library`, `writer`, `
 
 ## Hidden messages from the kids (`content/messages.json`)
 - [ ] `birthday`: shown after clicking his name on the title page 17 times
-- [ ] `final`: shown after finding all 8 coffee cups
 
 ## Approvals
 - [ ] Every joke in `content/jokes.json`: set `"approved": true` after the family reviews it, or `"enabled": false` to remove it
