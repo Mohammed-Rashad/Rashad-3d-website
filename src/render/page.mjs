@@ -72,8 +72,7 @@ function chapterBody(id, c, dev) {
           <button class="btn" data-action="chalk-tool" data-tool="chalk" aria-pressed="true">${icon('chalk')} ${LH('Chalk', 'طباشير')}</button>
           <button class="btn" data-action="chalk-tool" data-tool="eraser" aria-pressed="false">${icon('eraser')} ${LH('Eraser', 'ممحاة')}</button>
           <button class="btn" data-action="chalk-clear">${icon('clear')} ${LH('Clean', 'امسح الكل')}</button>
-          <button class="btn" data-action="chalk">${icon('sparkle')} ${LH('Write his formula', 'اكتب معادلته')}</button>
-          <button class="btn" data-action="bell">${icon('bell')} ${LH('Ring the bell', 'اقرع الجرس')}</button></div>
+          <button class="btn" data-action="chalk">${icon('sparkle')} ${LH('Write the sampling formula', 'اكتب معادلة المعاينة')}</button></div>
         <div class="chalk-fallback" dir="ltr">${tex('f(t) = \\sum_{n} f(n)\\,\\operatorname{sinc}(t-n)', true)}</div>`;
     case 'cairo':
       return `<p class="lead">${L(P.cairo)}</p>

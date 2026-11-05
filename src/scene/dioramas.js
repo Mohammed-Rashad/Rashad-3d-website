@@ -2,6 +2,7 @@
 // { group, cam:{pos,target}, sky:{top,bottom}, fog, sun:{color,intensity,dir}, hemi:{sky,ground,intensity},
 //   clickables:[{obj, action}], drags:[{obj, onDrag(hit)}], actions:{}, anchors:[Vector3], cupSpot:Vector3, update(t,dt), onEnter() }
 import * as THREE from 'three';
+import { gsap } from 'gsap';
 import { mat, glow, mesh, box, cyl, cone, sphere, rng, noise2, terrain, towerHouse, palm, coffeePlant, coffeeCup, canvasTex, burst } from './kit.js';
 
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -71,22 +72,41 @@ export async function taiz(ctx) {
   // coffee plant + brass pot (Poly Haven) + the pour cup
   const plantPos = V(-2.9, H(-2.9, 3.8), 3.8); // left-front of the houses, in clear view
   const plant = coffeePlant(4); plant.position.copy(plantPos); plant.scale.setScalar(1.3); g.add(plant);
-  const pourCup = coffeeCup(2.2); pourCup.position.set(plantPos.x + 1.25, plantPos.y + 0.02, plantPos.z + 0.5); g.add(pourCup);
-  const coffee = pourCup.children.find((c) => c.userData.coffee); coffee.scale.setScalar(0.01);
-  const pot = await placeGLB(ctx, '/models/taiz/dallah.glb', g, { pos: V(plantPos.x + 1.95, H(plantPos.x + 1.95, plantPos.z + 0.2), plantPos.z + 0.2), scale: 1.25, rotY: -0.9 });
+  // the pour: a small finjan beside the plant, and the dallah that lifts, tilts its spout over it and pours
+  const cupPos = V(plantPos.x + 1.0, 0, plantPos.z + 0.55); cupPos.y = H(cupPos.x, cupPos.z) + 0.01;
+  const pourCup = coffeeCup(1.0); pourCup.position.copy(cupPos); g.add(pourCup);
+  const coffee = pourCup.children.find((c) => c.userData.coffee); coffee.scale.setScalar(0.01); coffee.position.y = 0.06;
+  const PIV_H = 0.28; // tilt around the pot's middle, not its base
+  const potPivot = new THREE.Group(); potPivot.position.set(cupPos.x + 0.19, cupPos.y + PIV_H, cupPos.z); g.add(potPivot);
+  const pot = await placeGLB(ctx, '/models/taiz/dallah.glb', potPivot, { pos: V(0, -PIV_H, 0), scale: 1.25, rotY: Math.PI / 2 }); // spout → towards the cup (−x)
+  const spout = new THREE.Object3D(); spout.position.set(-0.23, 0.32 - PIV_H, 0); potPivot.add(spout);
+  const stream = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.006, 1, 6, 1, true), mat('#3b1e0c', { roughness: 0.25 })); stream.visible = false; g.add(stream);
   const flipper = photoFrame(ctx, g, ctx.chapterData?.photos, V(3.2, H(3.2, 2.2), 2.2), -0.4);
   const fly = birds(g, 6, V(1, 7, -1), 7);
-  let pourT = -1;
+  let pouring = false; const sp = new THREE.Vector3();
+  const pour = () => {
+    if (pouring) return; pouring = true; coffee.scale.setScalar(0.01);
+    const rest = potPivot.position.clone();
+    const tl = gsap.timeline({ onComplete: () => (pouring = false) });
+    tl.to(potPivot.position, { y: rest.y + 0.3, x: rest.x + 0.02, duration: 0.55, ease: 'sine.inOut' })
+      .to(potPivot.rotation, { z: 0.9, duration: 0.6, ease: 'sine.inOut' })
+      .add(() => { stream.visible = true; ctx.sfx('pour'); })
+      .to(coffee.scale, { x: 1, y: 1, z: 1, duration: 1.3, ease: 'sine.out' })
+      .add(() => (stream.visible = false))
+      .to(potPivot.rotation, { z: 0, duration: 0.5, ease: 'sine.inOut' })
+      .to(potPivot.position, { y: rest.y, x: rest.x, duration: 0.5, ease: 'sine.inOut' })
+      .add(() => ctx.sfx('clink'));
+  };
   return base({
     group: g, cam: { pos: V(6.5, 7.5, 17), target: V(0.2, 2.4, 0.5) },
     sky: { top: '#4a3560', bottom: '#e9a979' }, fog: 0.028, sun: { color: '#ffd2a0', intensity: 2.2, dir: V(-6, 8, 4) }, hemi: { sky: '#ffe0c0', ground: '#4b3a2a', intensity: 1.1 },
-    clickables: [{ obj: plant, action: 'pour' }, { obj: pourCup, action: 'pour' }, ...(pot ? [{ obj: pot, action: 'pour' }] : [])],
-    actions: { pour() { if (pourT >= 0) return; pourT = 0; ctx.sfx('pour'); setTimeout(() => ctx.sfx('clink'), 1500); } },
+    clickables: [{ obj: plant, action: 'pour' }, { obj: pourCup, action: 'pour' }, { obj: potPivot, action: 'pour' }],
+    actions: { pour },
     anchors: [V(-0.2, 6, 1.9), V(1.6, 4.4, 4.2), V(5, fy + 2.4, -6)],
     cupSpot: V(5.9, fy + 1.45, -4.95),
     update(t, dt) {
       fly(t); flipper && flipper(dt);
-      if (pourT >= 0) { pourT += dt; const p = Math.min(1, pourT / 1.4); coffee.scale.setScalar(Math.max(0.01, p)); if (pot) pot.rotation.z = Math.sin(Math.min(1, pourT / 1.6) * Math.PI) * 0.6; if (pourT > 4) { coffee.scale.setScalar(0.01); pourT = -1; } }
+      if (stream.visible) { spout.getWorldPosition(sp); g.worldToLocal(sp); const to = new THREE.Vector3(cupPos.x, cupPos.y + 0.1, cupPos.z); const dir = to.clone().sub(sp); const len = Math.max(0.02, dir.length()); stream.scale.y = len; stream.position.copy(sp).addScaledVector(dir, 0.5); stream.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize()); }
     },
   });
 }
@@ -110,23 +130,16 @@ export async function sanaa(ctx) {
   const face = mesh(new THREE.PlaneGeometry(2.7, 1.5), new THREE.MeshBasicMaterial({ map: tex, color: '#e4e4e4' }), 0, 1.7, 0.06, board);
   box(2.7, 0.06, 0.18, '#5b3d27', 0, 0.9, 0.08, board);
   const desk = await placeGLB(ctx, '/models/sanaa/SchoolDesk_01.glb', g, { pos: V(2.4, 0, 4.2), scale: 1.6, rotY: Math.PI + 0.25 });
-  // school bell on a post
-  const bellG = new THREE.Group(); bellG.position.set(4.4, 0, 1.6); g.add(bellG);
-  cyl(0.06, 0.06, 2.4, '#4a4038', 0, 0, 0, bellG);
-  const bell = new THREE.Group(); bell.position.set(0, 2.4, 0); bellG.add(bell);
-  mesh(new THREE.CylinderGeometry(0.12, 0.32, 0.4, 10, 1, true), mat('#c99a3c', { metalness: 0.7, roughness: 0.35, side: THREE.DoubleSide }), 0, -0.25, 0, bell);
 
   let writeT = -1, wrote = false;
   let lastChalk = 0;
   const actions = {
     chalk() { writeT = 0; ctx.sfx('chalk'); },
-    bell() { ctx.sfx('bell'); bellSwing = 2.5; },
   };
-  let bellSwing = 0;
   return base({
     group: g, cam: { pos: V(5, 4.2, 13), target: V(0.6, 2.4, 0) },
     sky: { top: '#1d1844', bottom: '#b4708a' }, fog: 0.03, sun: { color: '#ff9f86', intensity: 1.2, dir: V(8, 3, -6) }, hemi: { sky: '#9b86d6', ground: '#3b2a2a', intensity: 1.0 },
-    clickables: [{ obj: bellG, action: 'bell' }, ...(desk ? [{ obj: desk, action: 'chalk' }] : [])],
+    clickables: [...(desk ? [{ obj: desk, action: 'chalk' }] : [])],
     drags: [{ obj: face, onDrag(hit, now, start) {
       const uv = hit.uv; if (!uv) return; chalk.stroke(uv.x * chalk.canvas.width, (1 - uv.y) * chalk.canvas.height, start);
       if (now - lastChalk > 180) { lastChalk = now; g.userData.fx.push(burst(g, hit.point, { color: '#ffffff', n: 10, speed: 0.5, size: 0.035, life: 0.8, gravity: -2 })); }
@@ -136,7 +149,6 @@ export async function sanaa(ctx) {
     onEnter() { if (!wrote) { wrote = true; setTimeout(() => actions.chalk(), 900); } },
     update(t, dt) {
       if (writeT >= 0) { writeT += dt; chalk.writeFormula(Math.min(1, writeT / 1.8)); if (writeT > 1.8) writeT = -1; }
-      if (bellSwing > 0) { bellSwing -= dt; bell.rotation.z = Math.sin(bellSwing * 18) * 0.4 * bellSwing / 2.5; }
     },
   });
 }

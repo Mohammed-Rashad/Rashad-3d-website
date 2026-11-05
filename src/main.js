@@ -179,7 +179,7 @@ document.addEventListener('click', (e) => {
   if (a === 'chalk-clear') { chalk.clear(); sfx('rustle'); return; }
   if (a === 'chalk' && !world) { chalk.writeFormula(1); sfx('chalk'); return; }
   if (a === 'radio') { if (!(world && world.action('radio'))) sfx('radio'); return; }
-  if (!(world && world.action(a))) sfx({ pour: 'pour', chalk: 'chalk', bell: 'bell', marzipan: 'blip' }[a] || 'blip');
+  if (!(world && world.action(a))) sfx({ pour: 'pour', chalk: 'chalk', marzipan: 'blip' }[a] || 'blip');
 });
 $$('.book').forEach((d) => d.addEventListener('toggle', () => d.open && sfx('page', true)));
 function emit(type, detail) {
