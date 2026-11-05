@@ -1,16 +1,16 @@
 // Shared chapter config (build-time renderer + runtime).
 export const CHAPTERS = [
   { id: 'intro', n: 0, title: { en: 'Title page', ar: 'صفحة العنوان' }, accent: '#f2c66d', amb: 'amb-intro', globe: 'taiz' },
-  { id: 'taiz', n: 1, title: { en: 'Taiz: Initial Conditions', ar: 'تعز: الشروط الابتدائية' }, accent: '#c8704a', amb: 'amb-taiz', place: { lat: 13.58, lon: 44.02 }, sample: 0.35 },
+  { id: 'taiz', n: 1, title: { en: 'Taiz: Initial Conditions', ar: 'تعز: الشروط الابتدائية (initial conditions)' }, accent: '#c8704a', amb: 'amb-taiz', place: { lat: 13.58, lon: 44.02 }, sample: 0.35 },
   { id: 'sanaa', n: 2, title: { en: "Sana'a: The First Samples", ar: 'صنعاء: العيّنات الأولى' }, accent: '#9a7ad0', amb: 'amb-sanaa', place: { lat: 15.37, lon: 44.19 }, sample: 0.8 },
-  { id: 'cairo', n: 3, title: { en: 'Cairo: Convergence Under Supervision', ar: 'القاهرة: التقارب تحت الإشراف' }, accent: '#3bb3a3', amb: 'amb-cairo', place: { lat: 30.03, lon: 31.21 }, sample: 0.15 },
+  { id: 'cairo', n: 3, title: { en: 'Cairo: Convergence Under Supervision', ar: 'القاهرة: التقارب (convergence) تحت الإشراف' }, accent: '#3bb3a3', amb: 'amb-cairo', place: { lat: 30.03, lon: 31.21 }, sample: 0.15 },
   { id: 'lubeck', n: 4, title: { en: 'Lübeck: The Humboldt Years', ar: 'لوبيك: سنوات هومبولت' }, accent: '#c4564a', amb: 'amb-lubeck', place: { lat: 53.87, lon: 10.69 }, sample: 0.95 },
   { id: 'najran', n: 5, title: { en: 'Najran: The Professor', ar: 'نجران: الأستاذ' }, accent: '#d69a48', amb: 'amb-najran', place: { lat: 17.49, lon: 44.13 }, sample: 0.55 },
   { id: 'library', n: 6, title: { en: 'The Library: History & Politics', ar: 'المكتبة: التاريخ والسياسة' }, accent: '#b07a52', amb: 'amb-library', sample: 0.7 },
   { id: 'writer', n: 7, title: { en: 'The Writer: On Facebook', ar: 'الكاتب: على فيسبوك' }, accent: '#c9a27c', amb: 'amb-writer', sample: 0.4 },
   { id: 'ai', n: 8, title: { en: 'AI: Two Ways to Fill the Gaps', ar: 'الذكاء الاصطناعي: طريقتان لسدّ الفجوات' }, accent: '#7fd8e6', amb: 'amb-ai', sample: 0.85 },
-  { id: 'conclusion', n: 9, title: { en: 'Conclusion: Convergence', ar: 'الخاتمة: التقارب' }, accent: '#f2c66d', amb: 'amb-end', globe: 'all' },
-  { id: 'epilogue', n: 10, label: { en: 'Appendix A', ar: 'الملحق أ' }, title: { en: 'The Map of Samples', ar: 'خريطة العيّنات' }, accent: '#f2c66d', amb: 'amb-end', globe: 'all' },
+  { id: 'conclusion', n: 9, title: { en: 'Conclusion: Convergence', ar: 'الخاتمة: التقارب (convergence)' }, accent: '#f2c66d', amb: null, globe: 'all' },
+  { id: 'epilogue', n: 10, label: { en: 'Appendix A', ar: 'الملحق أ' }, title: { en: 'The Map of Samples', ar: 'خريطة العيّنات' }, accent: '#f2c66d', amb: null, globe: 'all' },
 ];
 
 // '§3' for chapters, 'Appendix A' for the epilogue

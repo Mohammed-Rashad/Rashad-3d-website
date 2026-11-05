@@ -136,7 +136,7 @@ export function burst(parent, at, { color = '#ffe9a8', n = 40, speed = 1.5, life
 // a small street-name sign on a post (text drawn on a canvas)
 export function signpost(title, sub, pos, rotY = 0) {
   const g = new THREE.Group(); g.position.copy(pos); g.rotation.y = rotY;
-  mesh(new THREE.CylinderGeometry(0.035, 0.04, 1.5, 8), mat('#2a2a2e', { roughness: 0.5, metalness: 0.4 }), 0, 0.75, 0, g);
+  mesh(new THREE.CylinderGeometry(0.035, 0.04, 1.36, 8), mat('#2a2a2e', { roughness: 0.5, metalness: 0.4 }), 0, 0.68, 0, g); // ends under the board
   const t = canvasTex(512, 200, (c, w, h) => {
     c.fillStyle = '#f4efe2'; c.fillRect(0, 0, w, h); c.strokeStyle = '#7a2f25'; c.lineWidth = 10; c.strokeRect(8, 8, w - 16, h - 16);
     c.fillStyle = '#7a2f25'; c.textAlign = 'center'; let fs = 74; do { c.font = `700 ${fs}px "CMU Serif", Georgia, serif`; fs -= 2; } while (c.measureText(title).width > w - 60 && fs > 20); c.fillText(title, w / 2, 108);

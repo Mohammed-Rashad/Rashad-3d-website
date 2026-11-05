@@ -428,3 +428,6 @@ details.more[open] > summary { margin-bottom: 8px; }
 
 /* sound on by default: hide the "tap to enable" label once it's on */
 #btn-sound.on .l-en, #btn-sound.on .l-ar { display: none !important; }
+
+.site-footer .heart .ico { color: #e2504c; fill: #e2504c; vertical-align: -0.15em; }
+.site-footer a { color: var(--gold-hi); }

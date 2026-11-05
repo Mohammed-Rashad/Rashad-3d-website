@@ -43,7 +43,7 @@
     },
     "lubeck": {
       "en": "It began with a fellowship for European-Islamic Cultural Dialogue, with visits to Berlin, Bremen and Karlsruhe along the way. Together they built the Hermite-Gauss version of his method (2015), which uses derivatives as well as values.",
-      "ar": "بدأت الرحلة بزمالة للحوار الثقافي الأوروبي الإسلامي، وزار خلالها برلين وبريمن وكارلسروه. ومعًا طوّرا نسخة «هيرميت–غاوس» من طريقته (٢٠١٥)، وهي تستخدم المشتقات إلى جانب القيم."
+      "ar": "بدأت الرحلة بزمالة للحوار الثقافي الأوروبي الإسلامي، وزار خلالها برلين وبريمن وكارلسروه. ومعًا طوّرا نسخة «هيرميت–غاوس (Hermite-Gauss)» من طريقته (٢٠١٥)، وهي تستخدم المشتقات (derivatives) إلى جانب القيم."
     },
     "najran": {
       "en": "He has supervised six M.Sc. students, serves as an academic editor for Mathematical Problems in Engineering, and speaks two further languages fluently: Mathematica and LaTeX. Two of his chapters appeared in the Festschrift for Frank Stenger's 80th birthday (2021). In all: 40+ papers.",
@@ -54,12 +54,12 @@
       "ar": ""
     },
     "libraryPolitics": {
-      "en": "He follows and writes about politics too. This site does not speak for him: his own words are on his page.",
-      "ar": "وهو يتابع الشأن السياسي ويكتب فيه أيضًا، لكن هذا الموقع لا يتحدث باسمه؛ فكلماته على صفحته."
-    },
-    "writer": {
       "en": "",
       "ar": ""
+    },
+    "writer": {
+      "en": "This site does not speak for him: his own words are there.",
+      "ar": "هذا الموقع لا يتحدث باسمه؛ فكلماته هناك."
     },
     "ai": {
       "en": "His research asks an old question that every phone, camera and AI model now depends on.",
@@ -146,13 +146,13 @@
       ]
     },
     "library": {
-      "en": "History and politics: he reads them, follows them and writes about them.",
-      "ar": "التاريخ والسياسة: يقرؤهما ويتابعهما ويكتب عنهما.",
+      "en": "History and politics: he reads them widely and follows them closely.",
+      "ar": "التاريخ والسياسة: يقرأ فيهما كثيرًا ويتابعهما عن كثب.",
       "chips": []
     },
     "writer": {
-      "en": "He writes, and often, on Facebook.",
-      "ar": "يكتب كثيرًا على فيسبوك.",
+      "en": "He writes about history and politics, often, on his Facebook page.",
+      "ar": "يكتب في التاريخ والسياسة، وكثيرًا، على صفحته في فيسبوك.",
       "chips": []
     },
     "ai": {

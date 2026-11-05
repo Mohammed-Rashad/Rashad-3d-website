@@ -27,8 +27,9 @@ export function createAudio({ lang, captionsEl }) {
   }
   function get(n, opts = {}) { if (!cache[n]) cache[n] = new Howl({ src: src(n), ...opts }); return cache[n]; }
   async function setAmbience(name) {
-    if (name === ambName && amb) return; ambName = name;
+    if (name === ambName && (amb || !name)) return; ambName = name;
     if (!on) return;
+    if (!name) { if (amb) { const a = amb; a.fade(a.volume(), 0, 1500); setTimeout(() => a.stop(), 1600); amb = null; } return; }
     const old = amb; amb = get(name, { loop: true, volume: 0 }); amb.play(); amb.fade(0, 0.4, 2000);
     if (old && old !== amb) { old.fade(old.volume(), 0, 1500); setTimeout(() => old.stop(), 1600); }
   }

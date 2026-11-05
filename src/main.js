@@ -173,13 +173,8 @@ addEventListener('resize', onScroll);
 /* ---------------- actions (buttons in cards; mirrored in 3D) ---------------- */
 function compileHTML(sound = true) { const pdf = $('.tex-pdf'); const btn = $('[data-action=compile]'); btn.disabled = true; btn.textContent = 'pdflatex …'; if (sound) sfx('keys'); setTimeout(() => { pdf.hidden = false; btn.textContent = 'pdflatex ✓'; btn.disabled = false; if (sound) sfx('ding'); }, 1300); }
 function openBook(id) { const d = $(`#book-${CSS.escape(id)}`); if (!d) { sfx('page'); return; } $$('.book').forEach((b) => (b.open = b === d)); d.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); sfx('page'); }
-function openLetter(i) {
-  sfx('rustle');
-  const posts = $$('.letter');
-  const fb = $('.fb-link'); if (!posts.length && fb) { window.open(fb.href, '_blank', 'noopener'); return; }
-  if (!posts.length) return openModal(`<p class="handwritten soon">${lang() === 'ar' ? 'رابط صفحته على فيسبوك قريبًا…' : 'The link to his Facebook page is coming soon…'}</p>`);
-  const p = posts[i % posts.length]; openModal(`<article class="letter" lang="${p.lang}" dir="${p.dir}" style="--r:0deg">${p.innerHTML}</article>`);
-}
+// the letters on the corkboard just rustle; the Facebook button in §7 is the only link
+function openLetter() { sfx('rustle'); }
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-action]'); if (!b) return;
   const a = b.dataset.action;

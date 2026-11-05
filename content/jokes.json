@@ -10,11 +10,11 @@
       "approved": false,
       "title": {
         "en": "Jitter error",
-        "ar": "خطأ الارتعاش"
+        "ar": "خطأ الارتعاش – jitter error"
       },
       "body": {
         "en": "His 2011 paper studies “jitter errors” in sampling. We conjecture the source is Yemeni coffee.",
-        "ar": "تدرس ورقته المنشورة عام ٢٠١١ «أخطاء الارتعاش» في المعاينة. ونخمّن أن مصدرها القهوة اليمنية."
+        "ar": "تدرس ورقته المنشورة عام ٢٠١١ «أخطاء الارتعاش (jitter errors)» في المعاينة (sampling). ونخمّن أن مصدرها القهوة اليمنية."
       }
     },
     {
@@ -30,7 +30,7 @@
       },
       "body": {
         "en": "He was teaching mathematics before finishing his degree. In sampling terms: output before input. Causality is overrated.",
-        "ar": "كان يدرّس الرياضيات قبل أن يُنهي دراستها. وبلغة المعاينة: ظهر المُخرَج قبل المُدخَل. السببيةُ مُبالَغٌ في تقديرها."
+        "ar": "كان يدرّس الرياضيات قبل أن يُنهي دراستها. وبلغة المعاينة (sampling): ظهر المُخرَج قبل المُدخَل. السببيةُ مُبالَغٌ في تقديرها."
       }
     },
     {
@@ -42,11 +42,11 @@
       "approved": false,
       "title": {
         "en": "Eigenvalues of discontinuous problems",
-        "ar": "القيم الذاتية للمسائل غير المتصلة"
+        "ar": "القيم الذاتية للمسائل غير المتصلة – eigenvalues of discontinuous problems"
       },
       "body": {
         "en": "His early papers compute eigenvalues of problems with discontinuities. Moving countries four times is a discontinuity. Our result: the eigenvalues (his values) stayed the same.",
-        "ar": "تحسب أوراقه الأولى القيم الذاتية لمسائلَ فيها نقاط انقطاع. والانتقال بين البلدان أربع مرات انقطاعٌ أيضًا. ونتيجتنا: قيمُه الذاتية لم تتغيّر."
+        "ar": "تحسب أوراقه الأولى القيم الذاتية (eigenvalues) لمسائلَ فيها نقاط انقطاع. والانتقال بين البلدان أربع مرات انقطاعٌ أيضًا. ونتيجتنا: قيمُه الذاتية لم تتغيّر."
       }
     },
     {
@@ -62,7 +62,7 @@
       },
       "body": {
         "en": "His Humboldt visits to Germany (2011, 2012–13, 2014, 2017, 2019) are a textbook example of periodic nonuniform sampling, the title of his 2023 paper.",
-        "ar": "زياراته إلى ألمانيا بمنح هومبولت (٢٠١١، ٢٠١٢–٢٠١٣، ٢٠١٤، ٢٠١٧، ٢٠١٩) مثالٌ نموذجي على «المعاينة الدورية غير المنتظمة»، وهو عنوان ورقته المنشورة عام ٢٠٢٣."
+        "ar": "زياراته إلى ألمانيا بمنح هومبولت (٢٠١١، ٢٠١٢–٢٠١٣، ٢٠١٤، ٢٠١٧، ٢٠١٩) مثالٌ نموذجي على «المعاينة (sampling) الدورية غير المنتظمة»، وهو عنوان ورقته المنشورة عام ٢٠٢٣."
       }
     },
     {
@@ -74,11 +74,11 @@
       "approved": false,
       "title": {
         "en": "Inverse heat conduction",
-        "ar": "مسألة التوصيل الحراري العكسية"
+        "ar": "مسألة التوصيل الحراري العكسية – inverse heat conduction problem"
       },
       "body": {
         "en": "He has a paper on the inverse heat conduction problem. Applied version: go from Najran in August to Lübeck in January and reconstruct how you got there.",
-        "ar": "له ورقة في مسألة التوصيل الحراري العكسية. والنسخة التطبيقية: انتقل من نجران في أغسطس إلى لوبيك في يناير، ثم حاول أن تستنتج كيف وصلتَ إلى هنا."
+        "ar": "له ورقة في مسألة التوصيل الحراري العكسية (inverse heat conduction problem). والنسخة التطبيقية: انتقل من نجران في أغسطس إلى لوبيك في يناير، ثم حاول أن تستنتج كيف وصلتَ إلى هنا."
       }
     },
     {
@@ -90,11 +90,11 @@
       "approved": false,
       "title": {
         "en": "Hyperstability",
-        "ar": "الاستقرار الفائق"
+        "ar": "الاستقرار الفائق – hyperstability"
       },
       "body": {
         "en": "He has a 2024 paper on hyperstability of functional equations. Anyone who survived supervising six theses and committee meetings is hyperstable.",
-        "ar": "له ورقة عام ٢٠٢٤ في الاستقرار الفائق للمعادلات الدالّية. ومن نجا من الإشراف على ست رسائل ومن اجتماعات اللجان، فهو مستقرٌّ استقرارًا فائقًا بلا شك."
+        "ar": "له ورقة عام ٢٠٢٤ في الاستقرار الفائق (hyperstability) للمعادلات الدالّية (functional equations). ومن نجا من الإشراف على ست رسائل ومن اجتماعات اللجان، فهو مستقرٌّ استقرارًا فائقًا بلا شك."
       }
     },
     {
@@ -106,11 +106,11 @@
       "approved": false,
       "title": {
         "en": "Aliasing error",
-        "ar": "خطأ التعرّج"
+        "ar": "خطأ التعرّج – aliasing error"
       },
       "body": {
         "en": "He wrote a paper on aliasing error. Real-world aliasing: Asharabi, Al-Sharabi, Ash-Sharabi, Alsharabi. Same signal, many reconstructions.",
-        "ar": "كتب ورقةً عن خطأ التعرّج. أما التعرّج في الحياة الواقعية فهو: Asharabi وAl-Sharabi وAsh-Sharabi وAlsharabi. إشارة واحدة، وإعادات بناء كثيرة."
+        "ar": "كتب ورقةً عن خطأ التعرّج (aliasing error). أما التعرّج في الحياة الواقعية فهو: Asharabi وAl-Sharabi وAsh-Sharabi وAlsharabi. إشارة واحدة، وإعادات بناء كثيرة."
       }
     },
     {
@@ -142,7 +142,7 @@
       },
       "body": {
         "en": "Let f be a life sampled at Taiz, Sana'a, Cairo, Lübeck and Najran. With a Gaussian multiplier G (one patient wife, four children), the reconstruction converges exponentially.",
-        "ar": "لتكن f حياةً أُخذت عيّناتها في تعز وصنعاء والقاهرة ولوبيك ونجران. عندئذٍ، مع مضاعِفٍ غاوسي G (زوجةٌ صبورة وأربعة أبناء)، تتقارب إعادةُ البناء تقاربًا أُسّيًا."
+        "ar": "لتكن f حياةً أُخذت عيّناتها في تعز وصنعاء والقاهرة ولوبيك ونجران. عندئذٍ، مع مضاعِفٍ غاوسي (Gaussian multiplier) G (زوجةٌ صبورة وأربعة أبناء)، تتقارب إعادةُ البناء (reconstruction) تقاربًا أُسّيًا (exponentially)."
       },
       "proof": {
         "en": "Left as an exercise to the reader.",
@@ -154,7 +154,7 @@
       "chapter": "conclusion",
       "kind": "acknowledgements",
       "number": "",
-      "enabled": true,
+      "enabled": false,
       "approved": false,
       "title": {
         "en": "Acknowledgements",
