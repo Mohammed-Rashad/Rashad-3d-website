@@ -112,26 +112,22 @@ function chapterBody(id, c, dev) {
           <a href="${esc(c.profile.links.cv)}#publications" target="_blank" rel="noopener">${LH('All papers', 'كل الأبحاث') + ' ' + icon('external')}</a></figcaption></figure>
         ${J}${st}`;
     case 'library': {
-      const items = c.history.items.filter((h) => h.confirmed || dev);
+      const items = c.history.items.filter((h) => h.confirmed);
       const books = items.length
-        ? `<div class="books">` + items.map((h) => `<details class="book" id="book-${h.id}" data-book="${h.id}"><summary>${L(h.title)}${!h.confirmed ? `<span class="badge-draft">${L(UI.draft)}</span>` : ''}</summary><p>${L(h.text)}</p></details>`).join('') + `</div>`
-        : `<p class="handwritten">${L(UI.shelfStocking)}</p>`;
-      const fb = ok(c.profile.links.facebook) ? ` <a href="${esc(c.profile.links.facebook)}" target="_blank" rel="noopener">${L(UI.hisPosts)}</a>` : '';
-      return `<p class="lead">${L(P.library)}</p>${books}<p>${L(P.libraryPolitics)}${fb}</p>${J}${st}
+        ? `<div class="books">` + items.map((h) => `<details class="book" id="book-${h.id}" data-book="${h.id}"><summary>${L(h.title)}</summary><p>${L(h.text)}</p></details>`).join('') + `</div>`
+        : '';
+      const fb = ok(c.profile.links.facebook) ? ` <a href="${esc(c.profile.links.facebook)}" target="_blank" rel="noopener">${LH('His Facebook page', 'صفحته على فيسبوك')} ${icon('external')}</a>` : '';
+      return `${okL(P.library) ? `<p class="lead">${L(P.library)}</p>` : ''}${books}<p>${L(P.libraryPolitics)}${fb}</p>${J}${st}
         <div class="actions"><button class="btn" data-action="radio">${icon('radio')} ${LH('Tune the radio', 'اضبط الراديو')}</button></div>`;
     }
     case 'writer': {
       const fn = jokes.find((j) => j.kind === 'footnote' && j.enabled);
-      const posts = c.posts.items.filter((p) => ok(p.text));
-      const list = posts.length
-        ? `<div class="letters">` + posts.map((p, i) => `<article class="letter" lang="${p.lang === 'ar' ? 'ar' : 'en'}" dir="${p.lang === 'ar' ? 'rtl' : 'ltr'}" style="--r:${(i % 2 ? 1 : -1) * 1.5}deg"><p>${esc(p.text).replace(/\n/g, '<br>')}</p><footer>${ok(p.date) ? `<time>${esc(p.date)}</time>` : ''}${ok(p.url) ? ` · <a href="${esc(p.url)}" target="_blank" rel="noopener">${L(UI.readPost)}</a>` : ''}</footer></article>`).join('') + `</div>`
-        : '';
       const fbUrl = c.profile.links.facebook;
       const fbLink = ok(fbUrl)
-        ? `<p class="fb-wrap"><a class="btn big fb-link" href="${esc(fbUrl)}" target="_blank" rel="noopener">${LH('Read his writing on Facebook', 'اقرأ ما يكتبه على فيسبوك')} ${icon('external')}</a></p>`
+        ? `<p class="fb-wrap"><a class="btn big fb-link" href="${esc(fbUrl)}" target="_blank" rel="noopener">${LH('His Facebook page', 'صفحته على فيسبوك')} ${icon('external')}</a></p>`
         : `<p class="handwritten soon">${LH('The link to his Facebook page is coming soon…', 'رابط صفحته على فيسبوك قريبًا…')}</p>`;
       const mark = fn ? `<sup class="fn-mark"><a href="#fn-7-1" id="fnref-7-1">7.1</a></sup>` : '';
-      return `<p class="lead">${L(P.writer)}${mark}</p>${fbLink}${list}${st}
+      return `${okL(P.writer) ? `<p class="lead">${L(P.writer)}${mark}</p>` : ''}${fbLink}${st}
         ${fn ? `<ol class="footnotes"><li id="fn-7-1" value="7"><span class="fn-num">7.1</span> ${L(fn.body)} <a href="#fnref-7-1" aria-label="back">↑</a></li></ol>` : ''}`;
     }
     case 'ai': {
@@ -196,7 +192,7 @@ export function renderPage(c, { dev = false } = {}) {
   const intro = `
   <section class="chapter intro" id="intro" data-chapter="intro" tabindex="-1" aria-label="Title page">
     <div class="card paper titlepage">
-      ${ok(p.photo?.src) ? `<img class="author-photo" src="${esc(p.photo.src)}" alt="${esc(p.photo.alt?.en || '')}" width="132" height="132" decoding="async">` : ''}
+      ${ok(p.photo?.src) ? `<figure class="polaroid title-polaroid" style="--r:-3deg"><img src="${esc(p.photo.src)}" alt="${esc(p.photo.alt?.en || '')}" width="600" height="326" decoding="async"><figcaption>${L(p.nickname)}</figcaption></figure>` : ''}
       <p class="journal">${LH('Journal of Family Analysis · Vol. 1 · Festschrift issue', 'مجلة التحليل العائلي · المجلد ١ · عدد تذكاري')}</p>
       <h1>${LH('On the Convergence of a Yemeni Mathematician', 'حول تقارُب عالِم رياضياتٍ يمني')}</h1>
       <p class="authors"><button class="name-btn" id="his-name" type="button">${L(p.name)}</button><sup>1</sup>

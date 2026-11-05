@@ -7,7 +7,7 @@ export const CHAPTERS = [
   { id: 'lubeck', n: 4, title: { en: 'Lübeck: The Humboldt Years', ar: 'لوبيك: سنوات هومبولت' }, accent: '#c4564a', amb: 'amb-lubeck', place: { lat: 53.87, lon: 10.69 }, sample: 0.95 },
   { id: 'najran', n: 5, title: { en: 'Najran: The Professor', ar: 'نجران: الأستاذ' }, accent: '#d69a48', amb: 'amb-najran', place: { lat: 17.49, lon: 44.13 }, sample: 0.55 },
   { id: 'library', n: 6, title: { en: 'The Library: History & Politics', ar: 'المكتبة: التاريخ والسياسة' }, accent: '#b07a52', amb: 'amb-library', sample: 0.7 },
-  { id: 'writer', n: 7, title: { en: 'The Writer: Facebook Posts', ar: 'الكاتب: منشورات فيسبوك' }, accent: '#c9a27c', amb: 'amb-writer', sample: 0.4 },
+  { id: 'writer', n: 7, title: { en: 'The Writer: On Facebook', ar: 'الكاتب: على فيسبوك' }, accent: '#c9a27c', amb: 'amb-writer', sample: 0.4 },
   { id: 'ai', n: 8, title: { en: 'AI: Two Ways to Fill the Gaps', ar: 'الذكاء الاصطناعي: طريقتان لسدّ الفجوات' }, accent: '#7fd8e6', amb: 'amb-ai', sample: 0.85 },
   { id: 'conclusion', n: 9, title: { en: 'Conclusion: Convergence', ar: 'الخاتمة: التقارب' }, accent: '#f2c66d', amb: 'amb-end', globe: 'all' },
   { id: 'epilogue', n: 10, label: { en: 'Appendix A', ar: 'الملحق أ' }, title: { en: 'The Map of Samples', ar: 'خريطة العيّنات' }, accent: '#f2c66d', amb: 'amb-end', globe: 'all' },

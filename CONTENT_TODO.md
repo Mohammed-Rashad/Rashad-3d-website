@@ -5,7 +5,7 @@ Any value equal to `TODO_FROM_FAMILY` (or empty) is hidden on the live site.
 
 ## Links (`content/profile.json → links`)
 - [ ] `scholar`: his own Google Scholar profile URL (the two Scholar links on the CV belong to his referees, so they are not used)
-- [ ] **`facebook`: link to his Facebook profile or page. §7 is now just a big "Read his writing on Facebook" button (and the letters on the 3D corkboard open it).** Until it's filled, §7 says the link is coming soon. Later you can add individual posts to `posts.json`.
+- [x] `facebook`: https://www.facebook.com/rashad197 (§7 and §6 link to his page; no individual posts on the site)
 
 ## Per-chapter stories & photos (`content/chapters.json`)
 For each of `taiz`, `sanaa`, `cairo`, `lubeck`, `najran`, `library`, `writer`, `ai`, `conclusion`:
@@ -24,10 +24,7 @@ For each of `taiz`, `sanaa`, `cairo`, `lubeck`, `najran`, `library`, `writer`, `
 - [ ] `students`: which co-authors were his six M.Sc. students (names exactly as written in `papers`). They will glow violet as "newer stars".
 
 ## History he loves (`content/history.json`)
-- [ ] Confirm or replace the four candidate topics (Kingdom of Saba, Ma'rib Dam, Queen Arwa, the Rasulids of Taiz). Set `"confirmed": true` for each one he actually loves. Unconfirmed topics are hidden on the live site (they show with a DRAFT badge in `npm run dev`).
-
-## His posts (`content/posts.json`)
-- [ ] Copy in a few posts he's happy to share: `{ "text": "...", "date": "2024-05-01", "lang": "ar", "url": "https://..." }`. Never scraped; empty = "Posts coming soon…" in handwriting.
+- [ ] Optional: if you ever want specific history books on the shelf, set `"confirmed": true` on topics he loves. Until then §6 just states his interest.
 
 ## His thoughts on AI (`content/ai.json`)
 - [ ] In his own words (or a paraphrase he approved): `{ "text": { "en": "...", "ar": "..." } }`

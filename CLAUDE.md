@@ -115,14 +115,14 @@ Starts on black; a single point of light oscillates into a sinc wave, then the t
 
 ### §6 The Library: History & Politics
 - Cozy study: bookshelves, a globe, a radio, a newspaper.
-- Books are clickable; each opens a history topic he loves (from `history.json`). Yemen-themed candidates for the family to confirm: Kingdom of Saba, Ma'rib Dam, Queen Arwa, the Rasulids of Taiz.
+- Books are clickable; each opens a history topic he loves (from `history.json`, only `confirmed: true`). For now §6 just states his interest; no placeholder text about the family choosing books.
 - **Politics:** say only that he follows and writes about history and politics, and link his own posts. Never state or invent positions. No political imagery.
 - **Joke — Remark 6.1 (Aliasing error).** *He wrote a paper on aliasing error. Real-world aliasing: Asharabi, Al-Sharabi, Ash-Sharabi, Alsharabi. Same signal, many reconstructions.*
 - Sound: radio tuning crackle, page flips.
 
 ### §7 The Writer: Facebook Posts
 - Posts appear as handwritten letters you pull from an envelope, or pinned on a corkboard.
-- Data only from `content/posts.json` (`text, date, lang, url?`). Arabic posts RTL in a Naskh font.
+- **Decided with the family (2026-11-05):** no posts on the site, only a link to his account https://www.facebook.com/rashad197 (`profile.json → links.facebook`).
 - Never scrape Facebook. Never generate posts. Empty file → "Posts coming soon" in handwriting.
 - **Joke — Footnote 7.1.** *Unlike his journal papers, these posts were not peer-reviewed. The comment section did that.*
 - Sound: paper rustle, pen scribble.
@@ -226,7 +226,6 @@ Rules:
 content/
   profile.json     # names (AR/EN), chapter intros
   chapters.json    # stories, photos, dates          (TODO_FROM_FAMILY)
-  posts.json       # Facebook posts: { text, date, lang, url? }
   history.json     # history topics he loves
   ai.json          # his thoughts on AI
   whispers.json    # short notes from family/students: { from, text, chapter }

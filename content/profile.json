@@ -17,7 +17,7 @@
     "orcid": "https://orcid.org/0000-0002-6616-2008",
     "scopus": "https://www.scopus.com/authid/detail.uri?authorId=25637203500",
     "scholar": "TODO_FROM_FAMILY",
-    "facebook": "TODO_FROM_FAMILY"
+    "facebook": "https://www.facebook.com/rashad197"
   },
   "dedication": {
     "confirmed": false,
@@ -50,16 +50,16 @@
       "ar": "أشرف على ست رسائل ماجستير، ويعمل محررًا أكاديميًا في مجلة Mathematical Problems in Engineering، ويُتقن لغتين أخريين بطلاقة: Mathematica وLaTeX. ونُشر له فصلان في الكتاب التذكاري الصادر احتفاءً بعيد ميلاد فرانك ستينغر الثمانين (٢٠٢١). وله في المجمل أكثر من أربعين بحثًا منشورًا."
     },
     "library": {
-      "en": "Pull a book from the shelf.",
-      "ar": "اسحب كتابًا من الرف."
+      "en": "",
+      "ar": ""
     },
     "libraryPolitics": {
-      "en": "He follows and writes about politics too. This site does not speak for him: his own words are in his posts.",
-      "ar": "وهو يتابع الشأن السياسي ويكتب فيه أيضًا، لكن هذا الموقع لا يتحدث باسمه؛ فكلماته في منشوراته."
+      "en": "He follows and writes about politics too. This site does not speak for him: his own words are on his page.",
+      "ar": "وهو يتابع الشأن السياسي ويكتب فيه أيضًا، لكن هذا الموقع لا يتحدث باسمه؛ فكلماته على صفحته."
     },
     "writer": {
-      "en": "Rather than copy his posts here, read them where he wrote them.",
-      "ar": "وبدلًا من نقل منشوراته إلى هنا، اقرأها حيث كتبها."
+      "en": "",
+      "ar": ""
     },
     "ai": {
       "en": "His research asks an old question that every phone, camera and AI model now depends on.",
