@@ -82,7 +82,7 @@ export function palm(h = 3, seed = 2) {
     leaf.geometry.translate(0, 0.8, 0); leaf.rotation.z = 1.9; leaf.rotation.y = (i / 7) * Math.PI * 2; leaf.scale.set(1, 1, 0.25);
     const piv = new THREE.Group(); piv.rotation.y = (i / 7) * Math.PI * 2; piv.add(leaf); leaf.rotation.set(0, 0, -1.25 - r() * 0.3); crown.add(piv);
   }
-  g.userData.crown = crown;
+  g.userData.crown = crown; g.traverse((o) => o.isMesh && (o.userData.noCup = true));
   return g;
 }
 
@@ -91,6 +91,7 @@ export function coffeePlant(seed = 3) {
   cyl(0.05, 0.07, 0.6, '#5b4030', 0, 0, 0, g, 5);
   for (let i = 0; i < 9; i++) { const s = sphere(0.28 + r() * 0.12, i % 2 ? '#2f6b3a' : '#3c7d44', (r() - 0.5) * 0.7, 0.6 + r() * 0.7, (r() - 0.5) * 0.7, g, 0); s.scale.y = 0.8; }
   for (let i = 0; i < 14; i++) sphere(0.055, '#c0283a', (r() - 0.5) * 0.9, 0.5 + r() * 0.9, (r() - 0.5) * 0.9, g, 0);
+  g.traverse((o) => o.isMesh && (o.userData.noCup = true));
   return g;
 }
 

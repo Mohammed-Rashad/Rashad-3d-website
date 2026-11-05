@@ -14,7 +14,7 @@ for (const id of (process.env.ONLY || 'taiz,sanaa,cairo,lubeck,najran,library,wr
     const underCard = info && info.x > c.left && info.x < c.right && info.y > c.top && info.y < c.bottom;
     const onScreen = info && info.x > 10 && info.x < innerWidth - 10 && info.y > 60 && info.y < innerHeight - 95;
     return { ...info, onScreen, underCard }; }, id);
-  const okk = r && r.onScreen && !r.underCard && !r.occluded;
+  const okk = r && r.onScreen && !r.underCard && !r.occluded && r.px >= 18 && r.px <= 50;
   console.log((okk ? 'OK  ' : 'BAD ') + id, JSON.stringify(r));
   if (process.env.SHOT) await p.screenshot({ path: `${process.env.SHOT}/cup-${vpName}-${id}.png`, timeout: 180000 });
 }

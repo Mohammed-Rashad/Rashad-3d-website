@@ -27,10 +27,10 @@ function stars(parent, n = 400, r = 60) {
   parent.add(s); return s;
 }
 
-async function placeGLB(ctx, url, parent, { pos = V(0, 0, 0), scale = 1, rotY = 0 } = {}) {
+async function placeGLB(ctx, url, parent, { pos = V(0, 0, 0), scale = 1, rotY = 0, noCup = false } = {}) {
   try {
     const g = await ctx.loadGLB(url); g.position.copy(pos); g.scale.setScalar(scale); g.rotation.y = rotY; parent.add(g);
-    g.traverse((o) => { if (o.material?.name === 'clock_face') o.material.emissiveIntensity = 0.25; if (o.material?.name?.startsWith('qamariya')) o.material.emissiveIntensity = 0.8; });
+    g.traverse((o) => { if (noCup && o.isMesh) o.userData.noCup = true; if (o.material?.name === 'clock_face') o.material.emissiveIntensity = 0.25; if (o.material?.name?.startsWith('qamariya')) o.material.emissiveIntensity = 0.8; });
     return g;
   } catch (e) { console.warn('model failed', url, e); return null; }
 }
@@ -166,7 +166,7 @@ export async function cairo(ctx) {
   const uni = new THREE.Group(); uni.position.set(-1.6, 0.4, -8.4); g.add(uni);
   await placeGLB(ctx, '/models/cairo/cairo_university.glb', uni, { pos: V(0, 0, 0), scale: 0.62, rotY: 0 });
   await placeGLB(ctx, '/models/cairo/cairo_clock_tower.glb', uni, { pos: V(5.6, 0, 0.6), scale: 0.62, rotY: 0.2 });
-  await Promise.all([[-6, -6.5], [-8, -5.8], [6.5, -6.2], [8.5, -5.5], [-9, 4.2], [9, 4.5], [5.5, 4.8]].map(([x, z], i) => placeGLB(ctx, '/models/najran/date_palm.glb', g, { pos: V(x, 0.2, z), scale: 0.42 + (i % 3) * 0.05, rotY: i * 1.9 })));
+  await Promise.all([[-6, -6.5], [-8, -5.8], [6.5, -6.2], [8.5, -5.5], [-9, 4.2], [9, 4.5], [5.5, 4.8]].map(([x, z], i) => placeGLB(ctx, '/models/najran/date_palm.glb', g, { pos: V(x, 0.2, z), scale: 0.42 + (i % 3) * 0.05, rotY: i * 1.9, noCup: true })));
   // felucca
   const fel = new THREE.Group(); fel.position.set(3, -0.2, river(3)); g.add(fel);
   await placeGLB(ctx, '/models/cairo/dhow.glb', fel, { pos: V(0, -0.05, 0), scale: 0.5, rotY: Math.PI / 2 });
@@ -279,7 +279,7 @@ export async function najran(ctx) {
   [[-7.6, -7.5, 5, 1.9], [6.8, -9.5, 6.6, 2.2]].forEach(([x, z, h, w]) => mud(x, z, h, w));
   await placeGLB(ctx, '/models/najran/najran_kasbah.glb', g, { pos: V(-3.2, 0, -5.2), scale: 0.95, rotY: 0.35 });
   await placeGLB(ctx, '/models/najran/najran_kasbah.glb', g, { pos: V(2.6, 0, -8.6), scale: 0.8, rotY: -0.5 });
-  await Promise.all(Array.from({ length: 10 }, (_, i) => { let x = -9 + r() * 18; const z = 1 + r() * 6 + (i % 2 ? 0 : 2); if (Math.abs(x - 3.5) < 2.2 && z < 4) x += 4; return placeGLB(ctx, '/models/najran/date_palm.glb', g, { pos: V(x, 0, z), scale: 0.38 + r() * 0.2, rotY: r() * 6.28 }); }));
+  await Promise.all(Array.from({ length: 10 }, (_, i) => { let x = -9 + r() * 18; const z = 1 + r() * 6 + (i % 2 ? 0 : 2); if (Math.abs(x - 3.5) < 2.2 && z < 4) x += 4; return placeGLB(ctx, '/models/najran/date_palm.glb', g, { pos: V(x, 0, z), scale: 0.38 + r() * 0.2, rotY: r() * 6.28, noCup: true }); }));
   // lecture hall
   const hall = new THREE.Group(); hall.position.set(4.8, 0, -1.2); hall.rotation.y = -0.45; g.add(hall);
   box(5.2, 2.4, 3.2, '#e6d3b0', 0, 0, 0, hall);

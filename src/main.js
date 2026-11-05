@@ -253,15 +253,13 @@ else playIntro($('#intro-canvas'), () => { titlepage.classList.add('shown'); int
 
 // the part of the screen not covered by the chapter's text card (cups are placed there)
 function freeRect(id) {
+  // independent of the scroll position: the card's left/right edges don't move while scrolling
   const w = innerWidth, h = innerHeight; const c = document.querySelector('#' + id + ' .card');
-  const r = c ? c.getBoundingClientRect() : { left: 0, right: 0, top: h, bottom: h };
+  const r = c ? c.getBoundingClientRect() : { left: 0, right: 0 };
   const top = 70, bot = h - 100;
-  const opts = [
-    { x0: r.right + 20, x1: w - 12, y0: top, y1: bot },
-    { x0: 12, x1: r.left - 20, y0: top, y1: bot },
-    { x0: 12, x1: w - 12, y0: top, y1: Math.min(bot, r.top - 20) },
-  ].map((o) => ({ ...o, a: Math.max(0, o.x1 - o.x0) * Math.max(0, o.y1 - o.y0) }));
-  return opts.sort((a, b) => b.a - a.a)[0];
+  if (w < 760) return { x0: 12, x1: w - 12, y0: top, y1: h * 0.46 }; // phones: the card sits below
+  const right = { x0: r.right + 24, x1: w - 12, y0: top, y1: bot }, left = { x0: 12, x1: r.left - 24, y0: top, y1: bot };
+  return right.x1 - right.x0 >= left.x1 - left.x0 ? right : left;
 }
 async function startWorld() {
   if (calm) return;

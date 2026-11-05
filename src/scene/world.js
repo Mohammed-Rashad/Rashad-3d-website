@@ -162,17 +162,18 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
     cup.userData.steam = steam;
   }
   // where, inside the free part of the screen (0..1, 0..1), each chapter tucks its cup
-  const CUP_AT = { taiz: [0.78, 0.7], sanaa: [0.2, 0.8], cairo: [0.8, 0.72], lubeck: [0.22, 0.8], najran: [0.82, 0.78], library: [0.8, 0.62], writer: [0.22, 0.66], ai: [0.7, 0.78] };
+  const CUP_PX = innerWidth < 760 ? 20 : 22; // target on-screen height of a hidden cup, in CSS px
+  const CUP_AT = { taiz: [0.78, 0.7], sanaa: [0.2, 0.8], cairo: [0.8, 0.72], lubeck: [0.22, 0.8], najran: [0.82, 0.78], library: [0.8, 0.62], writer: [0.22, 0.66], ai: [0.62, 0.9] };
   function positionCup(d) {
     const cup = d.cup; if (!cup) return;
     const free = data.freeRect ? data.freeRect(d.id) : { x0: innerWidth * 0.5, y0: 80, x1: innerWidth - 10, y1: innerHeight - 100 };
     // evaluate with the chapter's final camera pose
     const saved = { p: cam.pos.clone(), t: cam.target.clone(), sx: shift.x, sy: shift.y };
     cam.pos.copy(d.cam.pos); cam.target.copy(d.cam.target); const s = layoutShift(d.id); shift.x = s.x; shift.y = s.y; applyCamera();
-    const r = new THREE.Raycaster(); r.camera = camera; const nd = new THREE.Vector2(); const nrm = new THREE.Vector3();
+    const r = new THREE.Raycaster(); r.camera = camera; const nd = new THREE.Vector2(); const nrm = new THREE.Vector3(); const clr = new THREE.Raycaster();
     const [u0, v0] = CUP_AT[d.id] || [0.75, 0.7]; let placed = false;
     const meshes = []; d.group.traverse((o) => { if (o.isMesh && !within(o, cup)) meshes.push(o); });
-    outer: for (let ring = 0; ring <= 6; ring++) for (let k = 0; k < Math.max(1, ring * 8); k++) {
+    outer: for (let ring = 0; ring <= 9; ring++) for (let k = 0; k < Math.max(1, ring * 8); k++) {
       const a = (k / Math.max(1, ring * 8)) * Math.PI * 2; const u = u0 + Math.cos(a) * ring * 0.05, v = v0 + Math.sin(a) * ring * 0.05;
       if (u < 0.04 || u > 0.96 || v < 0.04 || v > 0.96) continue;
       const px = free.x0 + u * (free.x1 - free.x0), py = free.y0 + v * (free.y1 - free.y0);
@@ -180,10 +181,24 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
       const h = r.intersectObjects(meshes, false)[0]; if (!h || !h.face || h.distance > 45 || h.object.userData.noCup) continue;
       nrm.copy(h.face.normal).transformDirection(h.object.matrixWorld);
       if (nrm.y < 0.6) continue; // only on floors, roofs, tables, shelves
+      // the cup should look about the same small size everywhere: scale it by its distance from the camera
+      const dist = camera.position.distanceTo(h.point);
+      const worldH = 2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * (CUP_PX / innerHeight);
+      const sc = THREE.MathUtils.clamp(worldH / 0.18, 0.45, innerWidth < 760 ? 2.2 : 1.05), rad = 0.17 * sc + 0.04, top = 0.2 * sc + 0.05;
+      // clearance: nothing within the cup's radius around it, nothing just above it (no cups cutting into walls)
+      const base = h.point.clone().add(new THREE.Vector3(0, 0.05 * sc, 0)); let blocked = false;
+      for (let a = 0; a < 8 && !blocked; a++) { clr.set(base, new THREE.Vector3(Math.cos(a * Math.PI / 4), 0, Math.sin(a * Math.PI / 4))); clr.far = rad; blocked = clr.intersectObjects(meshes, false).length > 0; }
+      if (!blocked) { clr.set(base, new THREE.Vector3(0, 1, 0)); clr.far = top + 0.3; blocked = clr.intersectObjects(meshes, false).length > 0; }
+      if (!blocked) { // the top of the cup must be visible too (not tucked behind a board or a wall)
+        const topP = h.point.clone().add(new THREE.Vector3(0, 0.19 * sc, 0)); const dir = topP.clone().sub(camera.position); const dTop = dir.length();
+        clr.set(camera.position, dir.normalize()); clr.far = dTop - 0.05; blocked = clr.intersectObjects(meshes, false).length > 0;
+      }
+      if (blocked) continue;
+      cup.userData.size = sc;
       cup.position.copy(d.group.worldToLocal(h.point.clone())); placed = true; break outer;
     }
     cam.pos.copy(saved.p); cam.target.copy(saved.t); shift.x = saved.sx; shift.y = saved.sy;
-    cup.visible = true; cup.scale.setScalar(0.01); gsap.to(cup.scale, { x: 1.9, y: 1.9, z: 1.9, duration: 0.6, ease: 'back.out' });
+    const sc = cup.userData.size || 1.2; cup.visible = true; cup.scale.setScalar(0.01); gsap.to(cup.scale, { x: sc, y: sc, z: sc, duration: 0.6, ease: 'back.out' });
     if (!placed) cup.position.copy(d.cupSpot);
   }
   let chapterTime = 0;
@@ -489,9 +504,11 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
       const p = new THREE.Vector3(); active.cup.getWorldPosition(p); p.y += 0.15;
       const s = p.clone().project(camera); const x = ((s.x + 1) / 2) * innerWidth, y = ((1 - s.y) / 2) * innerHeight;
       const r = new THREE.Raycaster(camera.position.clone(), p.clone().sub(camera.position).normalize()); r.camera = camera;
-      const hits = r.intersectObjects(active.group.children, true).filter((h) => !h.object.isSprite && !h.object.isPoints);
+      const hits = r.intersectObjects(active.group.children, true).filter((h) => !h.object.isSprite && !h.object.isPoints && !h.object.isLine);
       const occluded = hits.length && !within(hits[0].object, active.cup);
-      return { id: active.id, x: Math.round(x), y: Math.round(y), occluded: !!occluded, by: occluded ? hits[0].object.type : null };
+      const tp = p.clone().add(new THREE.Vector3(0, 0.2 * active.cup.scale.y, 0)).project(camera), bt = p.clone().add(new THREE.Vector3(0, -0.15, 0)).project(camera);
+      const px = Math.round(Math.abs(tp.y - bt.y) / 2 * innerHeight);
+      return { id: active.id, x: Math.round(x), y: Math.round(y), px, scale: +active.cup.scale.x.toFixed(2), occluded: !!occluded, by: occluded ? hits[0].object.type : null };
     },
   };
   if (location.search.includes('debug')) window.__world = api;
