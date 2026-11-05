@@ -73,5 +73,110 @@
       "en": "This is where the samples were taken. Drag to spin the globe; tap a pin to go back to that chapter.",
       "ar": "هنا أُخذت العيّنات. اسحب لتدوير الكرة الأرضية، وانقر على أي دبّوس للعودة إلى فصله."
     }
+  },
+  "short": {
+    "_note": "Experiment \"less text\": one line + a few chips per chapter. The full text stays under \"Read more\".",
+    "taiz": {
+      "en": "Born 17 Dec 1974 among the terraces of Taiz, next door to the original mocha.",
+      "ar": "وُلد في ١٧ ديسمبر ١٩٧٤ بين مدرّجات تعز، على مقربة من موطن الموكا الأصلي.",
+      "chips": [
+        {
+          "en": "1974",
+          "ar": "١٩٧٤"
+        },
+        {
+          "en": "Taiz",
+          "ar": "تعز"
+        }
+      ]
+    },
+    "sanaa": {
+      "en": "He studied mathematics at Sana'a, and taught it before he graduated.",
+      "ar": "درس الرياضيات في صنعاء، ودرّسها قبل أن يتخرّج.",
+      "chips": [
+        {
+          "en": "teaching from 1995",
+          "ar": "يدرّس منذ ١٩٩٥"
+        },
+        {
+          "en": "B.S. 1999",
+          "ar": "بكالوريوس ١٩٩٩"
+        }
+      ]
+    },
+    "cairo": {
+      "en": "M.Sc. and Ph.D. at Cairo University with Prof. Annaby. First big paper: SIAM, 2008.",
+      "ar": "الماجستير والدكتوراه في جامعة القاهرة مع الأستاذ الدكتور عنّابي. أول ورقة كبرى: SIAM عام ٢٠٠٨.",
+      "chips": [
+        {
+          "en": "M.Sc. 2004",
+          "ar": "ماجستير ٢٠٠٤"
+        },
+        {
+          "en": "Ph.D. 2008",
+          "ar": "دكتوراه ٢٠٠٨"
+        }
+      ]
+    },
+    "lubeck": {
+      "en": "Five Humboldt stays in Lübeck with Prof. Prestin: periodic, but not uniform.",
+      "ar": "خمس إقامات بمنح هومبولت في لوبيك مع الأستاذ الدكتور بريستين: دورية، لكنها غير منتظمة.",
+      "chips": [
+        {
+          "en": "2011",
+          "ar": "٢٠١١"
+        },
+        {
+          "en": "2012–13",
+          "ar": "٢٠١٢–١٣"
+        },
+        {
+          "en": "2014",
+          "ar": "٢٠١٤"
+        },
+        {
+          "en": "2017",
+          "ar": "٢٠١٧"
+        },
+        {
+          "en": "2019",
+          "ar": "٢٠١٩"
+        }
+      ]
+    },
+    "najran": {
+      "en": "Full Professor at Najran University. Six M.Sc. students, 40+ papers.",
+      "ar": "أستاذ (بروفيسور) في جامعة نجران. ست رسائل ماجستير، وأكثر من ٤٠ بحثًا.",
+      "chips": [
+        {
+          "en": "Associate 2016",
+          "ar": "مشارك ٢٠١٦"
+        },
+        {
+          "en": "Professor 2020",
+          "ar": "أستاذ ٢٠٢٠"
+        }
+      ]
+    },
+    "library": {
+      "en": "History and politics: he reads them, follows them and writes about them.",
+      "ar": "التاريخ والسياسة: يقرؤهما ويتابعهما ويكتب عنهما.",
+      "chips": []
+    },
+    "writer": {
+      "en": "He writes, often. Read him where he wrote it.",
+      "ar": "يكتب كثيرًا. اقرأه حيث كتب.",
+      "chips": []
+    },
+    "ai": {
+      "en": "Can you rebuild a whole signal from a few samples? Try it.",
+      "ar": "هل يمكن إعادة بناء إشارة كاملة من عيّنات قليلة؟ جرّب بنفسك.",
+      "chips": []
+    },
+    "conclusion": {
+      "en": "Five samples. Everything between them is reconstruction.",
+      "ar": "خمس عيّنات، وكل ما بينها إعادةُ بناء.",
+      "chips": []
+    }
   }
 }

@@ -202,6 +202,9 @@ export function renderPage(c, { dev = false } = {}) {
       <p class="authors"><button class="name-btn" id="his-name" type="button">${L(p.name)}</button><sup>1</sup>
         · ${LH('Received: 17 December 1974', 'تاريخ الاستلام: ١٧ ديسمبر ١٩٧٤')} · ${LH('Accepted: still under review', 'تاريخ القبول: لا يزال قيد المراجعة')}</p>
       <p class="affil"><sup>1</sup> ${LH('Taiz → Sana’a → Cairo → Lübeck → Najran', 'تعز ← صنعاء ← القاهرة ← لوبيك ← نجران')}</p>
+      <p class="cup-call">${icon('cup')} ${LH('<strong>8 Yemeni coffee cups</strong> are hidden in the scenes. Find them all.', '<strong>٨ فناجين قهوة يمنية</strong> مخبّأة في المشاهد. اعثر عليها كلها.')}</p>
+      <a class="btn big start-btn" href="#taiz">${LH('Start', 'ابدأ')} ${icon('chevron')}</a>
+      <details class="more"><summary>${LH('Abstract & how to read', 'الملخص وطريقة القراءة')}</summary>
       <div class="abstract"><p>${LH('<strong>Abstract.</strong> We study a function <span dir="ltr">' + tex('f(t)') + '</span>, known locally as “Baba”, sampled at five points in space-time. Using a sinc-Gaussian operator with <em>family</em> as the multiplier, we reconstruct the continuous life between samples and show that convergence is exponential.', '<strong>الملخص.</strong> ندرس دالةً <span dir="ltr">' + tex('f(t)') + '</span>، تُعرف محليًا باسم «بابا»، أُخذت عيّناتها عند خمس نقاط في الزمكان. وباستخدام مؤثّر sinc-غاوس تكون فيه <em>العائلة</em> هي المضاعِف، نعيد بناء الحياة المتصلة بين العيّنات، ونُثبت أن التقارب أُسّي.')}</p>
       <p class="kw">${LH('<strong>Keywords:</strong> sampling, coffee, chalk, Humboldt, Facebook, four children.', '<strong>الكلمات المفتاحية:</strong> المعاينة، القهوة، الطباشير، هومبولت، فيسبوك، أربعة أبناء.')}</p>
       <p class="kw"><strong>MSC 2020:</strong> <span dir="ltr">94A20, 41A25, 00-DAD</span></p></div>
@@ -213,19 +216,39 @@ export function renderPage(c, { dev = false } = {}) {
           <li>${icon('hand')}<span>${LH('Click things in the scenes: the coffee plant, the chalkboard, the books…', 'انقر على ما في المشاهد: شجرة البنّ، والسبورة، والكتب…')}</span></li>
           <li>${icon('volumeOn')}<span>${LH('Sound is off. Switch it on at the top if you like.', 'الصوت مُطفأ، ويمكنك تشغيله من الأعلى إن شئت.')}</span></li>
         </ul>
-        <a class="btn big start-btn" href="#taiz">${LH('Start reading', 'ابدأ القراءة')} ${icon('chevron')}</a>
-      </div>
+      </div></details>
     </div>
   </section>`;
 
-  const secs = CHAPTERS.filter((ch) => ch.n > 0).map((ch) => `
+  const MORE = { en: 'Read more', ar: 'اقرأ المزيد' };
+  const part = (t, i) => ({ en: (t.en.split(':')[i] || '').trim(), ar: (t.ar.split(':')[i] || '').trim() });
+  function compact(ch) {
+    const sh = (c.profile.short || {})[ch.id];
+    let body = chapterBody(ch.id, c, dev);
+    // keep the buttons (and the Facebook link) visible, fold everything else
+    const keep = [];
+    body = body.replace(/<div class="actions">[\s\S]*?<\/div>/g, (m) => (keep.push(m), '')).replace(/<p class="fb-wrap">[\s\S]*?<\/p>/g, (m) => (keep.push(m), ''));
+    let visible = '', more = body;
+    if (ch.id === 'ai') { visible = body; more = ''; }                           // the widgets ARE the content
+    if (ch.id === 'conclusion') { const k = body.indexOf('<div class="mma"'); visible = body.slice(0, k); more = body.slice(k); }
+    if (ch.id === 'epilogue') { visible = body; more = ''; }
+    const chips = sh && sh.chips && sh.chips.length ? `<ul class="chips">${sh.chips.map((x) => `<li>${L(x)}</li>`).join('')}</ul>` : '';
+    const sub = part(ch.title, 1);
+    return `
   <section class="chapter" id="${ch.id}" data-chapter="${ch.id}" style="--accent:${ch.accent}" tabindex="-1" aria-labelledby="h-${ch.id}">
-    <div class="card paper">
-      <h2 id="h-${ch.id}"><span class="sec">${LH(secLabel(ch, 'en'), secLabel(ch, 'ar'))}</span> ${L(ch.title)}</h2>
-      ${chapterBody(ch.id, c, dev)}
+    <div class="card paper compact${ch.id === 'ai' ? ' essay-compact' : ''}">
+      <h2 id="h-${ch.id}"><span class="sec">${LH(secLabel(ch, 'en'), secLabel(ch, 'ar'))}</span> <span class="place">${L(part(ch.title, 0))}</span>${sub.en ? `<span class="sub">${L(sub)}</span>` : ''}</h2>
+      ${sh ? `<p class="short">${L(sh)}</p>` : ''}
+      ${chips}
+      ${keep.join('')}
+      ${visible}
+      ${ch.id === 'ai' ? `<button class="btn small explain-toggle" type="button" aria-pressed="false">${LH('Show the explanations', 'أظهر الشروح')}</button>` : ''}
+      ${more.trim() ? `<details class="more"><summary>${L(MORE)}</summary>${more}</details>` : ''}
       <div class="whispers" data-whispers="${ch.id}"></div>
     </div>
-  </section>`).join('');
+  </section>`;
+  }
+  const secs = CHAPTERS.filter((ch) => ch.n > 0).map(compact).join('');
 
   const toc = `<nav class="toc" id="toc" aria-label="${UI.contents.en}" hidden><ol>${CHAPTERS.map((ch) => `<li><a href="#${ch.id}">${ch.n ? `<span class="sec">${LH(secLabel(ch, 'en'), secLabel(ch, 'ar'))}</span> ` : ''}${L(ch.title)}</a></li>`).join('')}</ol></nav>`;
 

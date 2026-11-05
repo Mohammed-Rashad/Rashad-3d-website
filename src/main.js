@@ -192,6 +192,9 @@ function emit(type, detail) {
   if (type === 'levelup') { const l = $('.levelup'); l.classList.remove('pulse'); void l.offsetWidth; l.classList.add('pulse'); }
 }
 
+/* ---------------- less-text experiment: show/hide the §8 explanations ---------------- */
+document.querySelector('.explain-toggle')?.addEventListener('click', (e) => { const card = e.currentTarget.closest('.card'); const on = card.classList.toggle('explained'); e.currentTarget.setAttribute('aria-pressed', on); });
+
 /* ---------------- Mathematica cell ---------------- */
 function evalMma() {
   const inp = $('.mma input'); const out = $('.mma-out'); const res = $('.mma-res'); const v = inp.value.replace(/\s/g, '');
