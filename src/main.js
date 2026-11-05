@@ -144,7 +144,7 @@ function onChapter(id) {
   $$('.calm-timeline li').forEach((li) => li.classList.toggle('on', li.dataset.p === id || (['library', 'writer', 'ai', 'conclusion', 'epilogue'].includes(id) && li.dataset.p === 'najran')));
   $('#life-curve-wrap').classList.toggle('hide', id === 'conclusion' || id === 'intro' || id === 'epilogue');
   chapterHint(id);
-  if (id === 'najran') { const l = $('.levelup'); l.classList.remove('pulse'); void l.offsetWidth; l.classList.add('pulse'); }
+  if (id === 'najran') { const l = $('.levelup'); if (l) { l.classList.remove('pulse'); void l.offsetWidth; l.classList.add('pulse'); } }
   world && world.go(id);
 }
 function onScroll() {
@@ -189,11 +189,8 @@ function emit(type, detail) {
   if (type === 'whisper') showWhisper(detail);
   if (type === 'goto') document.getElementById(detail)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
   if (type === 'snow') $('[data-action=snow]')?.setAttribute('aria-pressed', detail);
-  if (type === 'levelup') { const l = $('.levelup'); l.classList.remove('pulse'); void l.offsetWidth; l.classList.add('pulse'); }
+  if (type === 'levelup') { const l = $('.levelup'); if (l) { l.classList.remove('pulse'); void l.offsetWidth; l.classList.add('pulse'); } }
 }
-
-/* ---------------- less-text experiment: show/hide the §8 explanations ---------------- */
-document.querySelector('.explain-toggle')?.addEventListener('click', (e) => { const card = e.currentTarget.closest('.card'); const on = card.classList.toggle('explained'); e.currentTarget.setAttribute('aria-pressed', on); });
 
 /* ---------------- Mathematica cell ---------------- */
 function evalMma() {

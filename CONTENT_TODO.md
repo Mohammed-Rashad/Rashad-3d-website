@@ -15,6 +15,11 @@ For each of `taiz`, `sanaa`, `cairo`, `lubeck`, `najran`, `library`, `writer`, `
 - [ ] §4 Lübeck `germanyLife`: family life in Germany, food missed/discovered, travels
 - [ ] §5 Najran: anything about teaching, students, the professorship
 
+## Photos added (2026-11-05)
+- [x] Title-page portrait: `public/photos/rashad-portrait.jpg` (set in `profile.json → photo`)
+- [x] Lübeck: `public/photos/lubeck/{institute-of-mathematics,niederegger,winter-arcades,lake}.jpg` (in `chapters.json → lubeck.photos`)
+- [ ] Confirm or improve the captions and add years. "Winter in Germany" and "By the lake" are placeholders: where were they taken?
+
 ## Co-author constellation (`content/constellation.json`)
 - [ ] `students`: which co-authors were his six M.Sc. students (names exactly as written in `papers`). They will glow violet as "newer stars".
 
@@ -38,6 +43,7 @@ For each of `taiz`, `sanaa`, `cairo`, `lubeck`, `najran`, `library`, `writer`, `
 - [ ] Every joke in `content/jokes.json`: set `"approved": true` after the family reviews it, or `"enabled": false` to remove it
 - [ ] `footer-status` ("Status: Under review (Referee 2: Mom)") is **disabled** until the family approves it
 - [ ] `profile.json → dedication` ("A Festschrift in honor of Baba, from his four co-authors."): set `"confirmed": true` to show it
+- [ ] Chapter headers (`profile.json → short`: one line + chips) and the body text below them are written not to repeat each other. Check that they still read well together.
 - [ ] **Arabic text**: drafted by Claude and revised once (grammar, academic terms, names: عنّابي، بريستين). Please still have a native speaker in the family review it (`content/*.json`, `src/render/page.mjs`, `src/chapters.mjs`). In particular, check the Arabic spellings of Prof. Annaby's and Prof. Prestin's names.
 - [ ] Call-to-prayer ambience for Taiz: **not added**. Say if you want it.
 

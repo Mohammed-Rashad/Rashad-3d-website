@@ -54,7 +54,7 @@
       "chapter": "lubeck",
       "kind": "definition",
       "number": "4.1",
-      "enabled": true,
+      "enabled": false,
       "approved": false,
       "title": {
         "en": "",

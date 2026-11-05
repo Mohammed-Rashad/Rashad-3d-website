@@ -69,7 +69,7 @@ export async function taiz(ctx) {
   for (const [x, z] of [[-1.6, -1.1], [1.6, -1.1], [-1.6, 1.1], [1.6, 1.1]]) { cyl(0.38, 0.45, 1.6, '#b8956e', x, 0, z, fort, 8); for (let k = 0; k < 6; k++) box(0.12, 0.18, 0.12, '#d3b48c', x + Math.cos(k) * 0.33, 1.6, z + Math.sin(k) * 0.33, fort); }
   box(1.2, 1.8, 1, '#c9a882', 0.4, 0, -0.2, fort);
   // coffee plant + brass pot (Poly Haven) + the pour cup
-  const plantPos = V(1.6, H(1.6, 4.2), 4.2);
+  const plantPos = V(-2.9, H(-2.9, 3.8), 3.8); // left-front of the houses, in clear view
   const plant = coffeePlant(4); plant.position.copy(plantPos); plant.scale.setScalar(1.3); g.add(plant);
   const pourCup = coffeeCup(2.2); pourCup.position.set(plantPos.x + 1.25, plantPos.y + 0.02, plantPos.z + 0.5); g.add(pourCup);
   const coffee = pourCup.children.find((c) => c.userData.coffee); coffee.scale.setScalar(0.01);

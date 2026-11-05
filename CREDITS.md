@@ -27,6 +27,8 @@ Rendered on the site as the bibliography in §9. One reference per line starting
 - **All ambiences and interaction sounds**, procedurally synthesised for this site with tools/synth-audio.mjs (CC0): soft tonal pads per chapter plus sparse details. Replace with Freesound / ElevenLabs recordings later and list them here
 - **Icons**, drawn for this site (src/icons.mjs, CC0)
 
+- **Chalkboard writing**, Tomproberts, Wikimedia Commons (CC0): the chalk sounds (sfx-chalk, sfx-chalk-stroke) are cut from it. https://commons.wikimedia.org/wiki/File:Chalkboard-writing.ogg
+
 ## Fonts and code
 
 - **Computer Modern (CMU Serif / Typewriter)**, Donald Knuth et al., SIL Open Font License. https://www.npmjs.com/package/computer-modern

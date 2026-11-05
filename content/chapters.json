@@ -1,16 +1,117 @@
 {
   "_note": "Stories and photos per chapter, filled by the family. Photos go in public/photos/ and are referenced as \"photos/xyz.jpg\". Empty arrays hide gracefully.",
   "_example": {
-    "stories": [{ "title": { "en": "", "ar": "" }, "text": { "en": "", "ar": "" } }],
-    "photos": [{ "src": "photos/example.jpg", "alt": { "en": "", "ar": "" }, "caption": { "en": "", "ar": "" }, "year": "" }]
+    "stories": [
+      {
+        "title": {
+          "en": "",
+          "ar": ""
+        },
+        "text": {
+          "en": "",
+          "ar": ""
+        }
+      }
+    ],
+    "photos": [
+      {
+        "src": "photos/example.jpg",
+        "alt": {
+          "en": "",
+          "ar": ""
+        },
+        "caption": {
+          "en": "",
+          "ar": ""
+        },
+        "year": ""
+      }
+    ]
   },
-  "taiz":    { "stories": [], "photos": [] },
-  "sanaa":   { "stories": [], "photos": [] },
-  "cairo":   { "stories": [], "photos": [] },
-  "lubeck":  { "stories": [], "photos": [], "germanyLife": [] },
-  "najran":  { "stories": [], "photos": [] },
-  "library": { "stories": [], "photos": [] },
-  "writer":  { "stories": [], "photos": [] },
-  "ai":      { "stories": [], "photos": [] },
-  "conclusion": { "stories": [], "photos": [] }
+  "taiz": {
+    "stories": [],
+    "photos": []
+  },
+  "sanaa": {
+    "stories": [],
+    "photos": []
+  },
+  "cairo": {
+    "stories": [],
+    "photos": []
+  },
+  "lubeck": {
+    "stories": [],
+    "photos": [
+      {
+        "src": "photos/lubeck/institute-of-mathematics.jpg",
+        "alt": {
+          "en": "Rashad at the door of the Institute of Mathematics, University of Lübeck",
+          "ar": "رشاد عند باب معهد الرياضيات في جامعة لوبيك"
+        },
+        "caption": {
+          "en": "Institute of Mathematics, Lübeck",
+          "ar": "معهد الرياضيات، لوبيك"
+        },
+        "year": ""
+      },
+      {
+        "src": "photos/lubeck/niederegger.jpg",
+        "alt": {
+          "en": "Rashad seated at Niederegger, Lübeck",
+          "ar": "رشاد جالسًا في نيديريغر، لوبيك"
+        },
+        "caption": {
+          "en": "Niederegger, home of Lübeck marzipan",
+          "ar": "نيديريغر، بيت مرزبان لوبيك"
+        },
+        "year": ""
+      },
+      {
+        "src": "photos/lubeck/winter-arcades.jpg",
+        "alt": {
+          "en": "Rashad in a winter coat by the water, in front of white arcades",
+          "ar": "رشاد بمعطف شتوي على ضفة الماء أمام أروقة بيضاء"
+        },
+        "caption": {
+          "en": "Winter in Germany",
+          "ar": "شتاء في ألمانيا"
+        },
+        "year": ""
+      },
+      {
+        "src": "photos/lubeck/lake.jpg",
+        "alt": {
+          "en": "Rashad in a suit on the grass by a lake",
+          "ar": "رشاد ببدلة على العشب قرب بحيرة"
+        },
+        "caption": {
+          "en": "By the lake",
+          "ar": "على ضفة البحيرة"
+        },
+        "year": ""
+      }
+    ],
+    "germanyLife": []
+  },
+  "najran": {
+    "stories": [],
+    "photos": []
+  },
+  "library": {
+    "stories": [],
+    "photos": []
+  },
+  "writer": {
+    "stories": [],
+    "photos": []
+  },
+  "ai": {
+    "stories": [],
+    "photos": []
+  },
+  "conclusion": {
+    "stories": [],
+    "photos": []
+  }
 }

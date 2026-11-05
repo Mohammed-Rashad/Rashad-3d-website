@@ -28,7 +28,7 @@ export function createChalk(canvas, { sfx } = {}) {
   function stroke(x, y, start) {
     if (start || !last) last = { x, y };
     seg(last.x, last.y, x, y); last = { x, y }; changed();
-    const now = performance.now(); if (sfx && now - lastSfx > 260) { lastSfx = now; sfx(state.tool === 'eraser' ? 'rustle' : 'chalk', true); }
+    const now = performance.now(); if (sfx && now - lastSfx > 650) { lastSfx = now; sfx(state.tool === 'eraser' ? 'rustle' : 'chalk-stroke', true); }
   }
   const end = () => (last = null);
   function writeFormula(p) {

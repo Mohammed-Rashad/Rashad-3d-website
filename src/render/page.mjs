@@ -100,14 +100,13 @@ function chapterBody(id, c, dev) {
         ${pins.map(([n, la, lo, main]) => `<g class="pin${main ? ' main' : ''}"><circle cx="${mx(lo)}" cy="${my(la)}" r="${main ? 5 : 3.5}"/><text x="${mx(lo) + 7}" y="${my(la) + 4}">${n}</text></g>`).join('')}
       </svg>`;
       return `<p class="lead">${L(P.lubeck)}</p>
-        <div class="figs">${axis}${map}</div>${J}${st}
+        <div class="figs one">${map}</div>${J}${st}
         ${(c.chapters.lubeck?.germanyLife || []).filter(okL).map((t) => `<p>${L(t)}</p>`).join('')}
         <div class="actions"><button class="btn" data-action="snow" aria-pressed="false">${icon('snow')} ${LH('Snow', 'تساقط الثلج')}</button><button class="btn" data-action="marzipan">${LH('Sample the marzipan', 'قطّع المرزبان إلى عيّنات')}</button></div>
         ${hint('Click the marzipan block on the quay.', 'انقر على قطعة المرزبان عند الرصيف.')}`;
     }
     case 'najran':
       return `<p class="lead">${L(P.najran)}</p>
-        <div class="levelup" aria-label="Full Professor, December 2020">${LH('Full Professor · Dec 2020', 'أستاذ (بروفيسور) · ديسمبر ٢٠٢٠')}</div>
         <figure class="constellation-fig"><canvas id="constellation" width="560" height="340" aria-label="Co-author constellation: each star is a paper, lines join co-authors"></canvas>
           <figcaption>${LH('Co-author constellation, from the public CV. Every star is a paper; the big clusters are Annaby and Prestin.', 'كوكبة المؤلفين المشاركين، مستخلصة من السيرة الذاتية المنشورة. كل نجمة بحثٌ منشور، والعنقودان الكبيران هما عنّابي وبريستين.')}
           <a href="${esc(c.profile.links.cv)}#publications" target="_blank" rel="noopener">${LH('All papers', 'كل الأبحاث') + ' ' + icon('external')}</a></figcaption></figure>
@@ -197,53 +196,43 @@ export function renderPage(c, { dev = false } = {}) {
   const intro = `
   <section class="chapter intro" id="intro" data-chapter="intro" tabindex="-1" aria-label="Title page">
     <div class="card paper titlepage">
+      ${ok(p.photo?.src) ? `<img class="author-photo" src="${esc(p.photo.src)}" alt="${esc(p.photo.alt?.en || '')}" width="132" height="132" decoding="async">` : ''}
       <p class="journal">${LH('Journal of Family Analysis · Vol. 1 · Festschrift issue', 'مجلة التحليل العائلي · المجلد ١ · عدد تذكاري')}</p>
       <h1>${LH('On the Convergence of a Yemeni Mathematician', 'حول تقارُب عالِم رياضياتٍ يمني')}</h1>
       <p class="authors"><button class="name-btn" id="his-name" type="button">${L(p.name)}</button><sup>1</sup>
         · ${LH('Received: 17 December 1974', 'تاريخ الاستلام: ١٧ ديسمبر ١٩٧٤')} · ${LH('Accepted: still under review', 'تاريخ القبول: لا يزال قيد المراجعة')}</p>
       <p class="affil"><sup>1</sup> ${LH('Taiz → Sana’a → Cairo → Lübeck → Najran', 'تعز ← صنعاء ← القاهرة ← لوبيك ← نجران')}</p>
-      <p class="cup-call">${icon('cup')} ${LH('<strong>8 Yemeni coffee cups</strong> are hidden in the scenes. Find them all.', '<strong>٨ فناجين قهوة يمنية</strong> مخبّأة في المشاهد. اعثر عليها كلها.')}</p>
-      <a class="btn big start-btn" href="#taiz">${LH('Start', 'ابدأ')} ${icon('chevron')}</a>
-      <details class="more"><summary>${LH('Abstract & how to read', 'الملخص وطريقة القراءة')}</summary>
       <div class="abstract"><p>${LH('<strong>Abstract.</strong> We study a function <span dir="ltr">' + tex('f(t)') + '</span>, known locally as “Baba”, sampled at five points in space-time. Using a sinc-Gaussian operator with <em>family</em> as the multiplier, we reconstruct the continuous life between samples and show that convergence is exponential.', '<strong>الملخص.</strong> ندرس دالةً <span dir="ltr">' + tex('f(t)') + '</span>، تُعرف محليًا باسم «بابا»، أُخذت عيّناتها عند خمس نقاط في الزمكان. وباستخدام مؤثّر sinc-غاوس تكون فيه <em>العائلة</em> هي المضاعِف، نعيد بناء الحياة المتصلة بين العيّنات، ونُثبت أن التقارب أُسّي.')}</p>
       <p class="kw">${LH('<strong>Keywords:</strong> sampling, coffee, chalk, Humboldt, Facebook, four children.', '<strong>الكلمات المفتاحية:</strong> المعاينة، القهوة، الطباشير، هومبولت، فيسبوك، أربعة أبناء.')}</p>
       <p class="kw"><strong>MSC 2020:</strong> <span dir="ltr">94A20, 41A25, 00-DAD</span></p></div>
-      <div class="howto" aria-label="How to read this paper">
-        <h2 class="howto-h">${LH('How to read this paper', 'كيف تقرأ هذه الورقة')}</h2>
-        <ul>
-          <li class="howto-cups">${icon('cup')}<span>${LH('<strong>Find the 8 hidden Yemeni coffee cups</strong>, one in every 3D scene. Click a cup to collect it; find all of them to unlock a message from his children.', '<strong>ابحث عن ٨ فناجين قهوة يمنية مخبّأة</strong>، فنجان في كل مشهد ثلاثي الأبعاد. انقر على الفنجان لتجمعه، واعثر عليها كلها لتفتح رسالة من أبنائه.')}</span></li>
-          <li>${icon('scroll')}<span>${LH('Scroll: every chapter is one sample point of his life.', 'مرّر للأسفل: كل فصل نقطة معاينة من حياته.')}</span></li>
-          <li>${icon('hand')}<span>${LH('Click things in the scenes: the coffee plant, the chalkboard, the books…', 'انقر على ما في المشاهد: شجرة البنّ، والسبورة، والكتب…')}</span></li>
-          <li>${icon('volumeOn')}<span>${LH('Sound is off. Switch it on at the top if you like.', 'الصوت مُطفأ، ويمكنك تشغيله من الأعلى إن شئت.')}</span></li>
-        </ul>
-      </div></details>
+      <ul class="howto-mini">
+        <li>${icon('scroll')}<span>${LH('Scroll: every chapter is one sample of his life.', 'مرّر: كل فصل عيّنة من حياته.')}</span></li>
+        <li>${icon('hand')}<span>${LH('Click things in the scenes.', 'انقر على ما في المشاهد.')}</span></li>
+        <li>${icon('volumeOn')}<span>${LH('Sound is off; switch it on at the top.', 'الصوت مُطفأ؛ شغّله من الأعلى.')}</span></li>
+      </ul>
+      <p class="cup-call">${icon('cup')} <span>${LH('<strong>8 Yemeni coffee cups</strong> are hidden in the scenes. Find them all to unlock a message from his children.', '<strong>٨ فناجين قهوة يمنية</strong> مخبّأة في المشاهد. اعثر عليها كلها لتفتح رسالة من أبنائه.')}</span></p>
+      <a class="btn big start-btn" href="#taiz">${LH('Start', 'ابدأ')} ${icon('chevron')}</a>
     </div>
   </section>`;
 
-  const MORE = { en: 'Read more', ar: 'اقرأ المزيد' };
   const part = (t, i) => ({ en: (t.en.split(':')[i] || '').trim(), ar: (t.ar.split(':')[i] || '').trim() });
   function compact(ch) {
     const sh = (c.profile.short || {})[ch.id];
     let body = chapterBody(ch.id, c, dev);
-    // keep the buttons (and the Facebook link) visible, fold everything else
+    // the buttons (and the Facebook link) sit right under the header
     const keep = [];
     body = body.replace(/<div class="actions">[\s\S]*?<\/div>/g, (m) => (keep.push(m), '')).replace(/<p class="fb-wrap">[\s\S]*?<\/p>/g, (m) => (keep.push(m), ''));
-    let visible = '', more = body;
-    if (ch.id === 'ai') { visible = body; more = ''; }                           // the widgets ARE the content
-    if (ch.id === 'conclusion') { const k = body.indexOf('<div class="mma"'); visible = body.slice(0, k); more = body.slice(k); }
-    if (ch.id === 'epilogue') { visible = body; more = ''; }
+    const visible = body;
     const chips = sh && sh.chips && sh.chips.length ? `<ul class="chips">${sh.chips.map((x) => `<li>${L(x)}</li>`).join('')}</ul>` : '';
     const sub = part(ch.title, 1);
     return `
   <section class="chapter" id="${ch.id}" data-chapter="${ch.id}" style="--accent:${ch.accent}" tabindex="-1" aria-labelledby="h-${ch.id}">
-    <div class="card paper compact${ch.id === 'ai' ? ' essay-compact' : ''}">
+    <div class="card paper compact">
       <h2 id="h-${ch.id}"><span class="sec">${LH(secLabel(ch, 'en'), secLabel(ch, 'ar'))}</span> <span class="place">${L(part(ch.title, 0))}</span>${sub.en ? `<span class="sub">${L(sub)}</span>` : ''}</h2>
       ${sh ? `<p class="short">${L(sh)}</p>` : ''}
       ${chips}
       ${keep.join('')}
-      ${visible}
-      ${ch.id === 'ai' ? `<button class="btn small explain-toggle" type="button" aria-pressed="false">${LH('Show the explanations', 'أظهر الشروح')}</button>` : ''}
-      ${more.trim() ? `<details class="more"><summary>${L(MORE)}</summary>${more}</details>` : ''}
+      <div class="body">${visible}</div>
       <div class="whispers" data-whispers="${ch.id}"></div>
     </div>
   </section>`;
