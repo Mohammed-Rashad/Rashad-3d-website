@@ -3,6 +3,7 @@
 const BOARD = '#24432f';
 export function createChalk(canvas, { sfx } = {}) {
   const ctx = canvas.getContext('2d'); const W = canvas.width, H = canvas.height;
+  ctx.direction = 'ltr'; ctx.textAlign = 'left'; // math stays left-to-right, even inside an Arabic (RTL) card
   const listeners = new Set(); const changed = () => listeners.forEach((f) => f());
   const state = { tool: 'chalk' }; let last = null, lastSfx = 0;
   function background() {
@@ -44,6 +45,7 @@ export function createChalk(canvas, { sfx } = {}) {
     ctx.globalCompositeOperation = 'source-over';
     if (p <= 0.001 || p >= 1 || !writing) background();
     else { ctx.fillStyle = BOARD; ctx.fillRect(40, 150, W - 80, 260); }
+    ctx.direction = 'ltr'; ctx.textAlign = 'left';
     ctx.font = 'italic 84px "CMU Serif", Georgia, serif'; ctx.fillStyle = '#f2f2e6'; ctx.textBaseline = 'middle';
     ctx.fillText(text.slice(0, Math.floor(text.length * p)), 60, 220);
     if (p >= 1) { ctx.font = '46px "Caveat", cursive'; ctx.fillStyle = '#ffe9a0'; ctx.fillText('the whole, from its samples', 300, 370); ctx.strokeStyle = '#f2f2e6'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(60, 290); ctx.quadraticCurveTo(450, 300, 900, 285); ctx.stroke(); }

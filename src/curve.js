@@ -6,7 +6,7 @@ const sinc = (x) => (Math.abs(x) < 1e-6 ? 1 : Math.sin(Math.PI * x) / (Math.PI *
 
 // draw the curve into ctx. progress = continuous chapter index (1 = §1 ... 8 = §8, 9 = conclusion)
 export function drawCurve(ctx, W, H, progress, { lang = 'en', envelope = 0, dpr = 1, labels = true, annaby = true, pad = 28 } = {}) {
-  ctx.clearRect(0, 0, W, H);
+  ctx.clearRect(0, 0, W, H); ctx.direction = 'ltr';
   const K = SAMPLES.length; const m = pad * dpr; const top = 12 * dpr, bot = H - (labels ? 22 : 8) * dpr;
   const X = (k) => m + (k / (K - 1)) * (W - 2 * m); // k in sample index space (0..K-1)
   const Y = (v) => bot - (v * 0.78 + 0.08) * (bot - top);
@@ -54,7 +54,7 @@ export function drawCurve(ctx, W, H, progress, { lang = 'en', envelope = 0, dpr 
     const b = bloom[k]; const x = X(k), y = Y(SAMPLES[k].y);
     ctx.strokeStyle = `rgba(242,198,109,${0.25 + 0.5 * b})`; ctx.lineWidth = 1 * dpr; ctx.beginPath(); ctx.moveTo(x, Y(0)); ctx.lineTo(x, y); ctx.stroke();
     ctx.fillStyle = b > 0 ? SAMPLES[k].accent : 'rgba(255,255,255,0.15)'; ctx.beginPath(); ctx.arc(x, y, (2.5 + 2 * b) * dpr, 0, Math.PI * 2); ctx.fill();
-    if (labels) { ctx.fillStyle = `rgba(246,239,224,${0.35 + 0.55 * b})`; ctx.font = `${10.5 * dpr}px "CMU Serif", Georgia, serif`; ctx.textAlign = 'center'; const t = SAMPLES[k].label[lang].split(':')[0]; ctx.fillText(`§${SAMPLES[k].n} ${W < 700 * dpr ? '' : t}`, x, H - 6 * dpr); }
+    if (labels) { ctx.fillStyle = `rgba(246,239,224,${0.35 + 0.55 * b})`; ctx.font = `${10.5 * dpr}px "CMU Serif", Georgia, serif`; ctx.textAlign = 'center'; const t = SAMPLES[k].label[lang].split(':')[0]; const txt = `§${SAMPLES[k].n} ${W < 700 * dpr ? '' : t}`; const hw = ctx.measureText(txt).width / 2 + 4 * dpr; ctx.fillText(txt, Math.min(W - hw, Math.max(hw, x)), H - 6 * dpr); /* keep edge labels inside */ }
   }
 }
 

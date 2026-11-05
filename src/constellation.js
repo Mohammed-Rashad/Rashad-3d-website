@@ -25,7 +25,7 @@ export function constellation(canvas, data, { reduced, lang }) {
   const fit = () => { W = canvas.width = canvas.clientWidth * dpr; H = canvas.height = canvas.clientWidth * ratio * dpr; };
   fit(); new ResizeObserver(() => { fit(); draw(); }).observe(canvas);
   function draw() {
-    ctx.fillStyle = '#12142e'; ctx.fillRect(0, 0, W, H);
+    ctx.direction = 'ltr'; ctx.fillStyle = '#12142e'; ctx.fillRect(0, 0, W, H);
     for (const s of stars) {
       const me = hubs.get('ME'); ctx.strokeStyle = 'rgba(242,198,109,0.08)'; ctx.lineWidth = 1 * dpr; ctx.beginPath(); ctx.moveTo(s.x * W, s.y * H); ctx.lineTo(me.x * W, me.y * H); ctx.stroke();
       for (const a of s.p.a) { const h = hubs.get(a); ctx.strokeStyle = h.color + '55'; ctx.beginPath(); ctx.moveTo(s.x * W, s.y * H); ctx.lineTo(h.x * W, h.y * H); ctx.stroke(); }
