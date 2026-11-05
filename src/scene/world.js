@@ -184,7 +184,7 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
       // the cup should look about the same small size everywhere: scale it by its distance from the camera
       const dist = camera.position.distanceTo(h.point);
       const worldH = 2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * (CUP_PX / innerHeight);
-      const sc = THREE.MathUtils.clamp(worldH / 0.18, 0.45, innerWidth < 760 ? 2.2 : 1.05), rad = 0.17 * sc + 0.04, top = 0.2 * sc + 0.05;
+      const sc = THREE.MathUtils.clamp(worldH / 0.18, 0.45, innerWidth < 760 ? 1.7 : innerHeight < 520 ? 1.6 : 1.05), rad = 0.17 * sc + 0.04, top = 0.2 * sc + 0.05;
       // clearance: nothing within the cup's radius around it, nothing just above it (no cups cutting into walls)
       const base = h.point.clone().add(new THREE.Vector3(0, 0.05 * sc, 0)); let blocked = false;
       for (let a = 0; a < 8 && !blocked; a++) { clr.set(base, new THREE.Vector3(Math.cos(a * Math.PI / 4), 0, Math.sin(a * Math.PI / 4))); clr.far = rad; blocked = clr.intersectObjects(meshes, false).length > 0; }
@@ -216,6 +216,7 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
   let active = null; // diorama currently shown
   let current = null; let tl = null; let tls = []; let atGlobe = true;
   const sunDir = new THREE.Vector3(-6, 4, 8);
+  const fogState = { density: 0.004 }; let lastK = 1; // fog thins out when the camera backs off on phones
   const spin = { x: 0, y: 0, vx: 0, vy: 0, idle: 0 }; // epilogue: the visitor turns the globe (the camera stays put)
 
   function globePose(place, dist = 12.5) {
@@ -231,7 +232,7 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
     for (const c of ['top', 'horizon', 'bottom', 'glow']) tweenColor(skyU[c].value, k[c], d, t);
     t.to(skyU.sunDir.value, { x: k.sun.x, y: k.sun.y, z: k.sun.z, duration: d }, '<');
     t.to(skyU.stars, { value: k.stars, duration: d }, '<'); t.to(skyU.clouds, { value: k.clouds, duration: d }, '<'); t.to(skyU.sunSize, { value: k.sunSize, duration: d }, '<');
-    tweenColor(scene.fog.color, k.horizon, d, t); t.to(scene.fog, { density: env.fog, duration: d }, '<');
+    tweenColor(scene.fog.color, k.horizon, d, t); t.to(fogState, { density: env.fog, duration: d }, '<');
     t.add(() => setSky(k, d), '<');
     tweenColor(sun.color, env.sun.color, d, t); t.to(sun, { intensity: env.sun.intensity, duration: d }, '<');
     t.to(sunDir, { x: env.sun.dir.x, y: env.sun.dir.y, z: env.sun.dir.z, duration: d }, '<');
@@ -241,7 +242,7 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
     const k = skyOf(env);
     for (const c of ['top', 'horizon', 'bottom', 'glow']) skyU[c].value.set(k[c]);
     skyU.sunDir.value.copy(k.sun); skyU.stars.value = k.stars; skyU.clouds.value = k.clouds; skyU.sunSize.value = k.sunSize;
-    scene.fog.color.set(k.horizon); scene.fog.density = env.fog; setSky(k, 0);
+    scene.fog.color.set(k.horizon); fogState.density = env.fog; setSky(k, 0);
     sun.color.set(env.sun.color); sun.intensity = env.sun.intensity; sunDir.copy(env.sun.dir); hemi.color.set(env.hemi.sky); hemi.groundColor.set(env.hemi.ground); hemi.intensity = env.hemi.intensity;
   }
   function arcsFor(chId) {
@@ -255,7 +256,8 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
     if (chId === 'epilogue') return { x: 0, y: mobile ? -0.2 : -0.14 };
     const centered = chId === 'intro' || chId === 'ai' || chId === 'conclusion';
     if (mobile) return { x: 0, y: centered ? 0 : -0.2 };
-    return { x: centered ? 0 : isRTL() ? -0.2 : 0.2, y: 0 };
+    const sx = 0.2;
+    return { x: centered ? 0 : isRTL() ? -sx : sx, y: 0 };
   }
   function show(d) {
     if (active && active !== d) active.group.visible = false;
@@ -440,10 +442,21 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
   addEventListener('resize', resize); resize();
   let lastT = performance.now(), elapsed = 0; let running = true;
   document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) { lastT = performance.now(); loop(); } });
+  // narrow screens: back the camera off so it sees about as much horizontally as a 16:9 desktop does
+  const DESKTOP_TAN_H = Math.tan(THREE.MathUtils.degToRad(40) / 2) * (16 / 9);
+  function fitK() {
+    if (camera.aspect >= 1.25) return innerHeight < 520 ? 1.45 : 1; // phones held sideways: a little wider
+    const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
+    if (!active) { // the globe: fit its width (with atmosphere) to the screen
+      const need = 9.6 / (2 * tanV * camera.aspect); return THREE.MathUtils.clamp(need / Math.max(1, cam.pos.distanceTo(cam.target)), 1, 3);
+    }
+    const k = (DESKTOP_TAN_H / (camera.aspect * tanV)) * 0.72; // 0.8: the scene may crop a little at the sides
+    return THREE.MathUtils.clamp(k, 1, 3.2) * ((active && active.mobileZoom) || 1);
+  }
   function applyCamera() {
     const w = innerWidth, h = innerHeight; const sx = Math.abs(shift.x), sy = Math.abs(shift.y);
     camera.setViewOffset(w * (1 + 2 * sx), h * (1 + 2 * sy), shift.x >= 0 ? 0 : 2 * sx * w, shift.y >= 0 ? 0 : 2 * sy * h, w, h);
-    const k = active && camera.aspect < 1 ? (active.mobileZoom ?? 1.75) : 1; camera.position.copy(cam.pos).sub(cam.target).multiplyScalar(k).add(cam.target); camera.lookAt(cam.target); sky.position.copy(camera.position);
+    const k = fitK(); lastK = k; scene.fog.density = fogState.density / k; camera.position.copy(cam.pos).sub(cam.target).multiplyScalar(k).add(cam.target); camera.lookAt(cam.target); sky.position.copy(camera.position);
     camera.updateMatrixWorld();
   }
   const perf = /[?&]debug=1\b/.test(location.search) ? (() => {

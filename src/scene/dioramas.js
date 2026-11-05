@@ -98,7 +98,7 @@ export async function taiz(ctx) {
       .add(() => ctx.sfx('clink'));
   };
   return base({
-    group: g, cam: { pos: V(4.4, 5.4, 12.4), target: V(-0.4, 2.3, 1.0) }, mobileZoom: 1.35,
+    group: g, cam: { pos: V(4.4, 5.4, 12.4), target: V(-0.4, 2.3, 1.0) },
     sky: { top: '#4a3560', bottom: '#e9a979' }, fog: 0.028, sun: { color: '#ffd2a0', intensity: 2.2, dir: V(-6, 8, 4) }, hemi: { sky: '#ffe0c0', ground: '#4b3a2a', intensity: 1.1 },
     clickables: [{ obj: plant, action: 'pour' }, { obj: pourCup, action: 'pour' }, { obj: potPivot, action: 'pour' }],
     actions: { pour },
