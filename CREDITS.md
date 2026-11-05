@@ -12,6 +12,13 @@ Rendered on the site as the bibliography in §9. One reference per line starting
 - **Standing Picture Frame 01**, Poly Haven (CC0). https://polyhaven.com/a/standing_picture_frame_01
 - **Dioramas, globe and props** (tower houses, Holstentor, felucca, mud-brick towers, marzipan, coffee cups), procedural low-poly geometry written for this site (CC0). See ASSETS.md
 
+- **Dutch Canals House Amsterdam #1**, ustoopia (CC-BY). https://sketchfab.com/3d-models/e81a1b1f7fa54214983fa884fde76b46
+- **Stylized Kasbah – Tier I**, Mrigua Mohamed (CC-BY). https://sketchfab.com/3d-models/aaba649d4bed4b5a9208d47789298192
+- **Date Palm**, evolveduk (CC-BY). https://sketchfab.com/3d-models/11acf710e6c149daa8d6fb8cdc5d087f
+- **Low Poly Ancient Dhow Ship**, Nisa Nurul Azizah (CC-BY). https://sketchfab.com/3d-models/f25b4552dce24d379833160dd217db84
+- **Dallah – Arabian Coffee pot**, CGDELUXE (CC-BY). https://sketchfab.com/3d-models/1aa080b38eb142688b14e49dc8701ae0
+- **Holstentor**, modelled for this site in Blender with Poly Haven textures by Rob Tuytel, Dario Barresi and Dimitrios Savva (CC0). https://polyhaven.com/textures
+
 ## Sound
 
 - **All ambiences and interaction sounds**, procedurally synthesised for this site with tools/synth-audio.mjs (CC0): soft tonal pads per chapter plus sparse details. Replace with Freesound / ElevenLabs recordings later and list them here

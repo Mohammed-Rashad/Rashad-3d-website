@@ -69,7 +69,7 @@ export async function taiz(ctx) {
   const plant = coffeePlant(4); plant.position.copy(plantPos); plant.scale.setScalar(1.3); g.add(plant);
   const pourCup = coffeeCup(2.2); pourCup.position.set(plantPos.x + 1.25, plantPos.y + 0.02, plantPos.z + 0.5); g.add(pourCup);
   const coffee = pourCup.children.find((c) => c.userData.coffee); coffee.scale.setScalar(0.01);
-  const pot = await placeGLB(ctx, '/models/taiz/brass_pot_01.glb', g, { pos: V(plantPos.x + 1.95, plantPos.y, plantPos.z + 0.2), scale: 2.6, rotY: -0.6 });
+  const pot = await placeGLB(ctx, '/models/taiz/dallah.glb', g, { pos: V(plantPos.x + 1.95, H(plantPos.x + 1.95, plantPos.z + 0.2), plantPos.z + 0.2), scale: 1.25, rotY: -0.9 });
   const flipper = photoFrame(ctx, g, ctx.chapterData?.photos, V(3.2, H(3.2, 2.2), 2.2), -0.4);
   const fly = birds(g, 6, V(1, 7, -1), 7);
   let pourT = -1;
@@ -155,13 +155,10 @@ export async function cairo(ctx) {
   mesh(new THREE.SphereGeometry(1.35, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat('#b49b70'), 0, 2.5, 0, uni);
   cyl(0.08, 0.08, 0.5, '#b49b70', 0, 3.85, 0, uni);
   const tower = new THREE.Group(); tower.position.set(4.6, 0, 0); uni.add(tower); box(1, 4.4, 1, '#c8b48f', 0, 0, 0, tower); mesh(new THREE.CircleGeometry(0.3, 12), glow('#fff3c8', 1.2), 0, 3.7, 0.51, tower); cone(0.7, 0.8, '#b49b70', 0, 4.4, 0, tower, 4);
-  for (const [x, z] of [[-6, -6.5], [-8, -5.8], [6.5, -6.2], [8.5, -5.5], [-9, 4.2], [9, 4.5], [5.5, 4.8]]) { const p = palm(2.6 + Math.abs(x) * 0.05, x * 3); p.position.set(x, 0.2, z); g.add(p); }
+  await Promise.all([[-6, -6.5], [-8, -5.8], [6.5, -6.2], [8.5, -5.5], [-9, 4.2], [9, 4.5], [5.5, 4.8]].map(([x, z], i) => placeGLB(ctx, '/models/najran/date_palm.glb', g, { pos: V(x, 0.2, z), scale: 0.42 + (i % 3) * 0.05, rotY: i * 1.9 })));
   // felucca
   const fel = new THREE.Group(); fel.position.set(3, -0.2, river(3)); g.add(fel);
-  const hull = mesh(new THREE.CylinderGeometry(0.45, 0.45, 2.6, 8, 1, false, 0, Math.PI), mat('#6a4a32'), 0, 0.15, 0, fel); hull.rotation.set(0, 0, Math.PI / 2); hull.rotation.x = Math.PI;
-  cyl(0.04, 0.05, 2.6, '#4a3424', 0.2, 0.15, 0, fel);
-  const sail = new THREE.Mesh(new THREE.BufferGeometry().setFromPoints([V(-1.4, 0.4, 0), V(1.2, 3.4, 0), V(0.4, 0.4, 0)]), mat('#f4efe2', { side: THREE.DoubleSide }));
-  sail.geometry.computeVertexNormals(); sail.position.set(0.2, 0.2, 0.05); fel.add(sail);
+  await placeGLB(ctx, '/models/cairo/dhow.glb', fel, { pos: V(0, -0.05, 0), scale: 0.5, rotY: Math.PI / 2 });
   // the desk on the near bank
   const desk = new THREE.Group(); desk.position.set(1.2, 0.55, 4.4); desk.rotation.y = 0.2; g.add(desk);
   box(2.6, 0.12, 1.3, '#6b4423', 0, 0.9, 0, desk);
@@ -207,28 +204,12 @@ export async function lubeck(ctx) {
   sea.userData.noCup = true;
   const sp = sea.geometry.attributes.position; const sx = Float32Array.from({ length: sp.count }, (_, i) => sp.getX(i)); const sz = Float32Array.from({ length: sp.count }, (_, i) => sp.getZ(i));
   const brick = '#9c3b2e', brick2 = '#86322a', roof = '#4f6157';
-  // Holstentor
+  // Holstentor: built in Blender with Poly Haven brick/slate/plaster (tools/blender/06_holstentor.py)
   const ht = new THREE.Group(); ht.position.set(0.5, 0, -1.5); g.add(ht);
-  for (const x of [-1.55, 1.55]) {
-    cyl(1.05, 1.1, 4.4, brick, x, 0, 0, ht, 14);
-    for (let k = 1; k < 4; k++) cyl(1.07, 1.07, 0.12, brick2, x, k * 1.1, 0, ht, 14);
-    cone(1.15, 1.9, roof, x, 4.4, 0, ht, 14);
-    for (let k = 0; k < 3; k++) box(0.22, 0.4, 0.04, '#2a2422', x * 0.85, 1.4 + k * 1.05, 1.06, ht);
-  }
-  box(2.1, 4.1, 1.7, brick, 0, 0, 0, ht);
-  for (let s = 0; s < 4; s++) box(2.1 - s * 0.45, 0.45, 1.6, s % 2 ? brick2 : brick, 0, 4.1 + s * 0.45, 0, ht); // stepped gable
-  mesh(new THREE.CylinderGeometry(0.55, 0.55, 1.8, 10, 1, false, 0, Math.PI), mat('#1f1a18'), 0, 0.85, 0.86, ht).rotation.set(Math.PI / 2, 0, Math.PI / 2);
-  box(1.1, 1.3, 0.05, '#1f1a18', 0, 0, 0.86, ht);
-  box(1.6, 0.25, 0.06, '#e8dcc2', 0, 2.5, 0.87, ht);
+  await placeGLB(ctx, '/models/lubeck/holstentor.glb', ht, { pos: V(0, 0, 0), scale: 1, rotY: 0 });
   // gabled houses along the quay
   const r = rng(44);
-  for (let i = 0; i < 7; i++) {
-    const hg = new THREE.Group(); const x = -9 + i * 1.7 + (i > 3 ? 6.2 : 0); hg.position.set(x, 0, -5.4); g.add(hg);
-    const w = 1.55, h = 2.4 + r() * 1.4, c = [brick, brick2, '#a5503d', '#c2a27e', '#7d3a30'][i % 5];
-    box(w, h, 1.6, c, 0, 0, 0, hg);
-    for (let s = 0; s < 4; s++) box(w - s * 0.36, 0.38, 1.55, c, 0, h + s * 0.38, 0, hg);
-    for (let f = 0; f < Math.floor(h / 0.8); f++) for (const wx of [-0.4, 0, 0.4]) box(0.2, 0.36, 0.04, '#ffe6b0', wx, 0.5 + f * 0.8, 0.8, hg).material = glow('#ffd896', 0.8);
-  }
+  await Promise.all([-9.6, -7.1, -4.6, 5.4, 7.9, 10.4].map((x, i) => placeGLB(ctx, '/models/lubeck/lubeck_house.glb', g, { pos: V(x, 0, -5.8), scale: 0.42 + (i % 3) * 0.03, rotY: 0 })));
   // St. Mary's spires far behind
   for (const x of [-4.2, -2.8]) { box(1.1, 6.5, 1.1, brick2, x, 0, -11, g); cone(0.8, 3.5, roof, x, 6.5, -11, g, 4); }
   // marzipan loaf on a crate
@@ -280,8 +261,10 @@ export async function najran(ctx) {
     for (let f = 1; f < 5; f++) { const y = (f * h) / 5 - 0.35; box(0.22, 0.3, 0.03, '#f1e7d2', 0, y, w * 0.55 - f * 0.02, t); box(0.12, 0.2, 0.04, '#2a1d14', 0, y + 0.04, w * 0.56 - f * 0.02, t); }
     return t;
   };
-  [[-5, -3, 6, 2.2], [-2.4, -5, 7.5, 2.4], [0.6, -4, 5.5, 2], [-7.4, -6, 5, 1.9], [3.2, -6.8, 6.6, 2.2]].forEach(([x, z, h, w]) => mud(x, z, h, w));
-  for (let i = 0; i < 12; i++) { const p = palm(2.4 + r() * 1.6, i + 9); p.position.set(-9 + r() * 18, 0, 1 + r() * 6 + (i % 2 ? 0 : 2)); if (Math.abs(p.position.x - 3.5) < 2.2 && p.position.z < 4) p.position.x += 4; g.add(p); }
+  [[-7.6, -7.5, 5, 1.9], [6.8, -9.5, 6.6, 2.2]].forEach(([x, z, h, w]) => mud(x, z, h, w));
+  await placeGLB(ctx, '/models/najran/najran_kasbah.glb', g, { pos: V(-3.2, 0, -5.2), scale: 0.95, rotY: 0.35 });
+  await placeGLB(ctx, '/models/najran/najran_kasbah.glb', g, { pos: V(2.6, 0, -8.6), scale: 0.8, rotY: -0.5 });
+  await Promise.all(Array.from({ length: 10 }, (_, i) => { let x = -9 + r() * 18; const z = 1 + r() * 6 + (i % 2 ? 0 : 2); if (Math.abs(x - 3.5) < 2.2 && z < 4) x += 4; return placeGLB(ctx, '/models/najran/date_palm.glb', g, { pos: V(x, 0, z), scale: 0.38 + r() * 0.2, rotY: r() * 6.28 }); }));
   // lecture hall
   const hall = new THREE.Group(); hall.position.set(4.8, 0, -1.2); hall.rotation.y = -0.45; g.add(hall);
   box(5.2, 2.4, 3.2, '#e6d3b0', 0, 0, 0, hall);

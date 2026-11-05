@@ -105,7 +105,8 @@ export async function createWorld({ canvas, labelsEl, hunt, sfx, emit, data, isR
 
   // loaders
   const gltf = new GLTFLoader(); gltf.setMeshoptDecoder(MeshoptDecoder);
-  const loadGLB = (url) => new Promise((res, rej) => gltf.load(url, (g) => res(g.scene), undefined, rej));
+  const glbCache = {};
+  const loadGLB = (url) => (glbCache[url] ||= new Promise((res, rej) => gltf.load(url, (g) => res(g.scene), undefined, rej))).then((s) => s.clone(true));
 
   // dioramas (built lazily)
   const built = {}; const building = {};

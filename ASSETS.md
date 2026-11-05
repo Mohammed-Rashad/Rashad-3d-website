@@ -10,6 +10,12 @@ Every model used on the site. Skip anything with unclear licensing.
 | Vintage Oil Lamp | `public/models/cairo/vintage_oil_lamp.glb` | https://polyhaven.com/a/vintage_oil_lamp | Poly Haven | CC0 | same pipeline |
 | Round Spectacles | `public/models/cairo/round_spectacles.glb` | https://polyhaven.com/a/round_spectacles | Poly Haven | CC0 | same pipeline |
 | Wooden Bookshelf (worn) | `public/models/library/wooden_bookshelf_worn.glb` | https://polyhaven.com/a/wooden_bookshelf_worn | Poly Haven | CC0 | same pipeline |
+| Holstentor (Lübeck) | `public/models/lubeck/holstentor.glb` | built in Blender by `tools/blender/06_holstentor.py` with Poly Haven textures medieval_red_brick, roof_slates_02 (tinted), white_plaster_02, dark_brick_wall | this site + Rob Tuytel, Dario Barresi & Dimitrios Savva (Poly Haven) | CC0 | 1.2k faces, textures 512 px WebP, meshopt |
+| Lübeck gable houses | `public/models/lubeck/lubeck_house.glb` | "Dutch Canals House Amsterdam #1", https://sketchfab.com/3d-models/e81a1b1f7fa54214983fa884fde76b46 | ustoopia | CC-BY | joined, 74k → 9k faces, 512 px WebP, meshopt; instanced ×6 |
+| Najran kasbah | `public/models/najran/najran_kasbah.glb` | "Stylized Kasbah – Tier I", https://sketchfab.com/3d-models/aaba649d4bed4b5a9208d47789298192 | Mrigua Mohamed | CC-BY | 498k → 40k faces (photogrammetry tears below ~30k), 512 px WebP |
+| Date palm (Najran, Cairo) | `public/models/najran/date_palm.glb` | "Date Palm", https://sketchfab.com/3d-models/11acf710e6c149daa8d6fb8cdc5d087f | evolveduk | CC-BY | 10k → 6k faces; instanced |
+| Dhow (Cairo, replaces the felucca) | `public/models/cairo/dhow.glb` | "Low Poly Ancient Dhow Ship", https://sketchfab.com/3d-models/f25b4552dce24d379833160dd217db84 | Nisa Nurul Azizah | CC-BY | 512 px WebP |
+| Dallah (Taiz, replaces the brass pot) | `public/models/taiz/dallah.glb` | "Dallah – Arabian Coffee pot", https://sketchfab.com/3d-models/1aa080b38eb142688b14e49dc8701ae0 | CGDELUXE | CC-BY | display base removed, 25k → 4k faces |
 | Globe (low-poly, coarse continents) | `src/scene/globe.js` | procedural | this site | CC0 | — |
 | Taiz terraces, tower houses, fortress, coffee plant | `src/scene/dioramas.js`, `src/scene/kit.js` | procedural | this site | CC0 | — |
 | Old Sana'a facades, chalkboard, bell | `src/scene/dioramas.js` | procedural | this site | CC0 | chalkboard is a live CanvasTexture |
@@ -53,3 +59,9 @@ Nothing usable was found for the **Holstentor**, **Najran mud-brick towers**, **
 3. Keep procedural: terrain, globe, chalkboard, desks, books, marzipan, cups (they're interactive or already fit the style).
 
 Needed from you to do this: a **Sketchfab API token** (free account → Settings → Password & API) to download, and the **Blender MCP running** (open Blender, BlenderMCP panel → Connect) with an optional **Hyper3D Rodin key**.
+
+### Live Blender pipeline (2026-11-05)
+Models are processed in the user's open Blender ("Blender (MCP)" launcher, add-on socket :9876) with `node tools/blender/live.mjs <script.py>`:
+`01_lineup.py` import → `02_clean.py` join/scale/decimate → `04_export.py` GLB → gltf-transform resize 512 + webp + meshopt. `look.py` screenshots the viewport.
+Hyper3D Rodin's free-trial key is out of credit; generating landmarks needs a paid key.
+Still procedural and next in line: the Taiz and Sana'a tower houses (build like the Holstentor with Poly Haven stone/plaster + white gypsum trim), Cairo University dome.
