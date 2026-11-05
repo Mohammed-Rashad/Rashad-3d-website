@@ -41,7 +41,7 @@ For each of `taiz`, `sanaa`, `cairo`, `lubeck`, `najran`, `library`, `writer`, `
 - [ ] `footer-status` ("Status: Under review (Referee 2: Mom)") is **disabled** until the family approves it
 - [ ] `profile.json → dedication` ("A Festschrift in honor of Baba, from his four co-authors."): set `"confirmed": true` to show it
 - [ ] Chapter headers (`profile.json → short`: one line + chips) and the body text below them are written not to repeat each other. Check that they still read well together.
-- [ ] **Arabic text**: drafted by Claude and revised once (grammar, academic terms, names: عنّابي، بريستين). Please still have a native speaker in the family review it (`content/*.json`, `src/render/page.mjs`, `src/chapters.mjs`). In particular, check the Arabic spellings of Prof. Annaby's and Prof. Prestin's names.
+- [ ] **Arabic text**: drafted by Claude and revised once (grammar, academic terms; النابي for Annaby confirmed by the family). Please still have a native speaker in the family review it (`content/*.json`, `src/render/page.mjs`, `src/chapters.mjs`). Still to check: the Arabic spelling of Prof. Prestin (بريستين).
 - [ ] Call-to-prayer ambience for Taiz: **not added**. Say if you want it.
 
 ## Sound & models (optional upgrades)

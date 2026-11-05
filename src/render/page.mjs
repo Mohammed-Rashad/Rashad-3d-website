@@ -108,7 +108,7 @@ function chapterBody(id, c, dev) {
     case 'najran':
       return `<p class="lead">${L(P.najran)}</p>
         <figure class="constellation-fig"><canvas id="constellation" width="560" height="340" aria-label="Co-author constellation: each star is a paper, lines join co-authors"></canvas>
-          <figcaption>${LH('Co-author constellation, from the public CV. Every star is a paper; the big clusters are Annaby and Prestin.', 'كوكبة المؤلفين المشاركين، مستخلصة من السيرة الذاتية المنشورة. كل نجمة بحثٌ منشور، والعنقودان الكبيران هما عنّابي وبريستين.')}
+          <figcaption>${LH('Co-author constellation, from the public CV. Every star is a paper; the big clusters are Annaby and Prestin.', 'كوكبة المؤلفين المشاركين، مستخلصة من السيرة الذاتية المنشورة. كل نجمة بحثٌ منشور، والعنقودان الكبيران هما النابي وبريستين.')}
           <a href="${esc(c.profile.links.cv)}#publications" target="_blank" rel="noopener">${LH('All papers', 'كل الأبحاث') + ' ' + icon('external')}</a></figcaption></figure>
         ${J}${st}`;
     case 'library': {

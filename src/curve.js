@@ -47,7 +47,7 @@ export function drawCurve(ctx, W, H, progress, { lang = 'en', envelope = 0, dpr 
     const a = Math.min(1, (progress - 2.6) * 2) * (0.55 + 0.25 * Math.sin(progress * 5));
     const u = Math.max(2, head - 0.45); const av = f(u);
     ctx.globalAlpha = a; ctx.fillStyle = '#3bb3a3'; ctx.beginPath(); ctx.arc(X(u), Y(av) - 7 * dpr, 2.6 * dpr, 0, Math.PI * 2); ctx.fill();
-    ctx.font = `${10 * dpr}px "CMU Serif", Georgia, serif`; ctx.textAlign = 'center'; ctx.fillText(lang === 'ar' ? 'عنّابي' : 'Annaby', X(u), Y(av) - 13 * dpr); ctx.globalAlpha = 1;
+    ctx.font = `${10 * dpr}px "CMU Serif", Georgia, serif`; ctx.textAlign = 'center'; ctx.fillText(lang === 'ar' ? 'النابي' : 'Annaby', X(u), Y(av) - 13 * dpr); ctx.globalAlpha = 1;
   }
   // sample points + labels
   for (let k = 0; k < K; k++) {

@@ -11,7 +11,7 @@ export function constellation(canvas, data, { reduced, lang }) {
   const hubs = new Map(); hubs.set('ME', { x: 0.5, y: 0.5, r: 7, label: { en: 'R. M. Asharabi', ar: 'رشاد الشرعبي' }, color: '#f2c66d' });
   const big = names.filter((n) => authors.get(n) >= 4).sort((a, b) => authors.get(b) - authors.get(a));
   const small = names.filter((n) => authors.get(n) < 4);
-  const label = (n) => ({ 'M. H. Annaby': { en: 'Annaby', ar: 'عنّابي' }, 'J. Prestin': { en: 'Prestin', ar: 'بريستين' } }[n] || null);
+  const label = (n) => ({ 'M. H. Annaby': { en: 'Annaby', ar: 'النابي' }, 'J. Prestin': { en: 'Prestin', ar: 'بريستين' } }[n] || null);
   big.forEach((n, i) => { const a = i === 0 ? Math.PI * 0.95 : 0.15; hubs.set(n, { x: 0.5 + Math.cos(a) * 0.34, y: 0.5 + Math.sin(a) * 0.3, r: 3 + authors.get(n) * 0.4, label: label(n), color: i === 0 ? '#3bb3a3' : '#c4564a' }); });
   small.forEach((n, i) => { const a = -Math.PI / 2 + ((i + 0.5) / small.length) * Math.PI * 1.2 - 0.1; hubs.set(n, { x: 0.5 + Math.cos(a) * 0.33, y: 0.48 + Math.sin(a) * 0.36, r: 2.5 + authors.get(n) * 0.5, label: null, color: students.has(n) ? '#9a7ad0' : '#8090c0' }); });
   // stars: near the mean of their hubs, jittered; year controls a slight drift outward
